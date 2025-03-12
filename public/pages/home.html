@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Resell Depot - Home</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/home.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <p class="announcement-bar__message">Free PDF Guide with Purchase</p>
+    </div>
+
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="Resell Depot" class="logo-image">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/pages/products.html" class="nav-link">Products</a>
+                <a href="/pages/contact.html" class="nav-link">Contact</a>
+                <a href="/pages/cart.html" class="nav-link cart-icon">
+                    Cart (<span id="cart-count">0</span>)
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="cart-notification">
+        <div class="cart-notification__content">
+            <button class="cart-notification__close">&times;</button>
+            <div class="cart-notification__header">
+                <i class="fas fa-check-circle cart-notification__icon"></i>
+                Added to Cart!
+            </div>
+            <div class="cart-notification__product">
+                <img id="cart-notification-image" src="" alt="">
+                <div class="cart-notification__product-info">
+                    <h3 id="cart-notification-title" class="cart-notification__product-title"></h3>
+                    <p id="cart-notification-price" class="cart-notification__product-price"></p>
+                </div>
+            </div>
+            <div class="cart-notification__buttons">
+                <a href="/pages/cart.html" class="button button--primary">View Cart</a>
+                <button class="button button--secondary cart-notification__close">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section class="hero">
+            <div class="hero-slider">
+                <div class="hero-slide active">
+                    <img src="/images/hero-1.jpg" alt="Resell Depot Hero">
+                    <div class="hero-content">
+                        <h1>Welcome to Resell Depot</h1>
+                        <p>Your One-Stop Shop for Premium Products</p>
+                        <a href="/pages/products.html" class="button button--hero">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-collections">
+            <div class="collections-grid">
+                <a href="/pages/products.html" class="collection-card">
+                    <img src="/images/collections/sneakers.jpg" alt="Sneakers">
+                    <div class="collection-overlay">
+                        <h3>Sneakers</h3>
+                    </div>
+                </a>
+                <a href="/pages/products.html" class="collection-card">
+                    <img src="/images/collections/electronics.jpg" alt="Electronics">
+                    <div class="collection-overlay">
+                        <h3>Electronics</h3>
+                    </div>
+                </a>
+                <a href="/pages/products.html" class="collection-card">
+                    <img src="/images/collections/fashion.jpg" alt="Fashion">
+                    <div class="collection-overlay">
+                        <h3>Fashion</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section class="featured-products">
+            <div class="section-header">
+                <h2>Featured Products</h2>
+                <a href="/pages/products.html" class="view-all">View All</a>
+            </div>
+            <div class="products-grid" id="featured-products"></div>
+        </section>
+
+        <section class="benefits">
+            <div class="benefits__grid">
+                <div class="benefit-card">
+                    <img src="/images/icons/quality.svg" alt="Quality">
+                    <h3>1:1 Quality Replica</h3>
+                    <p>Premium quality products at affordable prices</p>
+                </div>
+                <div class="benefit-card">
+                    <img src="/images/icons/package.svg" alt="Package">
+                    <h3>Original Packaging</h3>
+                    <p>Authentic packaging experience</p>
+                </div>
+                <div class="benefit-card">
+                    <img src="/images/icons/serial.svg" alt="Serial">
+                    <h3>Valid Serial Number</h3>
+                    <p>Genuine product verification</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="newsletter">
+            <div class="newsletter-content">
+                <h2>Join Our Newsletter</h2>
+                <p>Subscribe to get special offers and once-in-a-lifetime deals</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="button button--primary">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__content">
+            <div class="footer__section">
+                <h4>About Us</h4>
+                <p>Resell Depot offers premium quality products at unbeatable prices.</p>
+            </div>
+            <div class="footer__section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/pages/products.html">Products</a></li>
+                    <li><a href="/pages/contact.html">Contact</a></li>
+                    <li><a href="/pages/faq.html">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer__section">
+                <h4>Contact</h4>
+                <p>Need help? Contact our support team.</p>
+            </div>
+            <div class="footer__section">
+                <h4>Payment Methods</h4>
+                <div class="payment-methods">
+                    <img src="/images/payment/visa.svg" alt="Visa">
+                    <img src="/images/payment/mastercard.svg" alt="Mastercard">
+                    <img src="/images/payment/amex.svg" alt="American Express">
+                    <img src="/images/payment/klarna.svg" alt="Klarna">
+                    <img src="/images/payment/applepay.svg" alt="Apple Pay">
+                    <img src="/images/payment/googlepay.svg" alt="Google Pay">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/home.js"></script>
+    <script src="/js/cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resell Depot - Premium Products</title>
+    <link rel="icon" type="image/png" href="images/Logo/Screenshot_2024-09-12_215012-removebg-preview1.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles/home.css">
+    <link rel="stylesheet" href="styles/products.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/footer.css">
+    <link rel="stylesheet" href="styles/reviews.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-slider">
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">👋 Welcome to Resell Depot</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🌟 5,000+ Satisfied Customers</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🔥 50% OFF Everything - Limited Time</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                </a>
+            </div>
+            <nav class="nav-container">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/" class="active">Home</a></li>
+                    <li class="nav-item"><a href="/pages/products.html">Products</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a href="/pages/cart.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu__header">
+            <button class="mobile-menu__close" aria-label="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu__nav">
+            <ul class="mobile-menu__list">
+                <li class="mobile-menu__item"><a href="/" class="active">Home</a></li>
+                <li class="mobile-menu__item"><a href="/pages/products.html">Products</a></li>
+                <li class="mobile-menu__item"><a href="/pages/contact.html">Contact</a></li>
+                <li class="mobile-menu__item">
+                    <a href="/pages/cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <main>
+        <!-- Features Section -->
+        <section class="features">
+            <div class="features__content">
+                <h2 class="features__title">What do we Offer?</h2>
+                <div class="features__points">
+                    <div class="feature-point">
+                        <i class="fas fa-gem feature-icon"></i>
+                        <h3>Quality 1:1 Replicated Items</h3>
+                        <p>Premium quality products that match the originals in every detail</p>
+                    </div>
+                    <div class="feature-point">
+                        <i class="fas fa-graduation-cap feature-icon"></i>
+                        <h3>Free Resell Tutorial</h3>
+                        <p>Learn how to start your reselling journey with our comprehensive guide</p>
+                    </div>
+                    <div class="feature-point">
+                        <i class="fas fa-rocket feature-icon"></i>
+                        <h3>Biggest Chance you ever had</h3>
+                        <p>Start your business today with minimal investment and maximum potential</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bestsellers Section -->
+        <section class="bestsellers">
+            <div class="section-header">
+                <h2 class="section-title">Bestsellers</h2>
+                <div class="carousel-controls">
+                    <button class="carousel-control prev" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-control next" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="bestsellers-carousel">
+                <div class="carousel-container" id="bestsellers-container">
+                    <!-- Products will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero__content">
+                <h1>Premium Products</h1>
+                <p>Start your journey today with our exclusive collection</p>
+                <div class="hero__buttons">
+                    <a href="pages/products.html" class="button button--primary">Shop Now</a>
+                    <a href="#how-it-works" class="button button--outline">How Does it Work?</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bundles Section -->
+        <section class="bundles">
+            <div class="section-header">
+                <h2 class="section-title">Bundles</h2>
+            </div>
+            <div class="bundles-grid" id="bundles-container">
+                <!-- Bundles will be loaded dynamically -->
+            </div>
+        </section>
+
+        <!-- Our Story Section -->
+        <section class="our-story">
+            <div class="our-story__container">
+                <div class="our-story__image">
+                    <img src="images/story/brothers.jpg" alt="Two brothers who founded Resell Depot" loading="lazy">
+                </div>
+                <div class="our-story__content">
+                    <h2>Our Story</h2>
+                    <p>What started as a side hustle between two brothers turned into something extraordinary. Back in 2020, we discovered the untapped potential of the reselling market while searching for ways to achieve financial independence.</p>
+                    <p>Through dedication and deep market research, we transformed our initial investment into a thriving business generating 5-figure daily revenues. Today, Resell Depot shares our proven strategies and market insights with every product we offer.</p>
+                    <p>Our mission is simple: empower others to achieve the same financial freedom we discovered through reselling. Every product comes with our personal guarantee and the exact blueprint we used to succeed.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spotlight Bestseller -->
+        <section class="spotlight-bestseller">
+            <div class="spotlight-bestseller__container">
+                <h2 class="spotlight-bestseller__title">Absolute Bestseller</h2>
+                <div class="spotlight-bestseller__product">
+                    <div class="spotlight-bestseller__image">
+                        <img src="https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Allvendorsbild.jpg?v=1729621537" alt="All Vendors Bundle">
+                        <span class="sale-badge">Save 75%</span>
+                    </div>
+                    <div class="spotlight-bestseller__content">
+                        <h3>All Vendors Bundle</h3>
+                        <div class="spotlight-bestseller__price">
+                            <span class="price">€99.95</span>
+                            <span class="compare-price">€199.95</span>
+                        </div>
+                        <div class="spotlight-bestseller__description">
+                            <p>Get Everything from our Site once so you can try everything and then decide what you want to sell its an one time offer wich and you save yourself alot of money instead of buying everything seperately. This also includes the R3ceipt Generator!</p>
+                        </div>
+                        <a href="/pages/product.html?handle=all-vendors-bundle" class="button button--primary">View Full Details →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="cart-notification" class="cart-notification">
+        <button class="cart-notification__close">&times;</button>
+        <div class="cart-notification__content">
+            <p>Item added to cart!</p>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/data/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/bestsellers.js"></script>
+    <script src="js/bundles.js"></script>
+    <script src="js/reviews.js"></script>
+    <script src="js/footer.js"></script>
+    <script src="js/mobile-menu.js"></script>
+</body>
+</html>

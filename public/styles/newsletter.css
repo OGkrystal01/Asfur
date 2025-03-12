@@ -1,0 +1,73 @@
+.newsletter-page {
+    padding: 60px 20px;
+    min-height: calc(100vh - 300px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newsletter-page__content {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    padding: 40px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+.newsletter-page__content h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #000000;
+}
+
+.newsletter-page__content p {
+    font-size: 16px;
+    margin-bottom: 30px;
+    color: #333333;
+}
+
+.newsletter-page__form {
+    display: flex;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.newsletter-page__input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.newsletter-page__input:focus {
+    outline: none;
+    border-color: #000000;
+}
+
+.button.button--primary {
+    padding: 12px 25px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+.button.button--primary:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .newsletter-page__form {
+        flex-direction: column;
+    }
+
+    .button.button--primary {
+        width: 100%;
+    }
+}

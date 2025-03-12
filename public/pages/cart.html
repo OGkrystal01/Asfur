@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Resell Depot</title>
+    <link rel="icon" type="image/png" href="../images/Logo/Screenshot_2024-09-12_215012-removebg-preview1.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/cart.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-slider">
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">👋 Welcome to Resell Depot</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🌟 5,000+ Satisfied Customers</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🔥 50% OFF Everything - Limited Time</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="/images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                </a>
+            </div>
+            <nav class="nav-container">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/">Home</a></li>
+                    <li class="nav-item"><a href="/pages/products.html">Products</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a href="/pages/cart.html" class="cart-icon active">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu__header">
+            <button class="mobile-menu__close" aria-label="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu__nav">
+            <ul class="mobile-menu__list">
+                <li class="mobile-menu__item"><a href="/">Home</a></li>
+                <li class="mobile-menu__item"><a href="/pages/products.html">Products</a></li>
+                <li class="mobile-menu__item"><a href="/pages/contact.html">Contact</a></li>
+                <li class="mobile-menu__item">
+                    <a href="/pages/cart.html" class="cart-icon active">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <main class="cart-page">
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+        </div>
+
+        <div id="empty-cart" style="display: none;">
+            <div class="empty-cart__content">
+                <i class="fas fa-shopping-cart"></i>
+                <h2>Your cart is empty</h2>
+                <p>Looks like you haven't added any items to your cart yet.</p>
+                <a href="/pages/products.html" class="button button--primary">Continue Shopping</a>
+            </div>
+        </div>
+
+        <div id="cart-container">
+            <div class="cart-content">
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be loaded dynamically -->
+                </div>
+
+                <div class="cart-summary">
+                    <h2>Order Summary</h2>
+                    <div class="cart-summary__row">
+                        <span>Subtotal</span>
+                        <span class="cart-subtotal">0,00 €</span>
+                    </div>
+                    <div class="cart-summary__row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="cart-summary__row cart-summary__total">
+                        <span>Total</span>
+                        <span class="cart-total">0,00 €</span>
+                    </div>
+                    <button class="button button--primary button--full" id="checkout-button">
+                        Proceed to Checkout
+                    </button>
+                    <a href="/pages/products.html" class="button button--secondary button--full">
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../js/cart.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/mobile-menu.js"></script>
+</body>
+</html>

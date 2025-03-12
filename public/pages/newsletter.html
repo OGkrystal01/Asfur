@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter - Resell Depot</title>
+    <link rel="icon" type="image/png" href="../images/Logo/Screenshot_2024-09-12_215012-removebg-preview1.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/newsletter.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-slider">
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">👋 Welcome to Resell Depot</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🌟 5,000+ Satisfied Customers</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🔥 50% OFF Everything - Limited Time</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="../images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                </a>
+            </div>
+            <nav class="nav-container">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/">Home</a></li>
+                    <li class="nav-item"><a href="/pages/products.html">Products</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a href="/pages/cart.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu__header">
+            <button class="mobile-menu__close" aria-label="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu__nav">
+            <ul class="mobile-menu__list">
+                <li class="mobile-menu__item"><a href="/">Home</a></li>
+                <li class="mobile-menu__item"><a href="/pages/products.html">Products</a></li>
+                <li class="mobile-menu__item"><a href="/pages/contact.html">Contact</a></li>
+                <li class="mobile-menu__item">
+                    <a href="/pages/cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <main class="newsletter-page">
+        <section class="newsletter-page__content">
+            <h1>Subscribe to Our Newsletter</h1>
+            <p>Stay updated with our latest products, exclusive offers, and reselling tips.</p>
+            <form class="newsletter-page__form" id="newsletter-form">
+                <input type="email" class="newsletter-page__input" placeholder="Enter your email" required>
+                <button type="submit" class="button button--primary">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../js/cart.js"></script>
+    <script src="../js/newsletter.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/mobile-menu.js"></script>
+</body>
+</html>

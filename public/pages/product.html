@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Resell Depot</title>
+    <link rel="icon" type="image/png" href="../images/Logo/Screenshot_2024-09-12_215012-removebg-preview1.png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/product.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+    <link rel="stylesheet" href="/styles/products.css">
+    <link rel="stylesheet" href="/css/cart-notification.css">
+    <link rel="stylesheet" href="/styles/reviews.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-slider">
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">👋 Welcome to Resell Depot</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🌟 5,000+ Satisfied Customers</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🔥 50% OFF Everything - Limited Time</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="/images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                </a>
+            </div>
+            <nav class="nav-container">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/">Home</a></li>
+                    <li class="nav-item"><a href="/pages/products.html">Products</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a href="/pages/cart.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu__header">
+            <button class="mobile-menu__close" aria-label="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu__nav">
+            <ul class="mobile-menu__list">
+                <li class="mobile-menu__item"><a href="/">Home</a></li>
+                <li class="mobile-menu__item"><a href="/pages/products.html">Products</a></li>
+                <li class="mobile-menu__item"><a href="/pages/contact.html">Contact</a></li>
+                <li class="mobile-menu__item">
+                    <a href="/pages/cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="cart-notification">
+        <div class="cart-notification__content">
+            <button class="cart-notification__close">&times;</button>
+            <div class="cart-notification__header">
+                <svg class="cart-notification__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Item Added to Cart</span>
+            </div>
+            <div class="cart-notification__product">
+                <img id="cart-notification-image" src="" alt="">
+                <div class="cart-notification__product-info">
+                    <p id="cart-notification-title" class="cart-notification__product-title"></p>
+                    <p id="cart-notification-price" class="cart-notification__product-price"></p>
+                </div>
+            </div>
+            <div class="cart-notification__buttons">
+                <a href="/pages/cart.html" class="button button--outline">View Cart</a>
+                <a href="/checkout" class="button button--primary">Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="product-page">
+        <div class="product-container">
+            <div class="product-image">
+                <img id="main-image" src="" alt="">
+            </div>
+
+            <div class="product-details">
+                <div class="product-info">
+                    <h1 id="product-title" class="product-title"></h1>
+                    <div id="product-rating" class="product__rating">
+                        <div class="star-rating"></div>
+                        <span class="product__rating-count"></span>
+                    </div>
+                    <p id="product-price" class="product-price"></p>
+                </div>
+
+                <div class="quantity-selector">
+                    <label for="quantity">Quantity</label>
+                    <div class="quantity-controls">
+                        <button type="button" class="quantity-btn minus">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="99">
+                        <button type="button" class="quantity-btn plus">+</button>
+                    </div>
+                </div>
+
+                <div class="product-features">
+                    <div class="feature">
+                        <div class="feature-icon"></div>
+                        <h3 class="feature-title">1:1 Quality Replica</h3>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"></div>
+                        <h3 class="feature-title">Original Packaging</h3>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"></div>
+                        <h3 class="feature-title">Valid Serial Number</h3>
+                    </div>
+                </div>
+
+                <div class="product-description">
+                    <h2>Product Description</h2>
+                    <div id="product-description"></div>
+                </div>
+
+                <div class="product-actions">
+                    <button type="button" id="add-to-cart" class="product-button product-button--outline">Add to Cart</button>
+                    <a href="/pages/cart.html" class="product-button product-button--primary">Checkout</a>
+                </div>
+
+                <div class="collapsible-section">
+                    <button class="collapsible">How is this product so cheap?
+                        <svg class="collapsible-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="content">
+                        <p>Because its only a 1:1 Replica...</p>
+                    </div>
+
+                    <button class="collapsible">Is this product authentic?
+                        <svg class="collapsible-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="content">
+                        <p>No, this is a high-quality replica product.</p>
+                    </div>
+
+                    <button class="collapsible">What's included in the package?
+                        <svg class="collapsible-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="content">
+                        <p>The package includes the product, original-style packaging, and all standard accessories.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Reviews section -->
+    <div id="reviews-container"></div>
+
+    <div id="footer-container"></div>
+
+    <script src="/js/data/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/product.js"></script>
+    <script src="../js/reviews.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/mobile-menu.js"></script>
+    <script>
+        // Initialize cart when header loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCart();
+        });
+    </script>
+</body>
+</html>

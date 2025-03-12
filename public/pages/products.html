@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Resell Depot</title>
+    <link rel="icon" type="image/png" href="../images/Logo/Screenshot_2024-09-12_215012-removebg-preview1.png">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles/products.css">
+    <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="announcement-bar">
+        <div class="announcement-slider">
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">👋 Welcome to Resell Depot</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🌟 5,000+ Satisfied Customers</p>
+            </div>
+            <div class="announcement-slide">
+                <p class="announcement-bar__message">🔥 50% OFF Everything - Limited Time</p>
+            </div>
+        </div>
+    </div>
+
+    <header class="header">
+        <div class="header-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo-container">
+                <a href="/">
+                    <img src="../images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                </a>
+            </div>
+            <nav class="nav-container">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="/">Home</a></li>
+                    <li class="nav-item"><a href="/pages/products.html" class="active">Products</a></li>
+                    <li class="nav-item"><a href="/pages/contact.html">Contact</a></li>
+                    <li class="nav-item">
+                        <a href="/pages/cart.html" class="cart-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu__header">
+            <button class="mobile-menu__close" aria-label="Close Menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu__nav">
+            <ul class="mobile-menu__list">
+                <li class="mobile-menu__item"><a href="/">Home</a></li>
+                <li class="mobile-menu__item"><a href="/pages/products.html" class="active">Products</a></li>
+                <li class="mobile-menu__item"><a href="/pages/contact.html">Contact</a></li>
+                <li class="mobile-menu__item">
+                    <a href="/pages/cart.html" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart (<span id="mobile-cart-count">0</span>)
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="cart-notification">
+        <button class="cart-notification__close">&times;</button>
+        <div class="cart-notification__content">
+            <div class="cart-notification__header">
+                <i class="fas fa-check-circle cart-notification__icon"></i>
+                Added to Cart!
+            </div>
+            <div class="cart-notification__product">
+                <img id="cart-notification-image" src="" alt="">
+                <div class="cart-notification__product-info">
+                    <h3 id="cart-notification-title" class="cart-notification__product-title"></h3>
+                    <p id="cart-notification-price" class="cart-notification__product-price"></p>
+                </div>
+            </div>
+            <div class="cart-notification__buttons">
+                <a href="cart.html" class="button button--primary">View Cart</a>
+                <button class="button button--secondary cart-notification__close">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="products-page">
+        <div class="products-header">
+            <h1>Our Products</h1>
+            <p>Explore our exclusive collection of premium products</p>
+        </div>
+
+        <div class="products-grid" id="products-container">
+            <!-- Products will be loaded dynamically -->
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="../js/data/products.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/products.js"></script>
+    <script src="../js/reviews.js"></script>
+    <script src="../js/header.js"></script>
+    <script src="../js/footer.js"></script>
+    <script src="../js/mobile-menu.js"></script>
+</body>
+</html>

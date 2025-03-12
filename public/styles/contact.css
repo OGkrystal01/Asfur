@@ -1,0 +1,154 @@
+/* Contact Page Styles */
+.contact-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 2rem;
+}
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.contact-info {
+    padding: 30px;
+    background: #f8f8f8;
+    border-radius: 8px;
+}
+
+.contact-info h1 {
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.contact-methods {
+    margin-top: 30px;
+}
+
+.contact-method {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.contact-method h3 {
+    margin-bottom: 10px;
+    color: #000;
+}
+
+.contact-method a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-method a:hover {
+    text-decoration: underline;
+}
+
+.contact-form {
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.contact-form h2 {
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background: #333;
+}
+
+.faq {
+    margin-top: 60px;
+}
+
+.faq h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2rem;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.faq-item {
+    padding: 25px;
+    background: #f8f8f8;
+    border-radius: 8px;
+}
+
+.faq-item h3 {
+    margin-bottom: 15px;
+    color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-page {
+        padding: 1rem;
+    }
+    
+    .contact-container,
+    .contact-form,
+    .contact-info {
+        padding: 20px;
+    }
+}
