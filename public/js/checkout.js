@@ -5,6 +5,56 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkoutForm = document.getElementById('checkout-form');
     const continueToPaymentBtn = document.getElementById('continue-to-payment');
 
+    // Handle direct product checkout
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    // Initialize cart or single product
+    function initializeCheckout() {
+        const productId = getQueryParam('productId');
+        const quantity = parseInt(getQueryParam('quantity')) || 1;
+
+        if (productId) {
+            // Direct product checkout
+            const product = window.products.find(p => p.id === productId);
+            if (product) {
+                displaySingleProduct(product, quantity);
+            }
+        } else {
+            // Cart checkout
+            loadCartItems();
+        }
+    }
+
+    function displaySingleProduct(product, quantity) {
+        const itemTotal = product.price * quantity;
+
+        checkoutItems.innerHTML = `
+            <div class="checkout-item">
+                <img src="${product.image}" alt="${product.name}">
+                <div class="checkout-item-details">
+                    <h3>${product.name}</h3>
+                    <p>Quantity: ${quantity}</p>
+                </div>
+                <div class="checkout-item-price">
+                    €${itemTotal.toFixed(2)}
+                </div>
+            </div>
+        `;
+
+        // Update totals
+        subtotalElement.textContent = `€${itemTotal.toFixed(2)}`;
+        totalElement.textContent = `€${itemTotal.toFixed(2)}`;
+
+        // Store single product data
+        localStorage.setItem('checkoutItems', JSON.stringify([{
+            id: product.id,
+            quantity: quantity
+        }]));
+    }
+
     // Load cart items from localStorage
     function loadCartItems() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -38,8 +88,14 @@ document.addEventListener('DOMContentLoaded', function() {
         subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
         totalElement.textContent = `€${subtotal.toFixed(2)}`;
 
+        // Store cart items for checkout
+        localStorage.setItem('checkoutItems', JSON.stringify(cart));
+
         return subtotal;
     }
+
+    // Initialize the checkout
+    initializeCheckout();
 
     // Handle form submission and continue to payment
     continueToPaymentBtn.addEventListener('click', async (e) => {
@@ -55,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(checkoutForm);
         const customerData = Object.fromEntries(formData.entries());
         
-        // Get cart data
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const total = loadCartItems();
+        // Get checkout items data
+        const checkoutItems = JSON.parse(localStorage.getItem('checkoutItems')) || [];
+        const total = parseFloat(totalElement.textContent.replace('€', ''));
 
         try {
             const response = await fetch('/api/create-payment', {

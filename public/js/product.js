@@ -179,59 +179,20 @@ document.addEventListener('DOMContentLoaded', () => {
             checkoutButton.style.backgroundColor = '#000000';
         });
 
-        checkoutButton.addEventListener('click', async () => {
+        checkoutButton.addEventListener('click', () => {
             if (!currentProduct) {
                 alert('Product not found');
                 return;
             }
 
-            try {
-                // Show loading state
-                checkoutButton.disabled = true;
-                checkoutButton.textContent = 'Processing...';
-                checkoutButton.style.backgroundColor = '#333333';
+            // Get quantity
+            const quantity = parseInt(document.getElementById('quantity')?.value || '1');
+            
+            // Get product ID from the current product
+            const productId = currentProduct.handle;
 
-                // Get quantity
-                const quantity = parseInt(document.getElementById('quantity')?.value || '1');
-                
-                // Create cart item
-                const cartItem = {
-                    handle: currentProduct.handle,
-                    title: currentProduct.title,
-                    price: currentProduct.variants[0].price,
-                    image: currentProduct.image.src,
-                    quantity: quantity
-                };
-
-                // Create Mollie payment
-                const response = await fetch('/api/create-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        cartItems: [cartItem]
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Payment creation failed');
-                }
-
-                const { checkoutUrl } = await response.json();
-                
-                // Redirect to Mollie checkout
-                window.location.href = checkoutUrl;
-
-            } catch (error) {
-                console.error('Checkout error:', error);
-                alert('Checkout failed. Please try again or contact support.');
-                
-                // Reset button state
-                checkoutButton.disabled = false;
-                checkoutButton.textContent = 'Buy Now';
-                checkoutButton.style.backgroundColor = '#000000';
-            }
+            // Redirect to checkout with product information
+            window.location.href = `/pages/checkout.html?productId=${productId}&quantity=${quantity}`;
         });
     }
 });

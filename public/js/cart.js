@@ -172,8 +172,8 @@ function showCartNotification(product) {
                 </div>
             </div>
             <div class="cart-notification__buttons">
-                <a href="/pages/cart.html" class="button button--primary">View Cart</a>
-                <button class="button button--secondary cart-notification__close">Continue Shopping</button>
+                <a href="/pages/cart.html" class="button button--outline">View Cart</a>
+                <a href="/pages/checkout.html" class="button button--primary">Checkout</a>
             </div>
         </div>
     `;
