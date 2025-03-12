@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
 
     // Initialize checkout button
-    const checkoutButton = document.querySelector('.checkout-button');
+    const checkoutButton = document.getElementById('checkout-button');
     if (checkoutButton) {
         checkoutButton.addEventListener('click', async () => {
             try {
