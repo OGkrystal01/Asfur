@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (productId) {
             // Direct product checkout
-            const product = window.products.find(p => p.id === productId);
+            const product = window.shopifyProducts.find(p => p.handle === productId);
             if (product) {
                 displaySingleProduct(product, quantity);
             }
@@ -29,13 +29,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displaySingleProduct(product, quantity) {
-        const itemTotal = product.price * quantity;
+        const itemTotal = product.variants[0].price * quantity;
 
         checkoutItems.innerHTML = `
             <div class="checkout-item">
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image.src}" alt="${product.title}">
                 <div class="checkout-item-details">
-                    <h3>${product.name}</h3>
+                    <h3>${product.title}</h3>
                     <p>Quantity: ${quantity}</p>
                 </div>
                 <div class="checkout-item-price">
@@ -50,8 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Store single product data
         localStorage.setItem('checkoutItems', JSON.stringify([{
-            id: product.id,
-            quantity: quantity
+            handle: product.handle,
+            quantity: quantity,
+            price: product.variants[0].price
         }]));
     }
 
@@ -63,17 +64,17 @@ document.addEventListener('DOMContentLoaded', function() {
         checkoutItems.innerHTML = '';
 
         cart.forEach(item => {
-            const product = window.products.find(p => p.id === item.id);
+            const product = window.shopifyProducts.find(p => p.handle === item.handle);
             if (product) {
-                const itemTotal = product.price * item.quantity;
+                const itemTotal = parseFloat(item.price) * item.quantity;
                 subtotal += itemTotal;
 
                 const itemElement = document.createElement('div');
                 itemElement.className = 'checkout-item';
                 itemElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
+                    <img src="${item.image}" alt="${item.title}">
                     <div class="checkout-item-details">
-                        <h3>${product.name}</h3>
+                        <h3>${item.title}</h3>
                         <p>Quantity: ${item.quantity}</p>
                     </div>
                     <div class="checkout-item-price">
