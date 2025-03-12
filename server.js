@@ -57,10 +57,26 @@ app.post('/api/create-payment', async (req, res) => {
             redirectUrl: `${process.env.APP_URL}/pages/order-confirmation.html`,
             webhookUrl: `${process.env.APP_URL}/api/webhooks/mollie`,
             metadata: {
-                cartItems: cartItems
+                cartItems: cartItems,
+                customer: req.body.customer
             },
             method: ['creditcard', 'applepay', 'banktransfer', 'klarnapaylater', 'klarnapaynow'],
-            locale: 'en_US'
+            locale: 'en_US',
+            billingAddress: {
+                streetAndNumber: req.body.customer.address.street + ' ' + (req.body.customer.address.apartment || ''),
+                postalCode: req.body.customer.address.postalCode,
+                city: req.body.customer.address.city,
+                country: req.body.customer.address.country
+            },
+            shippingAddress: {
+                streetAndNumber: req.body.customer.address.street + ' ' + (req.body.customer.address.apartment || ''),
+                postalCode: req.body.customer.address.postalCode,
+                city: req.body.customer.address.city,
+                country: req.body.customer.address.country
+            },
+            consumerName: req.body.customer.firstName + ' ' + req.body.customer.lastName,
+            email: req.body.customer.email,
+            phoneNumber: req.body.customer.phone
         });
 
         res.json({ 
