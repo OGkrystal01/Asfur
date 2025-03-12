@@ -59,7 +59,7 @@ app.post('/api/create-payment', async (req, res) => {
             metadata: {
                 cartItems: cartItems
             },
-            method: ['creditcard', 'applepay', 'banktransfer', 'klarnapaylater', 'klarnapaynow'],
+            methods: ['creditcard', 'applepay', 'banktransfer', 'klarnapaylater', 'klarnapaynow'],
             locale: 'en_US',
             billingCountry: 'DE'
         });
