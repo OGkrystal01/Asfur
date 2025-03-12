@@ -56,18 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     quantity
                 });
 
-                // Show notification menu
-                const notificationMenu = document.querySelector('.cart-notification-menu');
-                const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
-                const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
-                const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
+                // Update cart notification
+                const cartNotification = document.querySelector('.cart-notification');
+                const productImage = cartNotification.querySelector('#cart-notification-image');
+                const productTitle = cartNotification.querySelector('#cart-notification-title');
+                const productPrice = cartNotification.querySelector('#cart-notification-price');
 
                 productImage.src = currentProduct.image.src;
                 productImage.alt = currentProduct.title;
                 productTitle.textContent = currentProduct.title;
                 productPrice.textContent = formatPrice(currentProduct.variants[0].price);
 
-                notificationMenu.classList.add('visible');
+                cartNotification.classList.add('visible');
+                
+                // Hide notification after 3 seconds
+                setTimeout(() => {
+                    cartNotification.classList.remove('visible');
+                }, 3000);
 
                 // Show feedback with black color scheme
                 const originalText = newAddToCartButton.textContent;
@@ -185,15 +190,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Get quantity
+            // Add to cart first
             const quantity = parseInt(document.getElementById('quantity')?.value || '1');
-            
-            // Get product ID and price from the current product
-            const productId = currentProduct.handle;
-            const price = currentProduct.variants[0].price;
+            window.addToCart({
+                handle: currentProduct.handle,
+                title: currentProduct.title,
+                price: currentProduct.variants[0].price,
+                image: currentProduct.image.src,
+                quantity
+            });
 
-            // Redirect to checkout with product information
-            window.location.href = `/pages/checkout.html?productId=${productId}&quantity=${quantity}&price=${price}`;
+            // Then redirect to checkout
+            window.location.href = '/pages/checkout.html';
         });
     }
 });

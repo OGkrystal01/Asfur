@@ -11,56 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return urlParams.get(param);
     }
 
-    // Initialize cart or single product
+    // Initialize checkout
     function initializeCheckout() {
-        const productId = getQueryParam('productId');
-        const quantity = parseInt(getQueryParam('quantity')) || 1;
-        const price = parseFloat(getQueryParam('price'));
-
-        if (productId) {
-            // Direct product checkout
-            const product = window.shopifyProducts?.find(p => p.handle === productId);
-            if (product) {
-                displaySingleProduct(product, quantity, price);
-            } else {
-                console.error('Product not found:', productId);
-            }
-        } else {
-            // Cart checkout
-            loadCartItems();
-        }
-    }
-
-    function displaySingleProduct(product, quantity, price) {
-        // Use provided price if available, otherwise fallback to product price
-        const productPrice = price || parseFloat(product.variants[0].price);
-        const itemTotal = productPrice * quantity;
-
-        checkoutItems.innerHTML = `
-            <div class="checkout-item">
-                <img src="${product.image.src}" alt="${product.title}">
-                <div class="checkout-item-details">
-                    <h3>${product.title}</h3>
-                    <p>Quantity: ${quantity}</p>
-                </div>
-                <div class="checkout-item-price">
-                    €${itemTotal.toFixed(2)}
-                </div>
-            </div>
-        `;
-
-        // Update totals
-        subtotalElement.textContent = `€${itemTotal.toFixed(2)}`;
-        totalElement.textContent = `€${itemTotal.toFixed(2)}`;
-
-        // Store single product data
-        localStorage.setItem('checkoutItems', JSON.stringify([{
-            handle: product.handle,
-            title: product.title,
-            quantity: quantity,
-            price: productPrice,
-            image: product.image.src
-        }]));
+        // Always load from cart
+        loadCartItems();
     }
 
     // Load cart items from localStorage
