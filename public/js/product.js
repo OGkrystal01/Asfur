@@ -56,12 +56,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     quantity
                 });
 
-                // Update cart notification
-                window.showCartNotification({
-                    image: currentProduct.image.src,
-                    title: currentProduct.title,
-                    price: formatPrice(currentProduct.variants[0].price),
-                });
+                // Show notification menu
+                const notificationMenu = document.querySelector('.cart-notification-menu');
+                const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
+                const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
+                const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
+
+                productImage.src = currentProduct.image.src;
+                productImage.alt = currentProduct.title;
+                productTitle.textContent = currentProduct.title;
+                productPrice.textContent = formatPrice(currentProduct.variants[0].price);
+
+                notificationMenu.classList.add('visible');
+
+                // Hide notification after 3 seconds
+                setTimeout(() => {
+                    notificationMenu.classList.remove('visible');
+                }, 3000);
 
                 // Show feedback with black color scheme
                 const originalText = newAddToCartButton.textContent;
@@ -423,11 +434,22 @@ function displayProduct(product) {
             });
 
             // Show notification menu
-            window.showCartNotification({
-                image: product.image.src,
-                title: product.title,
-                price: formatPrice(product.variants[0].price),
-            });
+            const notificationMenu = document.querySelector('.cart-notification-menu');
+            const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
+            const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
+            const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
+
+            productImage.src = product.image.src;
+            productImage.alt = product.title;
+            productTitle.textContent = product.title;
+            productPrice.textContent = formatPrice(product.variants[0].price);
+
+            notificationMenu.classList.add('visible');
+
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notificationMenu.classList.remove('visible');
+            }, 3000);
 
             // Show feedback with black color scheme
             const originalText = newAddToCartBtn.textContent;
