@@ -59,8 +59,8 @@ app.post('/api/create-payment', async (req, res) => {
             metadata: {
                 cartItems: cartItems
             },
-            method: ['creditcard', 'ideal', 'bancontact', 'giropay', 'sofort', 'applepay', 'paypal'],
-            locale: 'en_US',
+            method: ['creditcard', 'applepay', 'googlepay', 'klarnapaylater', 'directdebit'],
+            locale: 'de_DE',
         });
 
         res.json({ 
