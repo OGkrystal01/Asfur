@@ -50,6 +50,9 @@ function updateCartCount() {
 
 // Update empty cart state
 function updateEmptyCartState() {
+    // Skip this check on checkout page
+    if (window.location.pathname.includes('checkout.html')) return;
+
     const cartContainer = document.querySelector('#cart-container');
     const emptyCart = document.querySelector('#empty-cart');
     if (!cartContainer || !emptyCart) return;
