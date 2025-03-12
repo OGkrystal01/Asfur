@@ -64,7 +64,7 @@ app.post('/api/create-payment', async (req, res) => {
         });
 
         res.json({ 
-            checkoutUrl: payment.getCheckoutUrl(),
+            checkoutUrl: payment._links.checkout.href,
             paymentId: payment.id
         });
 
