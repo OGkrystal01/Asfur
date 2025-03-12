@@ -468,39 +468,6 @@ function displayProduct(product) {
         });
     }
 
-    const checkoutBtn = document.querySelector('.product-button--primary');
-    if (checkoutBtn) {
-        // Clear any existing event listeners
-        const newCheckoutBtn = checkoutBtn.cloneNode(true);
-        checkoutBtn.parentNode.replaceChild(newCheckoutBtn, checkoutBtn);
-
-        newCheckoutBtn.style.backgroundColor = '#000000';
-        newCheckoutBtn.style.color = '#ffffff';
-        newCheckoutBtn.style.border = '2px solid #000000';
-        newCheckoutBtn.style.transition = 'all 0.3s ease';
-        
-        newCheckoutBtn.addEventListener('mouseover', () => {
-            newCheckoutBtn.style.backgroundColor = '#333333';
-        });
-        
-        newCheckoutBtn.addEventListener('mouseout', () => {
-            newCheckoutBtn.style.backgroundColor = '#000000';
-        });
-
-        // Add to cart and redirect to cart page
-        newCheckoutBtn.addEventListener('click', () => {
-            const quantity = parseInt(document.getElementById('quantity')?.value) || 1;
-            window.addToCart({
-                handle: product.handle,
-                title: product.title,
-                price: product.variants[0].price,
-                image: product.image.src,
-                quantity
-            });
-            window.location.href = '/pages/cart.html';
-        });
-    }
-
     // Style quantity controls with black color scheme
     const quantityControls = document.querySelectorAll('.quantity-btn');
     const quantityInput = document.getElementById('quantity');
