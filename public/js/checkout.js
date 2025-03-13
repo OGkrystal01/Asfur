@@ -69,68 +69,55 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(checkoutForm);
         const customerData = Object.fromEntries(formData.entries());
         
-        // Get checkout items data
-        const checkoutItems = JSON.parse(localStorage.getItem('checkoutItems')) || [];
-        const total = parseFloat(totalElement.textContent.replace('€', ''));
-
+        // Get cart data
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
         try {
-            // Format cart items to match the previous working structure
-            const formattedCartItems = checkoutItems.map(item => ({
-                handle: item.handle,
-                title: item.title,
-                price: item.price.toString(), // Ensure price is a string
-                quantity: parseInt(item.quantity),
-                image: item.image
-            }));
-
-            const paymentData = {
-                cartItems: formattedCartItems,
-                customer: {
-                    firstName: customerData.firstName,
-                    lastName: customerData.lastName,
-                    email: customerData.email,
-                    phone: customerData.phone,
-                    address: {
-                        street: customerData.address,
-                        apartment: customerData.apartment || '',
-                        city: customerData.city,
-                        postalCode: customerData.postalCode,
-                        country: customerData.country
-                    }
-                }
-            };
-
-            console.log('Sending payment request:', paymentData);
+            // Disable button and show processing state
+            continueToPaymentBtn.disabled = true;
+            continueToPaymentBtn.textContent = 'Processing...';
+            continueToPaymentBtn.style.backgroundColor = '#333333';
 
             const response = await fetch('https://resell-depot.onrender.com/api/create-payment', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(paymentData)
+                body: JSON.stringify({
+                    cartItems: cart,
+                    customer: {
+                        firstName: customerData.firstName,
+                        lastName: customerData.lastName,
+                        email: customerData.email,
+                        phone: customerData.phone,
+                        address: {
+                            street: customerData.address,
+                            apartment: customerData.apartment || '',
+                            city: customerData.city,
+                            postalCode: customerData.postalCode,
+                            country: customerData.country
+                        }
+                    }
+                })
             });
 
-            const responseData = await response.json();
-            console.log('Server response:', responseData);
-
-            if (!response.ok) {
-                throw new Error(responseData.error || 'Payment creation failed');
-            }
+            const { checkoutUrl } = await response.json();
 
             // Store customer data for order confirmation
             localStorage.setItem('customerData', JSON.stringify(customerData));
 
-            // Redirect to Mollie payment page
-            if (responseData.checkoutUrl) {
-                window.location.href = responseData.checkoutUrl;
-            } else {
-                throw new Error('No checkout URL received from server');
-            }
+            // Redirect to Mollie checkout
+            window.location.href = checkoutUrl;
 
         } catch (error) {
-            console.error('Detailed error:', error);
-            alert('Error: ' + error.message);
+            console.error('Checkout error:', error);
+            
+            // Reset button state
+            continueToPaymentBtn.disabled = false;
+            continueToPaymentBtn.textContent = 'Continue to Payment';
+            continueToPaymentBtn.style.backgroundColor = '#000000';
+            
+            alert('There was an error processing your payment. Please try again.');
         }
     });
 });
