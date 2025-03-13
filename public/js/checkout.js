@@ -78,9 +78,23 @@ document.addEventListener('DOMContentLoaded', function() {
             continueToPaymentBtn.textContent = 'Processing...';
             continueToPaymentBtn.style.backgroundColor = '#333333';
 
-            // Prepare payment data with proper customer info
+            // Format cart items like it was in the cart page
+            const formattedCartItems = cart.map(item => ({
+                handle: item.handle,
+                title: item.title,
+                price: parseFloat(item.price).toFixed(2),
+                quantity: item.quantity,
+                image: item.image
+            }));
+
+            // Calculate total amount
+            const total = formattedCartItems.reduce((sum, item) => {
+                return sum + (parseFloat(item.price) * parseInt(item.quantity));
+            }, 0).toFixed(2);
+
             const paymentData = {
-                cartItems: cart,
+                cartItems: formattedCartItems,
+                total: total,
                 customer: {
                     firstName: customerData.firstName,
                     lastName: customerData.lastName,
@@ -96,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             };
 
+            console.log('Sending payment data:', paymentData);
+
             const response = await fetch('https://resell-depot.onrender.com/api/create-payment', {
                 method: 'POST',
                 headers: {
@@ -104,20 +120,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(paymentData)
             });
 
-            if (!response.ok) {
-                throw new Error('Payment creation failed');
-            }
+            const responseData = await response.json();
+            console.log('Server response:', responseData);
 
-            const { checkoutUrl } = await response.json();
+            if (!response.ok) {
+                throw new Error(responseData.error || 'Payment creation failed');
+            }
 
             // Store customer data for order confirmation
             localStorage.setItem('customerData', JSON.stringify(customerData));
 
             // Redirect to Mollie checkout
-            window.location.href = checkoutUrl;
+            if (responseData.checkoutUrl) {
+                window.location.href = responseData.checkoutUrl;
+            } else {
+                throw new Error('No checkout URL received');
+            }
 
         } catch (error) {
-            console.error('Checkout error:', error);
+            console.error('Full error details:', error);
             
             // Reset button state
             continueToPaymentBtn.disabled = false;
