@@ -74,45 +74,56 @@ document.addEventListener('DOMContentLoaded', function() {
         const total = parseFloat(totalElement.textContent.replace('€', ''));
 
         try {
+            const paymentData = {
+                cartItems: checkoutItems,
+                total: total,
+                customer: {
+                    firstName: customerData.firstName,
+                    lastName: customerData.lastName,
+                    email: customerData.email,
+                    phone: customerData.phone,
+                    address: {
+                        street: customerData.address,
+                        apartment: customerData.apartment,
+                        city: customerData.city,
+                        postalCode: customerData.postalCode,
+                        country: customerData.country
+                    }
+                }
+            };
+
+            console.log('Sending payment request:', paymentData);
+
             const response = await fetch('https://resell-depot.onrender.com/api/create-payment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    cartItems: checkoutItems,
-                    total: total,
-                    customer: {
-                        firstName: customerData.firstName,
-                        lastName: customerData.lastName,
-                        email: customerData.email,
-                        phone: customerData.phone,
-                        address: {
-                            street: customerData.address,
-                            apartment: customerData.apartment,
-                            city: customerData.city,
-                            postalCode: customerData.postalCode,
-                            country: customerData.country
-                        }
-                    }
-                })
+                body: JSON.stringify(paymentData)
             });
 
             if (!response.ok) {
-                throw new Error('Payment creation failed');
+                const errorData = await response.json();
+                console.error('Server error:', errorData);
+                throw new Error(errorData.error || 'Payment creation failed');
             }
 
             const session = await response.json();
+            console.log('Payment session:', session);
             
             // Store customer data for order confirmation
             localStorage.setItem('customerData', JSON.stringify(customerData));
 
             // Redirect to Mollie payment page
-            window.location.href = session.checkoutUrl;
+            if (session.checkoutUrl) {
+                window.location.href = session.checkoutUrl;
+            } else {
+                throw new Error('No checkout URL received from server');
+            }
 
         } catch (error) {
-            console.error('Error creating payment:', error);
-            alert('There was an error processing your payment. Please try again.');
+            console.error('Detailed error:', error);
+            alert('Error: ' + error.message);
         }
     });
 
