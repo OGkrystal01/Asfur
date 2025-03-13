@@ -65,80 +65,42 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Get form data
-        const formData = new FormData(checkoutForm);
-        const customerData = {
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            email: formData.get('email'),
-            phone: formData.get('phone'),
-            address: {
-                street: formData.get('address'),
-                apartment: formData.get('apartment') || '',
-                city: formData.get('city'),
-                postalCode: formData.get('postalCode'),
-                country: formData.get('country')
-            }
-        };
-        
         // Get cart data
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         
         try {
-            // Disable button and show processing state
+            // Show loading state
             continueToPaymentBtn.disabled = true;
             continueToPaymentBtn.textContent = 'Processing...';
             continueToPaymentBtn.style.backgroundColor = '#333333';
 
-            // Format cart items like it was in the cart page
-            const formattedCartItems = cart.map(item => ({
-                handle: item.handle,
-                title: item.title,
-                price: parseFloat(item.price).toFixed(2),
-                quantity: parseInt(item.quantity),
-                image: item.image
-            }));
-
-            // Calculate total amount
-            const total = formattedCartItems.reduce((sum, item) => {
-                return sum + (parseFloat(item.price) * parseInt(item.quantity));
-            }, 0).toFixed(2);
-
-            const paymentData = {
-                cartItems: formattedCartItems,
-                total: total,
-                customer: customerData
-            };
-
-            console.log('Sending payment data:', paymentData);
-
-            const response = await fetch('https://resell-depot.onrender.com/api/create-payment', {
+            // Create Mollie payment - use exact same structure as cart page
+            const response = await fetch('/api/create-payment', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(paymentData)
+                body: JSON.stringify({
+                    cartItems: cart
+                })
             });
 
-            const responseData = await response.json();
-            console.log('Server response:', responseData);
-
             if (!response.ok) {
-                throw new Error(responseData.error || 'Payment creation failed');
+                throw new Error('Payment creation failed');
             }
 
-            // Store customer data for order confirmation
+            const { checkoutUrl } = await response.json();
+            
+            // Store form data for order confirmation
+            const formData = new FormData(checkoutForm);
+            const customerData = Object.fromEntries(formData.entries());
             localStorage.setItem('customerData', JSON.stringify(customerData));
-
+            
             // Redirect to Mollie checkout
-            if (responseData.checkoutUrl) {
-                window.location.href = responseData.checkoutUrl;
-            } else {
-                throw new Error('No checkout URL received');
-            }
+            window.location.href = checkoutUrl;
 
         } catch (error) {
-            console.error('Full error details:', error);
+            console.error('Checkout error:', error);
             
             // Reset button state
             continueToPaymentBtn.disabled = false;
