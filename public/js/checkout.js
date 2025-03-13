@@ -13,17 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize checkout
     function initializeCheckout() {
-        // Skip empty cart check if coming directly from product page
-        const isDirect = new URLSearchParams(window.location.search).get('direct');
-        
-        // Load cart items
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length === 0 && !isDirect) {
-            alert('Your cart is empty');
-            window.location.href = '/pages/cart.html';
-            return;
-        }
-        
         loadCartItems();
     }
 

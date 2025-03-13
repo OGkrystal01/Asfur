@@ -210,9 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
             
-            // Save cart and go directly to checkout
+            // Save cart and wait a tiny bit before redirecting
             localStorage.setItem('cart', JSON.stringify(cart));
-            window.location.href = '/pages/checkout.html?direct=true';
+            
+            // Use setTimeout to ensure cart is saved before redirect
+            setTimeout(() => {
+                window.location.href = '/pages/checkout.html';
+            }, 50);
         });
     }
 });
