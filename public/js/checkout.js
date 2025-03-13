@@ -13,18 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize checkout
     function initializeCheckout() {
-        // Check if we should skip empty cart validation
-        const skipEmptyCheck = new URLSearchParams(window.location.search).get('skipEmptyCheck');
-        
-        // Load cart items
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length === 0 && !skipEmptyCheck) {
-            // Only show empty cart message if not skipping the check
-            alert('Your cart is empty');
-            window.location.href = '/pages/cart.html';
-            return;
-        }
-        
         loadCartItems();
     }
 
