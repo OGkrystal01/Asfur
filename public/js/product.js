@@ -191,10 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Add to cart first
+            // Add to cart first without showing notification
             const quantity = parseInt(document.getElementById('quantity')?.value || '1');
             
-            // Add item to cart
+            // Add item directly to cart
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existingItem = cart.find(item => item.handle === currentProduct.handle);
             
@@ -210,11 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
             
-            // Save cart before redirecting
+            // Save cart and go directly to checkout
             localStorage.setItem('cart', JSON.stringify(cart));
-
-            // Redirect to checkout immediately
-            window.location.href = '/pages/checkout.html';
+            window.location.href = '/pages/checkout.html?direct=true';
         });
     }
 });
