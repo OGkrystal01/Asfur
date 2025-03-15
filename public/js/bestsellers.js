@@ -14,6 +14,8 @@ async function loadBestsellers() {
             .slice(0, 12); // Limit to 12 products
 
         displayBestsellers(bestsellers);
+        // Reinitialize controls after content is loaded
+        initializeCarouselControls();
     } catch (error) {
         console.error('Error loading bestsellers:', error);
     }
@@ -26,15 +28,36 @@ function initializeCarouselControls() {
     
     if (!container || !prevButton || !nextButton) return;
 
-    const scrollAmount = 280; // Width of one card
+    // Calculate scroll amount based on container width
+    const scrollAmount = container.offsetWidth / 2;
+
+    // Update button states initially
+    updateButtonStates();
 
     nextButton.addEventListener('click', () => {
         container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        setTimeout(updateButtonStates, 500); // Update after scroll animation
     });
 
     prevButton.addEventListener('click', () => {
         container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        setTimeout(updateButtonStates, 500); // Update after scroll animation
     });
+
+    // Update button states when scrolling ends
+    container.addEventListener('scroll', () => {
+        updateButtonStates();
+    });
+
+    function updateButtonStates() {
+        const isAtStart = container.scrollLeft <= 0;
+        const isAtEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth;
+
+        prevButton.style.opacity = isAtStart ? '0.5' : '1';
+        prevButton.style.cursor = isAtStart ? 'not-allowed' : 'pointer';
+        nextButton.style.opacity = isAtEnd ? '0.5' : '1';
+        nextButton.style.cursor = isAtEnd ? 'not-allowed' : 'pointer';
+    }
 }
 
 function displayBestsellers(products) {
