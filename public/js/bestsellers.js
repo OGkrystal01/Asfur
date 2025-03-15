@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadBestsellers();
-    initializeCarouselControls();
 });
 
 async function loadBestsellers() {
@@ -14,50 +13,34 @@ async function loadBestsellers() {
             .slice(0, 12); // Limit to 12 products
 
         displayBestsellers(bestsellers);
-        // Reinitialize controls after content is loaded
-        initializeCarouselControls();
+        setupCarouselControls();
     } catch (error) {
         console.error('Error loading bestsellers:', error);
     }
 }
 
-function initializeCarouselControls() {
+function setupCarouselControls() {
     const container = document.getElementById('bestsellers-container');
     const prevButton = document.querySelector('.bestsellers .carousel-control.prev');
     const nextButton = document.querySelector('.bestsellers .carousel-control.next');
     
     if (!container || !prevButton || !nextButton) return;
 
-    // Calculate scroll amount based on container width
-    const scrollAmount = container.offsetWidth / 2;
-
-    // Update button states initially
-    updateButtonStates();
+    const scrollAmount = 300; // Fixed scroll amount
 
     nextButton.addEventListener('click', () => {
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        setTimeout(updateButtonStates, 500); // Update after scroll animation
+        container.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
     });
 
     prevButton.addEventListener('click', () => {
-        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        setTimeout(updateButtonStates, 500); // Update after scroll animation
+        container.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
     });
-
-    // Update button states when scrolling ends
-    container.addEventListener('scroll', () => {
-        updateButtonStates();
-    });
-
-    function updateButtonStates() {
-        const isAtStart = container.scrollLeft <= 0;
-        const isAtEnd = container.scrollLeft + container.offsetWidth >= container.scrollWidth;
-
-        prevButton.style.opacity = isAtStart ? '0.5' : '1';
-        prevButton.style.cursor = isAtStart ? 'not-allowed' : 'pointer';
-        nextButton.style.opacity = isAtEnd ? '0.5' : '1';
-        nextButton.style.cursor = isAtEnd ? 'not-allowed' : 'pointer';
-    }
 }
 
 function displayBestsellers(products) {
