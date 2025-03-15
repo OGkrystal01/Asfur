@@ -205,35 +205,52 @@
 .bestsellers-carousel {
     position: relative;
     width: 100%;
-    overflow: hidden;
-    padding: 20px 0;
 }
 
 .carousel-container {
     display: flex;
-    gap: 30px;
+    gap: 20px;
     overflow-x: scroll;
     scroll-behavior: smooth;
-    -ms-overflow-style: none;  /* Hide scrollbar IE and Edge */
-    scrollbar-width: none;  /* Hide scrollbar Firefox */
-    padding: 0 20px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    padding: 10px 0;
 }
 
 .carousel-container::-webkit-scrollbar {
-    display: none;
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.carousel-control {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.carousel-control:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .bestsellers .bestseller-card {
     flex: 0 0 280px;
-    width: 280px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    max-width: 280px;
+    transition: transform 0.3s ease;
 }
 
 .bestsellers .bestseller-card:hover {
@@ -328,35 +345,6 @@
 
 .bestsellers .bestseller-card:hover .view-details {
     color: #333333;
-}
-
-.carousel-controls {
-    display: flex;
-    gap: 15px;
-}
-
-.carousel-control {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background: #f5f5f5;
-    color: #333;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.carousel-control:hover {
-    background: #333;
-    color: white;
-}
-
-.carousel-control:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 /* Features Section */

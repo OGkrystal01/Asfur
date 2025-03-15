@@ -13,20 +13,23 @@ async function loadBestsellers() {
             .slice(0, 12); // Limit to 12 products
 
         displayBestsellers(bestsellers);
-        setupCarouselControls();
+        initCarousel();
     } catch (error) {
         console.error('Error loading bestsellers:', error);
     }
 }
 
-function setupCarouselControls() {
+function initCarousel() {
     const container = document.getElementById('bestsellers-container');
     const prevButton = document.querySelector('.bestsellers .carousel-control.prev');
     const nextButton = document.querySelector('.bestsellers .carousel-control.next');
     
     if (!container || !prevButton || !nextButton) return;
 
-    const scrollAmount = 300; // Fixed scroll amount
+    // Calculate scroll amount based on card width plus gap
+    const cardWidth = 280; // Width of each card
+    const gap = 20; // Gap between cards
+    const scrollAmount = cardWidth + gap;
 
     nextButton.addEventListener('click', () => {
         container.scrollBy({
