@@ -174,6 +174,9 @@ function updateProductCards() {
         const rating = productRatings[handle];
         if (!rating || rating.count === 0) return;
 
+        // Check if rating element already exists to prevent duplication
+        if (card.querySelector('.product-card__rating')) return;
+
         const titleEl = card.querySelector('.product-card__title');
         if (!titleEl) return;
 

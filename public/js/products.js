@@ -41,9 +41,6 @@ function displayProducts(products) {
         const price = formatPrice(variant.price);
         const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
         const isOnSale = compareAtPrice && variant.compare_at_price > variant.price;
-        const rating = product.rating_count || 0;
-        // All products with ratings have 5 stars in the original Shopify store
-        const ratingStars = rating > 0 ? 5 : 0;
 
         return `
             <div class="product-card" style="width: 280px; background: white; margin: 10px; transition: transform 0.2s, box-shadow 0.2s;">
@@ -54,12 +51,6 @@ function displayProducts(products) {
                     </div>
                     <div class="product-info" style="padding: 20px;">
                         <h3 class="product-title product-card__title" style="margin: 0 0 10px; font-size: 16px; color: #000000;">${product.title}</h3>
-                        <div class="product-rating">
-                            <div class="star-rating" title="${ratingStars} out of 5 stars">
-                                ${Array(5).fill().map((_, index) => index < ratingStars ? '<span class="star">★</span>' : '<span class="star">☆</span>').join('')}
-                            </div>
-                            <span class="product-rating-count">(${rating})</span>
-                        </div>
                         <div class="product-price" style="margin-bottom: 10px;">
                             ${compareAtPrice ? `<span class="compare-price" style="text-decoration: line-through; color: #999; margin-right: 10px;">${compareAtPrice}</span>` : ''}
                             <span class="price" style="color: #000000; font-weight: bold;">${price}</span>

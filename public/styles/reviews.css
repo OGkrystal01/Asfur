@@ -59,6 +59,14 @@
     top: 1px;
 }
 
+/* Ensure all star ratings are yellow */
+.bestseller-card__rating .star-rating,
+.bestseller-card__rating .star,
+.related-products .star-rating,
+.related-products .star {
+    color: #FFA41C !important;
+}
+
 /* Reviews section */
 .reviews-section {
     margin-top: 80px;

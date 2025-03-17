@@ -185,11 +185,19 @@
     <!-- Reviews section <div id="reviews-container"></div> -->
 
     <!-- You May Also Like section -->
-    <section class="related-products">
-        <div class="container">
+    <section class="bestsellers related-products">
+        <div class="section-container">
             <h2 class="section-title">You May Also Like</h2>
-            <div class="related-products-slider">
-                <!-- Products will be dynamically inserted here -->
+            <div class="carousel-container">
+                <button class="carousel-control prev" aria-label="Previous">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div id="related-products-container" class="products-container">
+                    <!-- Products will be dynamically inserted here -->
+                </div>
+                <button class="carousel-control next" aria-label="Next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </section>

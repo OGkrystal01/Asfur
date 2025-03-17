@@ -526,67 +526,94 @@ function getRandomProducts(currentHandle, count = 4) {
 // Function to display related products
 function displayRelatedProducts(currentHandle) {
     const relatedProducts = getRandomProducts(currentHandle, 4);
-    const sliderContainer = document.querySelector('.related-products-slider');
+    const container = document.getElementById('related-products-container');
     
-    if (!sliderContainer) return;
+    if (!container) return;
     
-    sliderContainer.innerHTML = relatedProducts.map(product => `
-        <a href="/pages/product.html?handle=${product.handle}" class="related-product-card">
-            <img src="${product.image.src}" alt="${product.title}">
-            <div class="related-product-info">
-                <h3 class="related-product-title">${product.title}</h3>
-                <p class="related-product-price">${formatPrice(product.variants[0].price)}</p>
+    container.innerHTML = relatedProducts.map(product => {
+        const variant = product.variants[0];
+        const price = formatPrice(variant.price);
+        const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
+        const hasDiscount = variant.compare_at_price && variant.compare_at_price > variant.price;
+        const rating = product.rating_count ? product.rating_count : 0;
+        const ratingStars = Math.round(rating / 5 * 5);
+        
+        return `
+            <div class="bestseller-card">
+                <div class="bestseller-card__content">
+                    <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}" class="bestseller-card__link">
+                        <div class="bestseller-card__image">
+                            <img src="${product.image.src}" alt="${product.title}" loading="lazy">
+                            ${hasDiscount ? '<span class="sale-badge">Sale</span>' : ''}
+                        </div>
+                        <div class="bestseller-card__info">
+                            <h3 class="bestseller-card__title">${product.title}</h3>
+                            <div class="bestseller-card__rating">
+                                <div class="star-rating" title="${ratingStars} out of 5 stars">
+                                    ${Array(5).fill().map((_, index) => index < ratingStars ? '<span class="star">★</span>' : '<span class="star">☆</span>').join('')}
+                                </div>
+                                <span class="bestseller-card__rating-count">(${rating})</span>
+                            </div>
+                            <div class="bestseller-card__price">
+                                ${compareAtPrice ? `<span class="compare-at-price">${compareAtPrice}</span>` : ''}
+                                <span class="price">${price}</span>
+                            </div>
+                            <span class="view-details">View Full Details →</span>
+                        </div>
+                    </a>
+                </div>
             </div>
-        </a>
-    `).join('');
+        `;
+    }).join('');
 
-    // Add touch slide functionality for mobile
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    sliderContainer.addEventListener('mousedown', (e) => {
-        isDown = true;
-        sliderContainer.style.cursor = 'grabbing';
-        startX = e.pageX - sliderContainer.offsetLeft;
-        scrollLeft = sliderContainer.scrollLeft;
+    // Add hover effects
+    const cards = container.querySelectorAll('.bestseller-card');
+    cards.forEach(card => {
+        const viewDetails = card.querySelector('.view-details');
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            if (viewDetails) {
+                viewDetails.style.color = '#333333';
+            }
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'none';
+            card.style.boxShadow = 'none';
+            if (viewDetails) {
+                viewDetails.style.color = '#666';
+            }
+        });
     });
 
-    sliderContainer.addEventListener('mouseleave', () => {
-        isDown = false;
-        sliderContainer.style.cursor = 'grab';
+    // Initialize carousel controls
+    initRelatedProductsCarousel();
+}
+
+function initRelatedProductsCarousel() {
+    const container = document.getElementById('related-products-container');
+    const prevButton = document.querySelector('.related-products .carousel-control.prev');
+    const nextButton = document.querySelector('.related-products .carousel-control.next');
+    
+    if (!container || !prevButton || !nextButton) return;
+
+    // Calculate scroll amount based on card width plus gap
+    const cardWidth = 280; // Width of each card
+    const gap = 20; // Gap between cards
+    const scrollAmount = cardWidth + gap;
+
+    nextButton.addEventListener('click', () => {
+        container.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
     });
 
-    sliderContainer.addEventListener('mouseup', () => {
-        isDown = false;
-        sliderContainer.style.cursor = 'grab';
-    });
-
-    sliderContainer.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - sliderContainer.offsetLeft;
-        const walk = (x - startX) * 2;
-        sliderContainer.scrollLeft = scrollLeft - walk;
-    });
-
-    // Touch events for mobile
-    sliderContainer.addEventListener('touchstart', (e) => {
-        isDown = true;
-        startX = e.touches[0].pageX - sliderContainer.offsetLeft;
-        scrollLeft = sliderContainer.scrollLeft;
-    });
-
-    sliderContainer.addEventListener('touchend', () => {
-        isDown = false;
-    });
-
-    sliderContainer.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX - sliderContainer.offsetLeft;
-        const walk = (x - startX) * 2;
-        sliderContainer.scrollLeft = scrollLeft - walk;
+    prevButton.addEventListener('click', () => {
+        container.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
     });
 }
 
