@@ -572,32 +572,76 @@ function displayRelatedProducts(products) {
     let startX;
     let startScrollLeft;
     let isDragging = false;
+    let startTime;
+    let startY;
+    let isScrolling;
 
     function handleTouchStart(e) {
         isDragging = true;
+        isScrolling = undefined;
         startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
         startScrollLeft = container.scrollLeft;
-        
-        // Prevent card hover effects during scrolling
-        container.style.pointerEvents = 'none';
+        startTime = Date.now();
+
+        // Prevent any default touch behaviors
+        const cards = container.querySelectorAll('.bestseller-card__link');
+        cards.forEach(card => card.style.pointerEvents = 'none');
     }
 
     function handleTouchMove(e) {
         if (!isDragging) return;
 
         const x = e.touches[0].pageX;
-        const walk = startX - x;
-        container.scrollLeft = startScrollLeft + walk;
+        const y = e.touches[0].pageY;
+        const deltaX = startX - x;
+        const deltaY = startY - y;
+
+        // Determine if scrolling horizontally or vertically
+        if (isScrolling === undefined) {
+            isScrolling = Math.abs(deltaY) > Math.abs(deltaX);
+        }
+
+        // If scrolling horizontally, prevent default behavior
+        if (!isScrolling) {
+            e.preventDefault();
+            container.scrollLeft = startScrollLeft + deltaX;
+        }
     }
 
-    function handleTouchEnd() {
+    function handleTouchEnd(e) {
         isDragging = false;
-        // Restore card hover effects
-        container.style.pointerEvents = 'auto';
+        const cards = container.querySelectorAll('.bestseller-card__link');
+
+        // If this was a quick tap without much movement, treat it as a click
+        const endTime = Date.now();
+        const timeDiff = endTime - startTime;
+        const endX = e.changedTouches[0].pageX;
+        const moveDistance = Math.abs(endX - startX);
+
+        if (timeDiff < 300 && moveDistance < 10) {
+            // Find the clicked product card
+            let target = e.target;
+            while (target && !target.classList.contains('bestseller-card')) {
+                target = target.parentElement;
+            }
+            
+            if (target) {
+                const link = target.querySelector('.bestseller-card__link');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            }
+        }
+
+        // Re-enable pointer events after a small delay
+        setTimeout(() => {
+            cards.forEach(card => card.style.pointerEvents = 'auto');
+        }, 100);
     }
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
     container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
