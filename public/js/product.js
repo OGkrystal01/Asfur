@@ -572,29 +572,61 @@ function displayRelatedProducts(products) {
     let startX;
     let startScrollLeft;
     let isDragging = false;
+    let startTime;
+    let isMobile = window.innerWidth <= 1024;
 
     function handleTouchStart(e) {
         isDragging = true;
         startX = e.touches[0].pageX;
         startScrollLeft = container.scrollLeft;
+        startTime = Date.now();
     }
 
     function handleTouchMove(e) {
         if (!isDragging) return;
+        e.preventDefault();
+        e.stopPropagation();
 
         const x = e.touches[0].pageX;
         const walk = startX - x;
         container.scrollLeft = startScrollLeft + walk;
     }
 
-    function handleTouchEnd() {
+    function handleTouchEnd(e) {
+        if (!isDragging) return;
         isDragging = false;
+
+        // If this was a quick tap and we didn't move much, treat it as a click
+        const endTime = Date.now();
+        const timeDiff = endTime - startTime;
+        const endX = e.changedTouches[0].pageX;
+        const moveDistance = Math.abs(endX - startX);
+
+        if (timeDiff < 300 && moveDistance < 10 && isMobile) {
+            // Find the clicked product card
+            let target = e.target;
+            while (target && !target.classList.contains('bestseller-card')) {
+                target = target.parentElement;
+            }
+            
+            if (target) {
+                const link = target.querySelector('.bestseller-card__link');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            }
+        }
     }
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
     container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+
+    // Update mobile state on resize
+    window.addEventListener('resize', () => {
+        isMobile = window.innerWidth <= 1024;
+    });
 
     // Handle desktop arrow navigation
     const section = container.closest('.bestsellers');
