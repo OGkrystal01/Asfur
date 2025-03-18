@@ -126,36 +126,5 @@
     <script src="../js/header.js"></script>
     <script src="../js/footer.js"></script>
     <script src="../js/mobile-menu.js"></script>
-    <script>
-        // Cart item template
-        const cartItemTemplate = (item) => {
-            return `
-                <div class="cart-item">
-                    <div class="cart-item__image">
-                        <img src="${item.image}" alt="${item.title}">
-                    </div>
-                    <div class="cart-item__details">
-                        <h3 class="cart-item__title">${item.title}</h3>
-                        ${item.options && item.options.length > 0 ? `
-                            <div class="cart-item__options">
-                                ${item.options.map(opt => `
-                                    <span class="cart-item__option">${opt.name}: ${opt.value}</span>
-                                `).join('')}
-                            </div>
-                        ` : ''}
-                        <div class="cart-item__price">${formatPrice(item.price)}</div>
-                        <div class="cart-item__quantity">
-                            <button class="quantity-btn minus" data-handle="${item.handle}">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn plus" data-handle="${item.handle}">+</button>
-                        </div>
-                    </div>
-                    <button class="cart-item__remove" data-handle="${item.handle}">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-        };
-    </script>
 </body>
 </html>

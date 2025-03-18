@@ -4,63 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadProducts() {
     try {
-        const response = await fetch('/products.csv');
-        const text = await response.text();
-        const lines = text.split('\n');
-        const headers = lines[0].split(',').map(h => h.trim());
-        
-        const products = [];
-        let currentProduct = null;
-        
-        for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(v => v.trim());
-            const row = {};
-            
-            headers.forEach((header, index) => {
-                row[header] = values[index] || '';
-            });
-            
-            if (row.Handle && row.Title) {
-                // This is a new product
-                currentProduct = {
-                    handle: row.Handle,
-                    title: row.Title,
-                    body_html: row['Body (HTML)'],
-                    vendor: row.Vendor,
-                    product_category: row['Product Category'],
-                    published: row.Published === 'true',
-                    option1_name: row['Option1 Name'] || null,
-                    option1_value: row['Option1 Value'] || null,
-                    option2_name: row['Option2 Name'] || null,
-                    option2_value: row['Option2 Value'] || null,
-                    variants: [],
-                    image: {
-                        src: row['Image Src'] || ''
-                    }
-                };
-                products.push(currentProduct);
-            }
-            
-            // Add variant data
-            if (currentProduct) {
-                currentProduct.variants.push({
-                    option1_name: row['Option1 Name'] || null,
-                    option1_value: row['Option1 Value'] || null,
-                    option2_name: row['Option2 Name'] || null,
-                    option2_value: row['Option2 Value'] || null,
-                    price: parseFloat(row['Variant Price']) || 0,
-                    compare_at_price: parseFloat(row['Variant Compare At Price']) || 0,
-                    inventory_quantity: parseInt(row['Variant Inventory Qty']) || 0,
-                    requires_shipping: row['Variant Requires Shipping'] === 'true',
-                    taxable: row['Variant Taxable'] === 'true',
-                    image: row['Image Src'] || currentProduct.image.src
-                });
-            }
-        }
-        
-        // Make products available globally
-        window.shopifyProducts = products;
-        
+        const products = await fetchProducts();
         // Separate bundles and regular products
         const bundles = products.filter(product => {
             const title = product.title.toLowerCase();
@@ -97,43 +41,47 @@ function displayProducts(products) {
         const price = formatPrice(variant.price);
         const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
         const isOnSale = compareAtPrice && variant.compare_at_price > variant.price;
-        const isBundleProduct = product.title.toLowerCase().includes('bundle');
-        const imageSrc = isBundleProduct ? '/images/bundles/bundle.png' : (product.image?.src || '');
 
         return `
-            <div class="product-card">
-                <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}">
-                    <div class="product-image-container">
-                        <img src="${imageSrc}" alt="${product.title}" loading="lazy">
-                        ${isOnSale ? '<span class="sale-badge">Sale</span>' : ''}
+            <div class="product-card" style="width: 280px; background: white; margin: 10px; transition: transform 0.2s, box-shadow 0.2s;">
+                <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}" style="text-decoration: none; color: inherit; display: block;">
+                    <div class="product-image-container" style="position: relative; padding: 20px;">
+                        <img src="${product.image.src}" alt="${product.title}" loading="lazy" style="width: 100%; height: auto; display: block;">
+                        ${isOnSale ? '<span class="sale-badge" style="position: absolute; top: 10px; right: 10px; background: #ff0000; color: white; padding: 5px 10px; border-radius: 3px;">Sale</span>' : ''}
                     </div>
-                    <div class="product-info">
-                        <h3 class="product-title">${product.title}</h3>
-                        <div class="star-rating">★★★★★</div>
-                        <div class="price-container">
-                            ${compareAtPrice ? `<span class="compare-price">${compareAtPrice}</span>` : ''}
-                            <span class="current-price">${price}</span>
+                    <div class="product-info" style="padding: 20px;">
+                        <h3 class="product-title product-card__title" style="margin: 0 0 10px; font-size: 16px; color: #000000;">${product.title}</h3>
+                        <div class="product-price" style="margin-bottom: 10px;">
+                            ${compareAtPrice ? `<span class="compare-price" style="text-decoration: line-through; color: #999; margin-right: 10px;">${compareAtPrice}</span>` : ''}
+                            <span class="price" style="color: #000000; font-weight: bold;">${price}</span>
                         </div>
+                        <span class="view-details" style="color: #666; font-size: 14px;">View Full Details →</span>
                     </div>
                 </a>
             </div>
         `;
     }).join('');
 
-    // Add hover effect
+    // Add hover effects
     const cards = container.querySelectorAll('.product-card');
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             card.style.transform = 'translateY(-5px)';
-            card.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+            card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            card.querySelector('.view-details').style.color = '#333333';
         });
         card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
+            card.style.transform = 'none';
             card.style.boxShadow = 'none';
+            card.querySelector('.view-details').style.color = '#666';
         });
     });
 }
 
 function formatPrice(price) {
-    return '€' + parseFloat(price).toFixed(2);
+    if (!price) return '';
+    return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR'
+    }).format(price);
 }

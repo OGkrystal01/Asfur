@@ -80,25 +80,6 @@
                         <h2>Order Summary</h2>
                         <div id="checkout-items" class="checkout-items">
                             <!-- Items will be populated by JavaScript -->
-                            <template id="checkout-item-template">
-                                <div class="checkout-item">
-                                    <div class="checkout-item__image">
-                                        <img src="${item.image}" alt="${item.title}">
-                                    </div>
-                                    <div class="checkout-item__details">
-                                        <h3 class="checkout-item__title">${item.title}</h3>
-                                        ${item.options && item.options.length > 0 ? `
-                                            <div class="checkout-item__options">
-                                                ${item.options.map(opt => `
-                                                    <span class="checkout-item__option">${opt.name}: ${opt.value}</span>
-                                                `).join('')}
-                                            </div>
-                                        ` : ''}
-                                        <div class="checkout-item__price">${formatPrice(item.price)}</div>
-                                        <div class="checkout-item__quantity">Quantity: ${item.quantity}</div>
-                                    </div>
-                                </div>
-                            </template>
                         </div>
                         <div class="summary-totals">
                             <div class="summary-line">

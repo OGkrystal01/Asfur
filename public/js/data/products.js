@@ -6,49 +6,19 @@ const products = [
         body_html: '<p><span><strong>Every Purchase Includes:</strong></span> Free PDF with a Step for Step<span> </span><strong>Tutorial</strong><span> </span>on how to sell these. This tutorial is very valuable and will<span> </span><strong>definitely</strong><span> </span><strong>generate profit</strong><span> </span>if followed</p>',
         vendor: 'Resell-Depot',
         product_category: 'Uncategorized',
+        type: '',
+        tags: '',
         published: true,
-        option1_name: 'Size',
-        option1_value: 'XS',
-        variants: [
-            {
-                option1_name: 'Size',
-                option1_value: 'XS',
-                price: 24.95,
-                compare_at_price: 54.99,
-                inventory_quantity: -1,
-                requires_shipping: false,
-                taxable: false
-            },
-            {
-                option1_name: 'Size',
-                option1_value: 'S',
-                price: 24.95,
-                compare_at_price: 54.99,
-                inventory_quantity: -7,
-                requires_shipping: false,
-                taxable: false
-            },
-            {
-                option1_name: 'Size',
-                option1_value: 'M',
-                price: 24.95,
-                compare_at_price: 54.99,
-                inventory_quantity: -22,
-                requires_shipping: false,
-                taxable: false
-            },
-            {
-                option1_name: 'Size',
-                option1_value: 'XL',
-                price: 24.95,
-                compare_at_price: 54.99,
-                inventory_quantity: -16,
-                requires_shipping: false,
-                taxable: false
-            }
-        ],
+        variants: [{
+            price: 24.95,
+            compare_at_price: 54.99,
+            inventory_quantity: -1,
+            requires_shipping: false,
+            taxable: false
+        }],
         image: {
-            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/07e84d_6d869f53bc43432a820d01b544d5a46b_mv2.webp?v=1729621576'
+            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/07e84d_6d869f53bc43432a820d01b544d5a46b_mv2.webp?v=1729621576',
+            alt: ''
         },
         rating_count: 81,
         status: 'active'
@@ -260,33 +230,19 @@ const products = [
         body_html: '<p><span><strong>Every Purchase Includes:</strong></span> Free PDF with a Step for Step<span> </span><strong>Tutorial</strong><span> </span>on how to sell these. This tutorial is very valuable and will<span> </span><strong>definitely</strong><span> </span><strong>generate profit</strong><span> </span>if followed</p>',
         vendor: 'Resell-Depot',
         product_category: 'Uncategorized',
+        type: '',
+        tags: '',
         published: true,
-        option1_name: 'Color',
-        option1_value: 'Black',
-        variants: [
-            {
-                option1_name: 'Color',
-                option1_value: 'Black',
-                price: 14.95,
-                compare_at_price: 29.95,
-                inventory_quantity: -6,
-                requires_shipping: false,
-                taxable: false,
-                image: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/JBL_CHARGE5_HERO_BLACK_0046_x1_55e1907d-f60e-4c12-8585-cded54424f28.webp?v=1729621597'
-            },
-            {
-                option1_name: 'Color',
-                option1_value: 'Red',
-                price: 14.95,
-                compare_at_price: 29.95,
-                inventory_quantity: 0,
-                requires_shipping: false,
-                taxable: false,
-                image: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/JBL_CHARGE5_HERO_RED_0029_x2_057649e2-efa2-4a23-8d41-a37a4683266f.webp?v=1729621597'
-            }
-        ],
+        variants: [{
+            price: 14.95,
+            compare_at_price: 29.95,
+            inventory_quantity: -6,
+            requires_shipping: false,
+            taxable: false
+        }],
         image: {
-            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/JBL_CHARGE5_HERO_BLACK_0046_x1_55e1907d-f60e-4c12-8585-cded54424f28.webp?v=1729621597'
+            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/JBL_CHARGE5_HERO_BLACK_0046_x1_55e1907d-f60e-4c12-8585-cded54424f28.webp?v=1729621597',
+            alt: ''
         },
         status: 'active'
     },
@@ -385,39 +341,19 @@ const products = [
         body_html: '<p><span><strong>Every Purchase Includes:</strong></span> Free PDF with a Step for Step<span> </span><strong>Tutorial</strong><span> </span>on how to sell these. This tutorial is very valuable and will<span> </span><strong>definitely</strong><span> </span><strong>generate profit</strong><span> </span>if followed</p>',
         vendor: 'Resell-Depot',
         product_category: 'Uncategorized',
+        type: '',
+        tags: '',
         published: true,
-        option1_name: 'Color',
-        option1_value: 'Black',
-        option2_name: 'Storage',
-        option2_value: '128GB',
-        variants: [
-            {
-                option1_name: 'Color',
-                option1_value: 'Black',
-                option2_name: 'Storage',
-                option2_value: '128GB',
-                price: 79.99,
-                compare_at_price: 99.99,
-                inventory_quantity: -2,
-                requires_shipping: false,
-                taxable: false,
-                image: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558'
-            },
-            {
-                option1_name: 'Color',
-                option1_value: 'Black',
-                option2_name: 'Storage',
-                option2_value: '256GB',
-                price: 84.99,
-                compare_at_price: 99.99,
-                inventory_quantity: -1,
-                requires_shipping: false,
-                taxable: false,
-                image: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/65038654434d0-iPhone15ProNaturaltitaniumpng.png?v=1729621558'
-            }
-        ],
+        variants: [{
+            price: 79.99,
+            compare_at_price: 99.99,
+            inventory_quantity: -2,
+            requires_shipping: false,
+            taxable: false
+        }],
         image: {
-            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558'
+            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558',
+            alt: ''
         },
         rating_count: 87,
         status: 'active'
@@ -473,10 +409,14 @@ const products = [
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { products };
 } else {
+    // For browser environment
     window.shopifyProducts = products;
 }
 
 // Function to fetch products - maintaining exact Shopify functionality
 async function fetchProducts() {
+    if (typeof window !== 'undefined') {
+        return window.shopifyProducts || [];
+    }
     return products;
 }

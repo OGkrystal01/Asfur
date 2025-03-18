@@ -117,111 +117,32 @@ body {
 
 /* Product Options */
 .product-options {
-    margin: 20px 0;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .option-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .option-group label {
     display: block;
-    margin-bottom: 8px;
+    font-size: 16px;
     font-weight: 500;
-    font-size: 14px;
-    color: #000;
+    margin-bottom: 10px;
 }
 
-.option-values {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.option-value {
-    padding: 8px 16px;
-    border: 2px solid #e0e0e0;
+.option-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    cursor: pointer;
-    background: transparent;
-    color: #000;
-    font-size: 14px;
-    transition: all 0.2s ease;
-}
-
-.option-value:hover {
-    border-color: #000;
-}
-
-.option-value.selected {
-    background: #000;
-    border-color: #000;
-    color: #fff;
-}
-
-.option-value--color {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 50%;
-    border: 2px solid #e0e0e0;
-}
-
-.option-value--color:hover {
-    transform: scale(1.1);
-}
-
-.option-value--color.selected {
-    border-color: #000;
-    transform: scale(1.1);
-}
-
-/* Color option specific styles */
-.option-value--color {
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 50%;
-    position: relative;
-    background-size: cover;
-    background-position: center;
-}
-
-.option-value--color:hover {
-    transform: scale(1.1);
-}
-
-.option-value--color.selected {
-    border-color: #000;
-    transform: scale(1.1);
-}
-
-.option-value--color.selected::after {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border: 2px solid #000;
-    border-radius: 50%;
-}
-
-/* Cart and checkout display */
-.cart-item__options,
-.checkout-item__options {
-    font-size: 14px;
-    color: #666;
-    margin-top: 4px;
-}
-
-.cart-item__option,
-.checkout-item__option {
-    display: inline-block;
-    margin-right: 8px;
-}
-
-.cart-item__option:not(:last-child)::after,
-.checkout-item__option:not(:last-child)::after {
-    content: '•';
-    margin-left: 8px;
+    font-size: 16px;
+    background-color: white;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 /* Quantity Selector */

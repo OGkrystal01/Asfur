@@ -228,157 +228,291 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-let selectedOptions = {};
-
 function displayProduct(product) {
-    if (!product) {
-        showErrorState();
-        return;
-    }
-
     currentProduct = product;
     document.title = `${product.title} - Resell Depot`;
-
+    
     // Update main elements
     const mainImage = document.getElementById('main-image');
     const titleElement = document.getElementById('product-title');
     const priceElement = document.getElementById('product-price');
     const descriptionElement = document.getElementById('product-description');
-    const ratingContainer = document.getElementById('product-rating');
     
-    if (mainImage && product.image?.src) mainImage.src = product.image.src;
+    if (mainImage) mainImage.src = product.image.src;
     if (titleElement) titleElement.textContent = product.title;
-    if (descriptionElement) descriptionElement.innerHTML = product.body_html || '';
+    if (descriptionElement) descriptionElement.innerHTML = product.body_html;
 
-    // Update price
-    if (priceElement && product.variants?.[0]) {
+    // Add rating if product has reviews
+    if (product.rating_count) {
+        const ratingElement = document.getElementById('product-rating');
+        if (ratingElement) {
+            const starRating = ratingElement.querySelector('.star-rating');
+            const ratingCount = ratingElement.querySelector('.product__rating-count');
+            
+            // Generate 5 filled stars for all products with reviews
+            starRating.innerHTML = Array(5).fill('★').join('');
+            ratingCount.textContent = `${product.rating_count} reviews`;
+            
+            // Make rating clickable to scroll to reviews
+            ratingElement.style.display = 'flex';
+            ratingElement.style.cursor = 'pointer';
+            ratingElement.onclick = () => {
+                const reviewsSection = document.getElementById('reviews-container');
+                if (reviewsSection) {
+                    reviewsSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            };
+
+            // Add reviews section
+            const reviewsContainer = document.getElementById('reviews-container');
+            if (reviewsContainer) {
+                reviewsContainer.innerHTML = `
+                    <div class="reviews-section">
+                        <div class="reviews-section__header">
+                            <div class="reviews-section__summary">
+                                <h2>Customer Reviews</h2>
+                                <div class="reviews-section__average">
+                                    <div class="star-rating star-rating--large">
+                                        ${Array(5).fill('★').join('')}
+                                    </div>
+                                    <span class="reviews-section__average-text">5.0 out of 5</span>
+                                </div>
+                                <div class="reviews-section__count">${product.rating_count} reviews</div>
+                                <button class="write-review-btn" id="write-review-btn">Write a Review</button>
+                                <div class="reviews-section__distribution">
+                                    <div class="rating-bar">
+                                        <span class="rating-bar__label">5 stars</span>
+                                        <div class="rating-bar__bar">
+                                            <div class="rating-bar__fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="rating-bar__count">${product.rating_count}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-section__filters">
+                            <div class="reviews-section__sort">
+                                <label for="sort-reviews">Sort by:</label>
+                                <select id="sort-reviews" class="sort-reviews-select">
+                                    <option value="newest">Newest</option>
+                                    <option value="highest">Highest Rating</option>
+                                    <option value="lowest">Lowest Rating</option>
+                                    <option value="helpful">Most Helpful</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="reviews-section__list">
+                            ${Array(5).fill('').map(() => `
+                                <div class="review-card">
+                                    <div class="review-card__header">
+                                        <div class="star-rating">
+                                            ${Array(5).fill('★').join('')}
+                                        </div>
+                                        <span class="review-card__author">Verified Customer</span>
+                                        <span class="review-card__date">${new Date().toLocaleDateString('en-US', { 
+                                            year: 'numeric', 
+                                            month: 'long', 
+                                            day: 'numeric' 
+                                        })}</span>
+                                    </div>
+                                    <div class="review-card__body">
+                                        <p>Great product! Exactly as described. Fast shipping and excellent customer service.</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="reviews-pagination">
+                            <button class="pagination-btn prev disabled">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="pagination-btn number active">1</button>
+                            <button class="pagination-btn next disabled">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Add event listeners for review functionality
+                const writeReviewBtn = document.getElementById('write-review-btn');
+                const sortReviews = document.getElementById('sort-reviews');
+
+                if (writeReviewBtn) {
+                    writeReviewBtn.addEventListener('click', () => {
+                        // Scroll to top of reviews section
+                        const reviewsSection = document.querySelector('.reviews-section');
+                        if (reviewsSection) {
+                            reviewsSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        
+                        // Show write review form (to be implemented)
+                        alert('Write a review feature coming soon!');
+                    });
+                }
+
+                if (sortReviews) {
+                    sortReviews.addEventListener('change', (e) => {
+                        const sortBy = e.target.value;
+                        // Sort reviews logic (to be implemented)
+                        console.log('Sorting reviews by:', sortBy);
+                    });
+                }
+            }
+        }
+    } else {
+        // Hide rating if no reviews
+        const ratingElement = document.getElementById('product-rating');
+        if (ratingElement) {
+            ratingElement.style.display = 'none';
+        }
+    }
+
+    // Update price with compare at price if available
+    if (priceElement && product.variants && product.variants[0]) {
         const variant = product.variants[0];
-        if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        if (variant.compare_at_price) {
             priceElement.innerHTML = `
-                <span class="price-item price-item--sale">€${variant.price.toFixed(2)}</span>
-                <s class="price-item price-item--regular">€${variant.compare_at_price.toFixed(2)}</s>
+                <span class="price-item price-item--sale">€${variant.price}</span>
+                <s class="price-item price-item--regular">€${variant.compare_at_price}</s>
             `;
         } else {
-            priceElement.innerHTML = `<span class="price-item">€${variant.price.toFixed(2)}</span>`;
+            priceElement.innerHTML = `<span class="price-item">€${variant.price}</span>`;
         }
     }
 
-    // Update rating
-    if (ratingContainer) {
-        const starRating = ratingContainer.querySelector('.star-rating');
-        const ratingCount = ratingContainer.querySelector('.product__rating-count');
-        if (starRating) starRating.innerHTML = '★★★★★';
-        if (ratingCount) ratingCount.textContent = '(5.0)';
+    // Update product details with black color scheme
+    // Add cart notification menu if it doesn't exist
+    if (!document.querySelector('.cart-notification-menu')) {
+        const notificationMenu = document.createElement('div');
+        notificationMenu.className = 'cart-notification-menu';
+        notificationMenu.innerHTML = `
+            <div class="cart-notification-menu__header">
+                <h3 class="cart-notification-menu__title">Added to Cart</h3>
+                <button class="cart-notification-menu__close">&times;</button>
+            </div>
+            <div class="cart-notification-menu__product">
+                <img class="cart-notification-menu__product-image" src="" alt="">
+                <div class="cart-notification-menu__product-info">
+                    <h4 class="cart-notification-menu__product-title"></h4>
+                    <p class="cart-notification-menu__product-price"></p>
+                </div>
+            </div>
+            <div class="cart-notification-menu__buttons">
+                <button class="cart-notification-menu__button cart-notification-menu__button--secondary">Continue Shopping</button>
+                <button class="cart-notification-menu__button cart-notification-menu__button--primary">Checkout Now</button>
+            </div>
+        `;
+        document.body.appendChild(notificationMenu);
+
+        // Add event listeners for the notification menu
+        const closeBtn = notificationMenu.querySelector('.cart-notification-menu__close');
+        const continueBtn = notificationMenu.querySelector('.cart-notification-menu__button--secondary');
+        const checkoutBtn = notificationMenu.querySelector('.cart-notification-menu__button--primary');
+
+        closeBtn.addEventListener('click', () => {
+            notificationMenu.classList.remove('visible');
+        });
+
+        continueBtn.addEventListener('click', () => {
+            notificationMenu.classList.remove('visible');
+        });
+
+        checkoutBtn.addEventListener('click', () => {
+            window.location.href = '/pages/cart.html';
+        });
     }
 
-    // Handle variants
-    selectedOptions = {};
-    const optionsContainer = document.getElementById('product-options');
+    const addToCartBtn = document.getElementById('add-to-cart');
+    if (addToCartBtn) {
+        // Clear any existing event listeners
+        const newAddToCartBtn = addToCartBtn.cloneNode(true);
+        addToCartBtn.parentNode.replaceChild(newAddToCartBtn, addToCartBtn);
+        
+        newAddToCartBtn.style.display = 'block';
+        newAddToCartBtn.style.border = '2px solid #000000';
+        newAddToCartBtn.style.color = '#000000';
+        newAddToCartBtn.style.backgroundColor = 'transparent';
+        newAddToCartBtn.style.transition = 'all 0.3s ease';
+        
+        newAddToCartBtn.addEventListener('mouseover', () => {
+            newAddToCartBtn.style.backgroundColor = '#333333';
+            newAddToCartBtn.style.color = '#ffffff';
+        });
+        
+        newAddToCartBtn.addEventListener('mouseout', () => {
+            newAddToCartBtn.style.backgroundColor = 'transparent';
+            newAddToCartBtn.style.color = '#000000';
+        });
+
+        // Add to cart functionality
+        newAddToCartBtn.addEventListener('click', () => {
+            const quantity = parseInt(document.getElementById('quantity')?.value || '1');
+            window.addToCart({
+                handle: product.handle,
+                title: product.title,
+                price: product.variants[0].price,
+                image: product.image.src,
+                quantity
+            });
+
+            // Show notification menu
+            const notificationMenu = document.querySelector('.cart-notification-menu');
+            const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
+            const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
+            const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
+            const closeButton = notificationMenu.querySelector('.cart-notification-menu__close');
+
+            productImage.src = product.image.src;
+            productImage.alt = product.title;
+            productTitle.textContent = product.title;
+            productPrice.textContent = formatPrice(product.variants[0].price);
+
+            notificationMenu.classList.add('visible');
+
+            // Close notification on X button click
+            closeButton.addEventListener('click', () => {
+                notificationMenu.classList.remove('visible');
+            });
+
+            // Show feedback with black color scheme
+            const originalText = newAddToCartBtn.textContent;
+            newAddToCartBtn.textContent = 'Added to Cart!';
+            newAddToCartBtn.style.backgroundColor = '#000000';
+            newAddToCartBtn.style.color = '#ffffff';
+            
+            setTimeout(() => {
+                newAddToCartBtn.textContent = originalText;
+                newAddToCartBtn.style.backgroundColor = 'transparent';
+                newAddToCartBtn.style.color = '#000000';
+            }, 2000);
+        });
+    }
+
+    // Style quantity controls with black color scheme
+    const quantityControls = document.querySelectorAll('.quantity-btn');
+    const quantityInput = document.getElementById('quantity');
     
-    if (optionsContainer && product.variants && product.variants.length > 1) {
-        let optionsHtml = '';
+    quantityControls.forEach(btn => {
+        btn.style.border = '1px solid #000000';
+        btn.style.color = '#000000';
+        btn.style.backgroundColor = 'transparent';
+        btn.style.transition = 'all 0.3s ease';
         
-        // Handle Option 1
-        if (product.option1_name) {
-            const option1Values = [...new Set(product.variants.map(v => v.option1_value).filter(Boolean))];
-            if (option1Values.length > 0) {
-                optionsHtml += `
-                    <div class="option-group">
-                        <label>${product.option1_name}</label>
-                        <div class="option-values">
-                            ${option1Values.map(value => `
-                                <button class="option-value" data-option="1" data-value="${value}">
-                                    ${value}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-                selectedOptions[product.option1_name] = option1Values[0];
-            }
-        }
+        btn.addEventListener('mouseover', () => {
+            btn.style.backgroundColor = '#f0f0f0';
+        });
         
-        // Handle Option 2
-        if (product.option2_name) {
-            const option2Values = [...new Set(product.variants.map(v => v.option2_value).filter(Boolean))];
-            if (option2Values.length > 0) {
-                optionsHtml += `
-                    <div class="option-group">
-                        <label>${product.option2_name}</label>
-                        <div class="option-values">
-                            ${option2Values.map(value => `
-                                <button class="option-value" data-option="2" data-value="${value}">
-                                    ${value}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-                selectedOptions[product.option2_name] = option2Values[0];
-            }
-        }
+        btn.addEventListener('mouseout', () => {
+            btn.style.backgroundColor = 'transparent';
+        });
+    });
 
-        if (optionsHtml) {
-            optionsContainer.innerHTML = optionsHtml;
-            optionsContainer.style.display = 'block';
-
-            // Add click handlers
-            const optionButtons = optionsContainer.querySelectorAll('.option-value');
-            optionButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const optionNumber = button.dataset.option;
-                    const value = button.dataset.value;
-                    const optionName = optionNumber === '1' ? product.option1_name : product.option2_name;
-
-                    // Update selection
-                    const optionGroup = button.closest('.option-group');
-                    optionGroup.querySelectorAll('.option-value').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-                    button.classList.add('selected');
-                    selectedOptions[optionName] = value;
-
-                    // Find matching variant
-                    const variant = product.variants.find(v => 
-                        (!product.option1_name || v.option1_value === selectedOptions[product.option1_name]) &&
-                        (!product.option2_name || v.option2_value === selectedOptions[product.option2_name])
-                    );
-
-                    if (variant) {
-                        // Update price
-                        if (priceElement) {
-                            if (variant.compare_at_price && variant.compare_at_price > variant.price) {
-                                priceElement.innerHTML = `
-                                    <span class="price-item price-item--sale">€${variant.price.toFixed(2)}</span>
-                                    <s class="price-item price-item--regular">€${variant.compare_at_price.toFixed(2)}</s>
-                                `;
-                            } else {
-                                priceElement.innerHTML = `<span class="price-item">€${variant.price.toFixed(2)}</span>`;
-                            }
-                        }
-
-                        // Update image if variant has one
-                        if (variant.image && mainImage) {
-                            mainImage.src = variant.image;
-                        }
-                    }
-                });
-            });
-
-            // Select first options by default
-            optionsContainer.querySelectorAll('.option-group').forEach(group => {
-                const firstOption = group.querySelector('.option-value');
-                if (firstOption) {
-                    firstOption.classList.add('selected');
-                }
-            });
-        } else {
-            optionsContainer.style.display = 'none';
-        }
-    } else if (optionsContainer) {
-        optionsContainer.style.display = 'none';
+    if (quantityInput) {
+        quantityInput.style.border = '1px solid #000000';
+        quantityInput.style.color = '#000000';
     }
 
+    // Load and display related products (using bestsellers)
     loadRelatedProducts();
 }
 
@@ -513,6 +647,34 @@ function showErrorState(message = 'Product not found') {
 
     if (addToCartBtn) {
         addToCartBtn.style.display = 'none';
+    }
+}
+
+function initializeQuantityControls() {
+    const quantityInput = document.getElementById('quantity');
+    const minusBtn = document.querySelector('.quantity-btn.minus');
+    const plusBtn = document.querySelector('.quantity-btn.plus');
+
+    if (quantityInput && minusBtn && plusBtn) {
+        minusBtn.addEventListener('click', () => {
+            const currentValue = parseInt(quantityInput.value) || 1;
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
+        });
+
+        plusBtn.addEventListener('click', () => {
+            const currentValue = parseInt(quantityInput.value) || 1;
+            if (currentValue < 99) {
+                quantityInput.value = currentValue + 1;
+            }
+        });
+
+        quantityInput.addEventListener('change', () => {
+            let value = parseInt(quantityInput.value) || 1;
+            value = Math.max(1, Math.min(99, value));
+            quantityInput.value = value;
+        });
     }
 }
 
