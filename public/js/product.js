@@ -570,86 +570,29 @@ function displayRelatedProducts(products) {
 
     // Add touch event listeners for mobile scrolling
     let startX;
-    let currentX;
     let startScrollLeft;
     let isDragging = false;
-    let animationFrameId = null;
-    let velocity = 0;
-    let lastTimestamp = null;
 
     function handleTouchStart(e) {
         isDragging = true;
         startX = e.touches[0].pageX;
-        currentX = startX;
         startScrollLeft = container.scrollLeft;
-        lastTimestamp = Date.now();
-        
-        // Cancel any ongoing momentum scrolling
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
     }
 
     function handleTouchMove(e) {
         if (!isDragging) return;
-        e.preventDefault();
 
         const x = e.touches[0].pageX;
-        const deltaX = x - currentX;
-        currentX = x;
-
-        // Calculate velocity (pixels per millisecond)
-        const now = Date.now();
-        const timeDelta = now - lastTimestamp;
-        velocity = deltaX / timeDelta;
-        lastTimestamp = now;
-
-        // Update scroll position
-        container.scrollLeft = container.scrollLeft - deltaX;
-    }
-
-    function handleMomentumScroll() {
-        // Apply deceleration
-        velocity *= 0.95;
-
-        // Update scroll position
-        container.scrollLeft -= velocity * 16; // Assuming 60fps (16ms)
-
-        // Continue animation if velocity is significant
-        if (Math.abs(velocity) > 0.01) {
-            animationFrameId = requestAnimationFrame(handleMomentumScroll);
-        } else {
-            // Snap to nearest item when almost stopped
-            const itemWidth = 300; // Width of card + gap
-            const targetScroll = Math.round(container.scrollLeft / itemWidth) * itemWidth;
-            container.scrollTo({
-                left: targetScroll,
-                behavior: 'smooth'
-            });
-        }
+        const walk = startX - x;
+        container.scrollLeft = startScrollLeft + walk;
     }
 
     function handleTouchEnd() {
-        if (!isDragging) return;
         isDragging = false;
-
-        // Start momentum scrolling
-        if (Math.abs(velocity) > 0.1) {
-            animationFrameId = requestAnimationFrame(handleMomentumScroll);
-        } else {
-            // If moving too slowly, just snap to nearest item
-            const itemWidth = 300; // Width of card + gap
-            const targetScroll = Math.round(container.scrollLeft / itemWidth) * itemWidth;
-            container.scrollTo({
-                left: targetScroll,
-                behavior: 'smooth'
-            });
-        }
     }
 
     container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
     container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
