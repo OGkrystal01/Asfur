@@ -407,6 +407,7 @@ body {
     position: relative;
     margin: 0 -10px;
     padding: 0 10px;
+    overflow: hidden;
 }
 
 .bestsellers .products-container {
@@ -421,6 +422,9 @@ body {
     padding: 10px 0;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
+    touch-action: pan-x;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .bestsellers .products-container::-webkit-scrollbar {
@@ -428,11 +432,13 @@ body {
 }
 
 .bestsellers .bestseller-card {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
     background: white;
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    scroll-snap-align: center;
+    -webkit-user-drag: none;
 }
 
 .bestsellers .bestseller-card:hover {
@@ -450,6 +456,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bestsellers .bestseller-card__image {
@@ -468,6 +475,7 @@ body {
     height: 100%;
     object-fit: contain;
     padding: 20px;
+    -webkit-user-drag: none;
 }
 
 .bestsellers .bestseller-card__info {
@@ -555,17 +563,6 @@ body {
     right: -20px;
 }
 
-.bestsellers .view-details {
-    color: #666;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: color 0.3s;
-}
-
-.bestsellers .bestseller-card:hover .view-details {
-    color: #333;
-}
-
 .bestsellers .sale-badge {
     position: absolute;
     top: 10px;
@@ -599,6 +596,14 @@ body {
         grid-auto-columns: 220px;
         gap: 10px;
         padding: 5px 0;
+        scroll-snap-type: x mandatory;
+        touch-action: pan-x;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .bestsellers .bestseller-card {
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
     }
 
     .bestsellers .bestseller-card__info {
@@ -614,7 +619,7 @@ body {
     }
 
     .bestsellers .carousel-control {
-        display: none;
+        display: none !important;
     }
 }
 

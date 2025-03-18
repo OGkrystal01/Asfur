@@ -512,24 +512,27 @@ function displayProduct(product) {
         quantityInput.style.color = '#000000';
     }
 
-    // Display related products
-    displayRelatedProducts(product.handle);
+    // Load and display related products (using bestsellers)
+    loadRelatedProducts();
 }
 
-// Function to get random products excluding current product
-function getRandomProducts(currentHandle, count = 4) {
-    const availableProducts = window.shopifyProducts.filter(p => p.handle !== currentHandle);
-    const shuffled = availableProducts.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+async function loadRelatedProducts() {
+    // Use the same products as bestsellers
+    const products = window.shopifyProducts || [];
+    const bestsellers = products
+        .filter(product => !product.title.toLowerCase().includes('bundle'))
+        .slice(0, 12);
+    displayRelatedProducts(bestsellers);
 }
 
-// Function to display related products
-function displayRelatedProducts(currentHandle) {
-    const products = getRandomProducts(currentHandle);
-    const container = document.getElementById('bestsellers-container');
+function displayRelatedProducts(products) {
+    const container = document.querySelector('#related-products-container');
     if (!container) return;
 
-    container.innerHTML = products.map(product => {
+    const productsContainer = container.querySelector('.products-container');
+    if (!productsContainer) return;
+
+    productsContainer.innerHTML = products.map(product => {
         const variant = product.variants[0];
         const price = formatPrice(variant.price);
         const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
@@ -542,14 +545,14 @@ function displayRelatedProducts(currentHandle) {
                 <div class="bestseller-card__content">
                     <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}" class="bestseller-card__link">
                         <div class="bestseller-card__image">
-                            <img src="${product.image.src}" alt="${product.title}" loading="lazy">
                             ${hasDiscount ? '<span class="sale-badge">Sale</span>' : ''}
+                            <img src="${product.image.src}" alt="${product.title}" loading="lazy">
                         </div>
                         <div class="bestseller-card__info">
                             <h3 class="bestseller-card__title">${product.title}</h3>
                             <div class="bestseller-card__rating">
-                                <div class="star-rating" title="${ratingStars} out of 5 stars">
-                                    ${Array(5).fill().map((_, index) => index < ratingStars ? '<span class="star">★</span>' : '<span class="star">☆</span>').join('')}
+                                <div class="star-rating">
+                                    ${Array(5).fill().map((_, i) => `<span class="star ${i < ratingStars ? 'filled' : ''}">${i < ratingStars ? '★' : '☆'}</span>`).join('')}
                                 </div>
                                 <span class="bestseller-card__rating-count">(${rating})</span>
                             </div>
@@ -557,7 +560,6 @@ function displayRelatedProducts(currentHandle) {
                                 ${compareAtPrice ? `<span class="compare-at-price">${compareAtPrice}</span>` : ''}
                                 <span class="price">${price}</span>
                             </div>
-                            <span class="view-details">View Full Details →</span>
                         </div>
                     </a>
                 </div>
@@ -565,54 +567,64 @@ function displayRelatedProducts(currentHandle) {
         `;
     }).join('');
 
-    // Add hover effects
-    const cards = container.querySelectorAll('.bestseller-card');
-    cards.forEach(card => {
-        const viewDetails = card.querySelector('.view-details');
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-5px)';
-            card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-            if (viewDetails) {
-                viewDetails.style.color = '#333333';
-            }
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'none';
-            card.style.boxShadow = 'none';
-            if (viewDetails) {
-                viewDetails.style.color = '#666';
-            }
-        });
-    });
+    // Add touch event listeners for mobile scrolling
+    let startX;
+    let scrollLeft;
+    let isDragging = false;
 
-    initRelatedProductsCarousel();
+    productsContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - productsContainer.offsetLeft;
+        scrollLeft = productsContainer.scrollLeft;
+        isDragging = true;
+    }, { passive: true });
+
+    productsContainer.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const x = e.touches[0].pageX - productsContainer.offsetLeft;
+        const walk = (x - startX);
+        productsContainer.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
+
+    productsContainer.addEventListener('touchend', () => {
+        isDragging = false;
+    }, { passive: true });
+
+    // Handle desktop arrow navigation
+    const prevButton = container.querySelector('.prev');
+    const nextButton = container.querySelector('.next');
+    
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => {
+            productsContainer.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+
+        nextButton.addEventListener('click', () => {
+            productsContainer.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+
+        // Show/hide arrows based on screen size
+        const updateArrowVisibility = () => {
+            const isMobile = window.innerWidth <= 768;
+            prevButton.style.display = isMobile ? 'none' : 'flex';
+            nextButton.style.display = isMobile ? 'none' : 'flex';
+        };
+
+        // Update on load and resize
+        updateArrowVisibility();
+        window.addEventListener('resize', updateArrowVisibility);
+    }
 }
 
-function initRelatedProductsCarousel() {
-    const container = document.getElementById('bestsellers-container');
-    const prevButton = document.querySelector('.bestsellers .carousel-control.prev');
-    const nextButton = document.querySelector('.bestsellers .carousel-control.next');
-    
-    if (!container || !prevButton || !nextButton) return;
-
-    // Calculate scroll amount based on card width plus gap
-    const cardWidth = 280; // Width of each card
-    const gap = 20; // Gap between cards
-    const scrollAmount = cardWidth + gap;
-
-    nextButton.addEventListener('click', () => {
-        container.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
-    });
-
-    prevButton.addEventListener('click', () => {
-        container.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth'
-        });
-    });
+function generateStarRating(rating) {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+        if (i < rating) {
+            stars.push('<span class="star">★</span>');
+        } else {
+            stars.push('<span class="star">☆</span>');
+        }
+    }
+    return stars.join('');
 }
 
 async function loadProductFromAPI(handle) {
@@ -696,4 +708,30 @@ function formatPrice(price) {
         currency: 'EUR',
         minimumFractionDigits: 2
     }).format(price).replace('€', '') + '€';
+}
+
+function fetchProducts() {
+    // Implement logic to fetch products from API or database
+    // For demonstration purposes, return a sample array of products
+    return Promise.resolve([
+        {
+            id: 1,
+            title: 'Product 1',
+            image: 'https://example.com/product1.jpg',
+            price: 19.99,
+            compareAtPrice: 24.99,
+            rating: 4.5,
+            reviewCount: 100
+        },
+        {
+            id: 2,
+            title: 'Product 2',
+            image: 'https://example.com/product2.jpg',
+            price: 9.99,
+            compareAtPrice: null,
+            rating: 4.2,
+            reviewCount: 50
+        },
+        // Add more products to the array...
+    ]);
 }
