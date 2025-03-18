@@ -434,44 +434,6 @@ body {
     color: inherit;
 }
 
-.carousel-control {
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-}
-
-.carousel-control.prev {
-    left: -20px;
-}
-
-.carousel-control.next {
-    right: -20px;
-}
-
-.carousel-control:hover {
-    background: #f5f5f5;
-    transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.carousel-controls {
-    position: relative;
-    display: flex;
-    gap: 10px;
-}
-
 /* Desktop hover effect */
 @media (hover: hover) {
     .bestseller-card:hover {
@@ -957,10 +919,6 @@ body {
     .feature-icon {
         font-size: 28px;
         margin-bottom: 0.75rem;
-    }
-
-    .carousel-control {
-        display: none;
     }
 }
 

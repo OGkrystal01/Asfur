@@ -577,7 +577,11 @@ function displayRelatedProducts(products) {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const href = link.href;
+            
+            // Add tapped class for animation
             card.classList.add('tapped');
+            
+            // Navigate after animation
             setTimeout(() => {
                 window.location.href = href;
             }, 200);
@@ -585,33 +589,19 @@ function displayRelatedProducts(products) {
     });
 
     // Handle desktop arrow navigation
-    const prevButton = document.querySelector('.bestsellers .carousel-control.prev');
-    const nextButton = document.querySelector('.bestsellers .carousel-control.next');
+    const prevButton = document.querySelector('.related-products .carousel-control.prev');
+    const nextButton = document.querySelector('.related-products .carousel-control.next');
 
     if (prevButton && nextButton) {
         prevButton.addEventListener('click', () => {
+            const container = document.querySelector('.related-products .carousel-container');
             container.scrollBy({ left: -300, behavior: 'smooth' });
         });
 
         nextButton.addEventListener('click', () => {
+            const container = document.querySelector('.related-products .carousel-container');
             container.scrollBy({ left: 300, behavior: 'smooth' });
         });
-
-        // Show/hide buttons based on scroll position
-        const updateButtons = () => {
-            const isStart = container.scrollLeft <= 0;
-            const isEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth;
-            
-            prevButton.style.opacity = isStart ? '0.5' : '1';
-            nextButton.style.opacity = isEnd ? '0.5' : '1';
-            
-            prevButton.style.pointerEvents = isStart ? 'none' : 'auto';
-            nextButton.style.pointerEvents = isEnd ? 'none' : 'auto';
-        };
-
-        container.addEventListener('scroll', updateButtons);
-        window.addEventListener('resize', updateButtons);
-        updateButtons(); // Initial state
     }
 }
 

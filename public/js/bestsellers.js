@@ -63,7 +63,11 @@ function displayBestsellers(products) {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const href = link.href;
+            
+            // Add tapped class for animation
             card.classList.add('tapped');
+            
+            // Navigate after animation
             setTimeout(() => {
                 window.location.href = href;
             }, 200);
@@ -76,28 +80,14 @@ function displayBestsellers(products) {
 
     if (prevButton && nextButton) {
         prevButton.addEventListener('click', () => {
+            const container = document.querySelector('.bestsellers .carousel-container');
             container.scrollBy({ left: -300, behavior: 'smooth' });
         });
 
         nextButton.addEventListener('click', () => {
+            const container = document.querySelector('.bestsellers .carousel-container');
             container.scrollBy({ left: 300, behavior: 'smooth' });
         });
-
-        // Show/hide buttons based on scroll position
-        const updateButtons = () => {
-            const isStart = container.scrollLeft <= 0;
-            const isEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth;
-            
-            prevButton.style.opacity = isStart ? '0.5' : '1';
-            nextButton.style.opacity = isEnd ? '0.5' : '1';
-            
-            prevButton.style.pointerEvents = isStart ? 'none' : 'auto';
-            nextButton.style.pointerEvents = isEnd ? 'none' : 'auto';
-        };
-
-        container.addEventListener('scroll', updateButtons);
-        window.addEventListener('resize', updateButtons);
-        updateButtons(); // Initial state
     }
 }
 
