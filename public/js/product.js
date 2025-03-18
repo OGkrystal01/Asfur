@@ -523,11 +523,16 @@ function displayProduct(product) {
 }
 
 async function loadRelatedProducts() {
-    const products = window.shopifyProducts || [];
-    const bestsellers = products
-        .filter(product => !product.title.toLowerCase().includes('bundle'))
-        .slice(0, 12);
-    displayRelatedProducts(bestsellers);
+    try {
+        const products = window.shopifyProducts || [];
+        const bestsellers = products
+            .filter(product => !product.title.toLowerCase().includes('bundle'))
+            .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
+            .slice(0, 12);
+        displayRelatedProducts(bestsellers);
+    } catch (error) {
+        console.error('Error loading related products:', error);
+    }
 }
 
 function displayRelatedProducts(products) {
@@ -539,11 +544,11 @@ function displayRelatedProducts(products) {
             <div class="bestseller-card">
                 <a href="/pages/product.html?handle=${product.handle}" class="bestseller-card__link">
                     <div class="bestseller-card__image">
-                        <img src="${product.images[0]}" alt="${product.title}">
+                        <img src="${product.image.src}" alt="${product.title}">
                     </div>
                     <div class="bestseller-card__content">
                         <h3 class="bestseller-card__title">${product.title}</h3>
-                        <p class="bestseller-card__price">€${formatPrice(product.price)}</p>
+                        <p class="bestseller-card__price">€${formatPrice(product.variants[0].price)}</p>
                     </div>
                 </a>
             </div>
@@ -577,6 +582,15 @@ function displayRelatedProducts(products) {
     nextButton?.addEventListener('click', () => {
         container.scrollBy({ left: 300, behavior: 'smooth' });
     });
+}
+
+// Format price to currency
+function formatPrice(price) {
+    return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2
+    }).format(price).replace('€', '') + '€';
 }
 
 async function loadProductFromAPI(handle) {
@@ -651,15 +665,6 @@ function initializeQuantityControls() {
             quantityInput.value = value;
         });
     }
-}
-
-function formatPrice(price) {
-    if (!price) return '';
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
-    }).format(price).replace('€', '') + '€';
 }
 
 function fetchProducts() {

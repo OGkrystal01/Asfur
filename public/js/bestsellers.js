@@ -1,19 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-    loadBestsellers();
+// Load bestsellers
+window.addEventListener('DOMContentLoaded', () => {
+    const products = window.shopifyProducts || [];
+    const bestsellers = products
+        .filter(product => !product.title.toLowerCase().includes('bundle'))
+        .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
+        .slice(0, 12);
+    displayBestsellers(bestsellers);
 });
-
-async function loadBestsellers() {
-    try {
-        const products = window.shopifyProducts || [];
-        const bestsellers = products
-            .filter(product => !product.title.toLowerCase().includes('bundle'))
-            .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
-            .slice(0, 12);
-        displayBestsellers(bestsellers);
-    } catch (error) {
-        console.error('Error loading bestsellers:', error);
-    }
-}
 
 function displayBestsellers(products) {
     const container = document.getElementById('bestsellers-container');
@@ -24,11 +17,11 @@ function displayBestsellers(products) {
             <div class="bestseller-card">
                 <a href="/pages/product.html?handle=${product.handle}" class="bestseller-card__link">
                     <div class="bestseller-card__image">
-                        <img src="${product.images[0]}" alt="${product.title}">
+                        <img src="${product.image.src}" alt="${product.title}">
                     </div>
                     <div class="bestseller-card__content">
                         <h3 class="bestseller-card__title">${product.title}</h3>
-                        <p class="bestseller-card__price">€${formatPrice(product.price)}</p>
+                        <p class="bestseller-card__price">€${formatPrice(product.variants[0].price)}</p>
                     </div>
                 </a>
             </div>
