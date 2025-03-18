@@ -228,113 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-async function loadRelatedProducts() {
-    try {
-        const products = window.shopifyProducts || [];
-        const bestsellers = products
-            .filter(product => !product.title.toLowerCase().includes('bundle'))
-            .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
-            .slice(0, 12);
-        displayRelatedProducts(bestsellers);
-    } catch (error) {
-        console.error('Error loading related products:', error);
-    }
-}
-
-function displayRelatedProducts(products) {
-    const container = document.getElementById('related-products-container');
-    if (!container) return;
-
-    container.innerHTML = products.map(product => {
-        const variant = product.variants[0];
-        const price = formatPrice(variant.price);
-        const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
-        const hasDiscount = variant.compare_at_price && variant.compare_at_price > variant.price;
-        const rating = product.rating_count ? product.rating_count : 0;
-        const ratingStars = Math.round(rating / 5 * 5);
-        
-        return `
-            <div class="bestseller-card">
-                <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}" class="bestseller-card__link">
-                    <div class="bestseller-card__image">
-                        ${hasDiscount ? '<span class="sale-badge">Sale</span>' : ''}
-                        <img src="${product.image.src}" alt="${product.title}" loading="lazy">
-                    </div>
-                    <div class="bestseller-card__info">
-                        <h3 class="bestseller-card__title">${product.title}</h3>
-                        <div class="bestseller-card__rating">
-                            <div class="star-rating">
-                                ${Array(5).fill().map((_, i) => `<span class="star ${i < ratingStars ? 'filled' : ''}">${i < ratingStars ? '★' : '☆'}</span>`).join('')}
-                            </div>
-                            <span class="bestseller-card__rating-count">(${rating})</span>
-                        </div>
-                        <div class="bestseller-card__price">
-                            ${compareAtPrice ? `<span class="compare-at-price">${compareAtPrice}</span>` : ''}
-                            <span class="price">${price}</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        `;
-    }).join('');
-
-    // Add touch event listeners for mobile scrolling
-    let startX;
-    let startScrollLeft;
-    let isDragging = false;
-
-    function handleTouchStart(e) {
-        isDragging = true;
-        startX = e.touches[0].pageX;
-        startScrollLeft = container.scrollLeft;
-        container.style.scrollBehavior = 'auto';
-    }
-
-    function handleTouchMove(e) {
-        if (!isDragging) return;
-        const x = e.touches[0].pageX;
-        const walk = startX - x;
-        container.scrollLeft = startScrollLeft + walk;
-    }
-
-    function handleTouchEnd() {
-        isDragging = false;
-        container.style.scrollBehavior = 'smooth';
-    }
-
-    container.addEventListener('touchstart', handleTouchStart, { passive: true });
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
-    container.addEventListener('touchend', handleTouchEnd, { passive: true });
-    container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-
-    // Handle desktop arrow navigation
-    const prevButton = container.closest('.bestsellers').querySelector('.carousel-control.prev');
-    const nextButton = container.closest('.bestsellers').querySelector('.carousel-control.next');
-    
-    if (prevButton && nextButton) {
-        const scrollAmount = 300;
-
-        prevButton.addEventListener('click', () => {
-            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        });
-
-        nextButton.addEventListener('click', () => {
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
-
-        // Show/hide arrows based on screen size
-        const updateArrowVisibility = () => {
-            const isMobile = window.innerWidth <= 768;
-            prevButton.style.display = isMobile ? 'none' : 'flex';
-            nextButton.style.display = isMobile ? 'none' : 'flex';
-        };
-
-        // Update on load and resize
-        updateArrowVisibility();
-        window.addEventListener('resize', updateArrowVisibility);
-    }
-}
-
 function displayProduct(product) {
     currentProduct = product;
     document.title = `${product.title} - Resell Depot`;
@@ -619,7 +512,117 @@ function displayProduct(product) {
         quantityInput.style.color = '#000000';
     }
 
+    // Load and display related products (using bestsellers)
     loadRelatedProducts();
+}
+
+async function loadRelatedProducts() {
+    const products = window.shopifyProducts || [];
+    const bestsellers = products
+        .filter(product => !product.title.toLowerCase().includes('bundle'))
+        .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
+        .slice(0, 12);
+    displayRelatedProducts(bestsellers);
+}
+
+function displayRelatedProducts(products) {
+    const container = document.getElementById('related-products-container');
+    if (!container) return;
+
+    container.innerHTML = products.map(product => {
+        const variant = product.variants[0];
+        const price = formatPrice(variant.price);
+        const compareAtPrice = variant.compare_at_price ? formatPrice(variant.compare_at_price) : null;
+        const hasDiscount = variant.compare_at_price && variant.compare_at_price > variant.price;
+        const rating = product.rating_count ? product.rating_count : 0;
+        const ratingStars = Math.round(rating / 5 * 5);
+        
+        return `
+            <div class="bestseller-card">
+                <div class="bestseller-card__content">
+                    <a href="/pages/product.html?handle=${encodeURIComponent(product.handle)}" class="bestseller-card__link">
+                        <div class="bestseller-card__image">
+                            ${hasDiscount ? '<span class="sale-badge">Sale</span>' : ''}
+                            <img src="${product.image.src}" alt="${product.title}" loading="lazy">
+                        </div>
+                        <div class="bestseller-card__info">
+                            <h3 class="bestseller-card__title">${product.title}</h3>
+                            <div class="bestseller-card__rating">
+                                <div class="star-rating">
+                                    ${Array(5).fill().map((_, i) => `<span class="star ${i < ratingStars ? 'filled' : ''}">${i < ratingStars ? '★' : '☆'}</span>`).join('')}
+                                </div>
+                                <span class="bestseller-card__rating-count">(${rating})</span>
+                            </div>
+                            <div class="bestseller-card__price">
+                                ${compareAtPrice ? `<span class="compare-at-price">${compareAtPrice}</span>` : ''}
+                                <span class="price">${price}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Add touch event listeners for mobile scrolling
+    let startX;
+    let scrollLeft;
+    let isDragging = false;
+
+    container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+        isDragging = true;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const x = e.touches[0].pageX - container.offsetLeft;
+        const walk = (x - startX);
+        container.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        isDragging = false;
+    }, { passive: true });
+
+    // Handle desktop arrow navigation
+    const section = container.closest('.bestsellers');
+    const prevButton = section.querySelector('.carousel-control.prev');
+    const nextButton = section.querySelector('.carousel-control.next');
+    
+    if (prevButton && nextButton) {
+        prevButton.addEventListener('click', () => {
+            container.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+
+        nextButton.addEventListener('click', () => {
+            container.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+
+        // Show/hide arrows based on screen size
+        const updateArrowVisibility = () => {
+            const isMobile = window.innerWidth <= 768;
+            prevButton.style.display = isMobile ? 'none' : 'flex';
+            nextButton.style.display = isMobile ? 'none' : 'flex';
+        };
+
+        // Update on load and resize
+        updateArrowVisibility();
+        window.addEventListener('resize', updateArrowVisibility);
+    }
+}
+
+function generateStarRating(rating) {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+        if (i < rating) {
+            stars.push('<span class="star">★</span>');
+        } else {
+            stars.push('<span class="star">☆</span>');
+        }
+    }
+    return stars.join('');
 }
 
 async function loadProductFromAPI(handle) {
