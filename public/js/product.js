@@ -517,12 +517,16 @@ function displayProduct(product) {
 }
 
 async function loadRelatedProducts() {
-    const products = window.shopifyProducts || [];
-    const bestsellers = products
-        .filter(product => !product.title.toLowerCase().includes('bundle'))
-        .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
-        .slice(0, 12);
-    displayRelatedProducts(bestsellers);
+    try {
+        const products = window.shopifyProducts || [];
+        const bestsellers = products
+            .filter(product => !product.title.toLowerCase().includes('bundle'))
+            .sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
+            .slice(0, 12);
+        displayRelatedProducts(bestsellers);
+    } catch (error) {
+        console.error('Error loading related products:', error);
+    }
 }
 
 function displayRelatedProducts(products) {
@@ -566,25 +570,32 @@ function displayRelatedProducts(products) {
 
     // Add touch event listeners for mobile scrolling
     let startX;
-    let scrollLeft;
+    let startScrollLeft;
     let isDragging = false;
 
-    container.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX - container.offsetLeft;
-        scrollLeft = container.scrollLeft;
+    function handleTouchStart(e) {
         isDragging = true;
-    }, { passive: true });
+        startX = e.touches[0].pageX;
+        startScrollLeft = container.scrollLeft;
+        container.style.scrollBehavior = 'auto';
+    }
 
-    container.addEventListener('touchmove', (e) => {
+    function handleTouchMove(e) {
         if (!isDragging) return;
-        const x = e.touches[0].pageX - container.offsetLeft;
-        const walk = (x - startX);
-        container.scrollLeft = scrollLeft - walk;
-    }, { passive: true });
+        const x = e.touches[0].pageX;
+        const walk = startX - x;
+        container.scrollLeft = startScrollLeft + walk;
+    }
 
-    container.addEventListener('touchend', () => {
+    function handleTouchEnd() {
         isDragging = false;
-    }, { passive: true });
+        container.style.scrollBehavior = 'smooth';
+    }
+
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+    container.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     // Handle desktop arrow navigation
     const section = container.closest('.bestsellers');
@@ -592,12 +603,14 @@ function displayRelatedProducts(products) {
     const nextButton = section.querySelector('.carousel-control.next');
     
     if (prevButton && nextButton) {
+        const scrollAmount = 300;
+
         prevButton.addEventListener('click', () => {
-            container.scrollBy({ left: -300, behavior: 'smooth' });
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         });
 
         nextButton.addEventListener('click', () => {
-            container.scrollBy({ left: 300, behavior: 'smooth' });
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         });
 
         // Show/hide arrows based on screen size
@@ -611,18 +624,6 @@ function displayRelatedProducts(products) {
         updateArrowVisibility();
         window.addEventListener('resize', updateArrowVisibility);
     }
-}
-
-function generateStarRating(rating) {
-    const stars = [];
-    for (let i = 0; i < 5; i++) {
-        if (i < rating) {
-            stars.push('<span class="star">★</span>');
-        } else {
-            stars.push('<span class="star">☆</span>');
-        }
-    }
-    return stars.join('');
 }
 
 async function loadProductFromAPI(handle) {
@@ -732,4 +733,16 @@ function fetchProducts() {
         },
         // Add more products to the array...
     ]);
+}
+
+function generateStarRating(rating) {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+        if (i < rating) {
+            stars.push('<span class="star">★</span>');
+        } else {
+            stars.push('<span class="star">☆</span>');
+        }
+    }
+    return stars.join('');
 }
