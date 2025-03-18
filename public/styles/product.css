@@ -445,30 +445,39 @@ body {
 .bestseller-card {
     flex: 0 0 280px;
     max-width: 280px;
-    transition: transform 0.3s ease;
     background: white;
     border-radius: 8px;
     overflow: hidden;
-    scroll-snap-align: start;
+    touch-action: pan-x;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.bestseller-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+/* Only apply hover effects on devices that support hover */
+@media (hover: hover) {
+    .bestseller-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .bestseller-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.bestseller-card__link {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .bestseller-card__content {
     background: white;
     border-radius: 8px;
     overflow: hidden;
-    height: 100%;
-}
-
-.bestseller-card__link {
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
     height: 100%;
 }
 
