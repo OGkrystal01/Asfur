@@ -230,163 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let selectedOptions = {};
 
-function getProductOptions(product) {
-    const options = [];
-    
-    // Get all variants for this product
-    const products = window.shopifyProducts || [];
-    const variants = products.filter(p => p.handle === product.handle);
-    
-    // Check for Option1
-    if (variants[0] && variants[0].option1_name) {
-        const values = new Set();
-        variants.forEach(variant => {
-            if (variant.option1_value) values.add(variant.option1_value);
-        });
-        options.push({
-            name: variants[0].option1_name,
-            values: Array.from(values)
-        });
-    }
-    
-    // Check for Option2
-    if (variants[0] && variants[0].option2_name) {
-        const values = new Set();
-        variants.forEach(variant => {
-            if (variant.option2_value) values.add(variant.option2_value);
-        });
-        options.push({
-            name: variants[0].option2_name,
-            values: Array.from(values)
-        });
-    }
-    
-    return options;
-}
-
-function renderProductOptions(product) {
-    const optionsContainer = document.getElementById('product-options');
-    if (!optionsContainer) return;
-    
-    const options = getProductOptions(product);
-    if (options.length === 0) {
-        optionsContainer.style.display = 'none';
-        return;
-    }
-
-    optionsContainer.style.display = 'block';
-    optionsContainer.innerHTML = options.map(option => `
-        <div class="option-group" data-option="${option.name.toLowerCase()}">
-            <label class="option-group__label">${option.name}</label>
-            <div class="option-group__values">
-                ${option.values.map(value => {
-                    const isColor = option.name.toLowerCase() === 'color';
-                    if (isColor) {
-                        // Find variant with this color to get its image
-                        const variant = window.shopifyProducts.find(p => 
-                            p.handle === product.handle && 
-                            (p.option1_value === value || p.option2_value === value) &&
-                            p.image
-                        );
-                        const style = variant && variant.image ? 
-                            `background-image: url('${variant.image}')` :
-                            `background-color: ${value.toLowerCase()}`;
-                        return `
-                            <div class="option-value option-value--color" 
-                                data-value="${value}"
-                                style="${style}"
-                                title="${value}">
-                            </div>`;
-                    }
-                    return `
-                        <div class="option-value" data-value="${value}">
-                            ${value}
-                        </div>`;
-                }).join('')}
-            </div>
-        </div>
-    `).join('');
-
-    // Set initial selected options
-    options.forEach(option => {
-        const firstValue = option.values[0];
-        selectedOptions[option.name] = firstValue;
-        const firstOption = optionsContainer.querySelector(
-            `.option-group[data-option="${option.name.toLowerCase()}"] .option-value[data-value="${firstValue}"]`
-        );
-        if (firstOption) {
-            firstOption.classList.add('selected');
-        }
-    });
-
-    // Add click handlers
-    optionsContainer.addEventListener('click', (e) => {
-        const optionValue = e.target.closest('.option-value');
-        if (!optionValue) return;
-
-        const optionGroup = optionValue.closest('.option-group');
-        const optionName = optionGroup.dataset.option;
-
-        // Update selection
-        optionGroup.querySelectorAll('.option-value').forEach(el => {
-            el.classList.remove('selected');
-        });
-        optionValue.classList.add('selected');
-        selectedOptions[optionName] = optionValue.dataset.value;
-
-        // Update product image if it's a color option
-        if (optionName === 'color') {
-            const variant = window.shopifyProducts.find(p => 
-                p.handle === product.handle && 
-                (p.option1_value === optionValue.dataset.value || p.option2_value === optionValue.dataset.value) &&
-                p.image
-            );
-            if (variant && variant.image) {
-                document.getElementById('main-image').src = variant.image;
-            }
-        }
-    });
-}
-
-function getUniqueOptionValues(handle, optionField) {
-    const products = window.shopifyProducts || [];
-    const variants = products.filter(p => p.handle === handle);
-    const values = new Set();
-    variants.forEach(variant => {
-        if (variant[optionField]) {
-            values.add(variant[optionField]);
-        }
-    });
-    return Array.from(values);
-}
-
-function findVariantWithColorImage(handle, colorValue) {
-    const products = window.shopifyProducts || [];
-    return products.find(p => 
-        p.handle === handle && 
-        (p['Option1 Value'] === colorValue || p['Option2 Value'] === colorValue || p['Option3 Value'] === colorValue) && 
-        p['Variant Image']
-    );
-}
-
-// Update addToCart to include selected options
-function addToCart(product) {
-    const quantity = parseInt(document.getElementById('quantity')?.value || '1');
-    const options = Object.entries(selectedOptions).map(([name, value]) => ({
-        name,
-        value
-    }));
-
-    window.addToCart({
-        handle: product.handle,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        quantity: quantity,
-        options: options
-    });
-}
-
 function displayProduct(product) {
     currentProduct = product;
     document.title = `${product.title} - Resell Depot`;
@@ -397,194 +240,46 @@ function displayProduct(product) {
     const priceElement = document.getElementById('product-price');
     const descriptionElement = document.getElementById('product-description');
     
-    if (mainImage) mainImage.src = product.image;
+    if (mainImage && product.image?.src) mainImage.src = product.image.src;
     if (titleElement) titleElement.textContent = product.title;
-    if (priceElement) priceElement.textContent = formatPrice(product.price);
-    if (descriptionElement) descriptionElement.innerHTML = product.description;
+    if (descriptionElement && product.body_html) descriptionElement.innerHTML = product.body_html;
+
+    // Update price with compare at price if available
+    if (priceElement && product.variants?.[0]) {
+        const variant = product.variants[0];
+        const price = variant.price;
+        const comparePrice = variant.compare_at_price;
+        
+        if (comparePrice && comparePrice > price) {
+            priceElement.innerHTML = `
+                <span class="price-item price-item--sale">€${price.toFixed(2)}</span>
+                <s class="price-item price-item--regular">€${comparePrice.toFixed(2)}</s>
+            `;
+        } else {
+            priceElement.innerHTML = `<span class="price-item">€${price.toFixed(2)}</span>`;
+        }
+    }
 
     // Render product options
     renderProductOptions(product);
 
-    // Add rating if product has reviews
-    if (product.rating_count) {
-        const ratingElement = document.getElementById('product-rating');
-        if (ratingElement) {
+    // Add rating if product has rating_count
+    const ratingElement = document.getElementById('product-rating');
+    if (ratingElement) {
+        if (product.rating_count) {
             const starRating = ratingElement.querySelector('.star-rating');
             const ratingCount = ratingElement.querySelector('.product__rating-count');
             
-            // Generate 5 filled stars for all products with reviews
-            starRating.innerHTML = Array(5).fill('★').join('');
-            ratingCount.textContent = `${product.rating_count} reviews`;
+            if (starRating) starRating.innerHTML = Array(5).fill('★').join('');
+            if (ratingCount) ratingCount.textContent = `${product.rating_count} reviews`;
             
-            // Make rating clickable to scroll to reviews
             ratingElement.style.display = 'flex';
-            ratingElement.style.cursor = 'pointer';
-            ratingElement.onclick = () => {
-                const reviewsSection = document.getElementById('reviews-container');
-                if (reviewsSection) {
-                    reviewsSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            };
-
-            // Add reviews section
-            const reviewsContainer = document.getElementById('reviews-container');
-            if (reviewsContainer) {
-                reviewsContainer.innerHTML = `
-                    <div class="reviews-section">
-                        <div class="reviews-section__header">
-                            <div class="reviews-section__summary">
-                                <h2>Customer Reviews</h2>
-                                <div class="reviews-section__average">
-                                    <div class="star-rating star-rating--large">
-                                        ${Array(5).fill('★').join('')}
-                                    </div>
-                                    <span class="reviews-section__average-text">5.0 out of 5</span>
-                                </div>
-                                <div class="reviews-section__count">${product.rating_count} reviews</div>
-                                <button class="write-review-btn" id="write-review-btn">Write a Review</button>
-                                <div class="reviews-section__distribution">
-                                    <div class="rating-bar">
-                                        <span class="rating-bar__label">5 stars</span>
-                                        <div class="rating-bar__bar">
-                                            <div class="rating-bar__fill" style="width: 100%"></div>
-                                        </div>
-                                        <span class="rating-bar__count">${product.rating_count}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="reviews-section__filters">
-                            <div class="reviews-section__sort">
-                                <label for="sort-reviews">Sort by:</label>
-                                <select id="sort-reviews" class="sort-reviews-select">
-                                    <option value="newest">Newest</option>
-                                    <option value="highest">Highest Rating</option>
-                                    <option value="lowest">Lowest Rating</option>
-                                    <option value="helpful">Most Helpful</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="reviews-section__list">
-                            ${Array(5).fill('').map(() => `
-                                <div class="review-card">
-                                    <div class="review-card__header">
-                                        <div class="star-rating">
-                                            ${Array(5).fill('★').join('')}
-                                        </div>
-                                        <span class="review-card__author">Verified Customer</span>
-                                        <span class="review-card__date">${new Date().toLocaleDateString('en-US', { 
-                                            year: 'numeric', 
-                                            month: 'long', 
-                                            day: 'numeric' 
-                                        })}</span>
-                                    </div>
-                                    <div class="review-card__body">
-                                        <p>Great product! Exactly as described. Fast shipping and excellent customer service.</p>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="reviews-pagination">
-                            <button class="pagination-btn prev disabled">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button class="pagination-btn number active">1</button>
-                            <button class="pagination-btn next disabled">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                // Add event listeners for review functionality
-                const writeReviewBtn = document.getElementById('write-review-btn');
-                const sortReviews = document.getElementById('sort-reviews');
-
-                if (writeReviewBtn) {
-                    writeReviewBtn.addEventListener('click', () => {
-                        // Scroll to top of reviews section
-                        const reviewsSection = document.querySelector('.reviews-section');
-                        if (reviewsSection) {
-                            reviewsSection.scrollIntoView({ behavior: 'smooth' });
-                        }
-                        
-                        // Show write review form (to be implemented)
-                        alert('Write a review feature coming soon!');
-                    });
-                }
-
-                if (sortReviews) {
-                    sortReviews.addEventListener('change', (e) => {
-                        const sortBy = e.target.value;
-                        // Sort reviews logic (to be implemented)
-                        console.log('Sorting reviews by:', sortBy);
-                    });
-                }
-            }
-        }
-    } else {
-        // Hide rating if no reviews
-        const ratingElement = document.getElementById('product-rating');
-        if (ratingElement) {
+        } else {
             ratingElement.style.display = 'none';
         }
     }
 
-    // Update price with compare at price if available
-    if (priceElement && product.variants && product.variants[0]) {
-        const variant = product.variants[0];
-        if (variant.compare_at_price) {
-            priceElement.innerHTML = `
-                <span class="price-item price-item--sale">€${variant.price}</span>
-                <s class="price-item price-item--regular">€${variant.compare_at_price}</s>
-            `;
-        } else {
-            priceElement.innerHTML = `<span class="price-item">€${variant.price}</span>`;
-        }
-    }
-
-    // Update product details with black color scheme
-    // Add cart notification menu if it doesn't exist
-    if (!document.querySelector('.cart-notification-menu')) {
-        const notificationMenu = document.createElement('div');
-        notificationMenu.className = 'cart-notification-menu';
-        notificationMenu.innerHTML = `
-            <div class="cart-notification-menu__header">
-                <h3 class="cart-notification-menu__title">Added to Cart</h3>
-                <button class="cart-notification-menu__close">&times;</button>
-            </div>
-            <div class="cart-notification-menu__product">
-                <img class="cart-notification-menu__product-image" src="" alt="">
-                <div class="cart-notification-menu__product-info">
-                    <h4 class="cart-notification-menu__product-title"></h4>
-                    <p class="cart-notification-menu__product-price"></p>
-                </div>
-            </div>
-            <div class="cart-notification-menu__buttons">
-                <button class="cart-notification-menu__button cart-notification-menu__button--secondary">Continue Shopping</button>
-                <button class="cart-notification-menu__button cart-notification-menu__button--primary">Checkout Now</button>
-            </div>
-        `;
-        document.body.appendChild(notificationMenu);
-
-        // Add event listeners for the notification menu
-        const closeBtn = notificationMenu.querySelector('.cart-notification-menu__close');
-        const continueBtn = notificationMenu.querySelector('.cart-notification-menu__button--secondary');
-        const checkoutBtn = notificationMenu.querySelector('.cart-notification-menu__button--primary');
-
-        closeBtn.addEventListener('click', () => {
-            notificationMenu.classList.remove('visible');
-        });
-
-        continueBtn.addEventListener('click', () => {
-            notificationMenu.classList.remove('visible');
-        });
-
-        checkoutBtn.addEventListener('click', () => {
-            window.location.href = '/pages/cart.html';
-        });
-    }
-
+    // Add to cart button functionality
     const addToCartBtn = document.getElementById('add-to-cart');
     if (addToCartBtn) {
         // Clear any existing event listeners
@@ -610,12 +305,21 @@ function displayProduct(product) {
         // Add to cart functionality
         newAddToCartBtn.addEventListener('click', () => {
             const quantity = parseInt(document.getElementById('quantity')?.value || '1');
+            
+            // Get selected variant based on options
+            const selectedVariant = findSelectedVariant(product);
+            
             window.addToCart({
                 handle: product.handle,
                 title: product.title,
-                price: product.variants[0].price,
-                image: product.image.src,
-                quantity
+                variant: selectedVariant,
+                price: selectedVariant ? selectedVariant.price : product.variants[0].price,
+                image: selectedVariant?.image || product.image.src,
+                quantity,
+                options: Object.entries(selectedOptions).map(([name, value]) => ({
+                    name,
+                    value
+                }))
             });
 
             // Show notification menu
@@ -625,10 +329,10 @@ function displayProduct(product) {
             const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
             const closeButton = notificationMenu.querySelector('.cart-notification-menu__close');
 
-            productImage.src = product.image.src;
+            productImage.src = selectedVariant?.image || product.image.src;
             productImage.alt = product.title;
             productTitle.textContent = product.title;
-            productPrice.textContent = formatPrice(product.variants[0].price);
+            productPrice.textContent = formatPrice(selectedVariant ? selectedVariant.price : product.variants[0].price);
 
             notificationMenu.classList.add('visible');
 
@@ -637,7 +341,7 @@ function displayProduct(product) {
                 notificationMenu.classList.remove('visible');
             });
 
-            // Show feedback with black color scheme
+            // Show feedback
             const originalText = newAddToCartBtn.textContent;
             newAddToCartBtn.textContent = 'Added to Cart!';
             newAddToCartBtn.style.backgroundColor = '#000000';
@@ -813,31 +517,161 @@ function showErrorState(message = 'Product not found') {
     }
 }
 
-function initializeQuantityControls() {
-    const quantityInput = document.getElementById('quantity');
-    const minusBtn = document.querySelector('.quantity-btn.minus');
-    const plusBtn = document.querySelector('.quantity-btn.plus');
+function renderProductOptions(product) {
+    const optionsContainer = document.getElementById('product-options');
+    if (!optionsContainer) return;
+    
+    const options = getProductOptions(product);
+    if (options.length === 0) {
+        optionsContainer.style.display = 'none';
+        return;
+    }
 
-    if (quantityInput && minusBtn && plusBtn) {
-        minusBtn.addEventListener('click', () => {
-            const currentValue = parseInt(quantityInput.value) || 1;
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
+    optionsContainer.style.display = 'block';
+    optionsContainer.innerHTML = options.map(option => `
+        <div class="option-group" data-option="${option.name.toLowerCase()}">
+            <label class="option-group__label">${option.name}</label>
+            <div class="option-group__values">
+                ${option.values.map(value => {
+                    const isColor = option.name.toLowerCase().includes('color');
+                    if (isColor) {
+                        const variant = findVariantWithColor(product, value);
+                        const style = variant?.image ? 
+                            `background-image: url('${variant.image}')` :
+                            `background-color: ${value.toLowerCase()}`;
+                        return `
+                            <div class="option-value option-value--color" 
+                                data-value="${value}"
+                                style="${style}"
+                                title="${value}">
+                            </div>`;
+                    }
+                    return `
+                        <div class="option-value" data-value="${value}">
+                            ${value}
+                        </div>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+
+    // Set initial selected options
+    options.forEach(option => {
+        const firstValue = option.values[0];
+        selectedOptions[option.name] = firstValue;
+        const firstOption = optionsContainer.querySelector(
+            `.option-group[data-option="${option.name.toLowerCase()}"] .option-value[data-value="${firstValue}"]`
+        );
+        if (firstOption) {
+            firstOption.classList.add('selected');
+        }
+    });
+
+    // Update initial variant
+    updateSelectedVariant(product);
+
+    // Add click handlers
+    optionsContainer.addEventListener('click', (e) => {
+        const optionValue = e.target.closest('.option-value');
+        if (!optionValue) return;
+
+        const optionGroup = optionValue.closest('.option-group');
+        const optionName = optionGroup.dataset.option;
+
+        // Update selection
+        optionGroup.querySelectorAll('.option-value').forEach(el => {
+            el.classList.remove('selected');
+        });
+        optionValue.classList.add('selected');
+        selectedOptions[optionName] = optionValue.dataset.value;
+
+        // Update selected variant and price
+        updateSelectedVariant(product);
+
+        // Update product image if it's a color option
+        if (optionName === 'color') {
+            const variant = findVariantWithColor(product, optionValue.dataset.value);
+            if (variant?.image) {
+                document.getElementById('main-image').src = variant.image;
             }
-        });
+        }
+    });
+}
 
-        plusBtn.addEventListener('click', () => {
-            const currentValue = parseInt(quantityInput.value) || 1;
-            if (currentValue < 99) {
-                quantityInput.value = currentValue + 1;
+function getProductOptions(product) {
+    const options = [];
+    
+    // Helper function to add option if it exists
+    const addOption = (optionNum) => {
+        const name = product[`option${optionNum}_name`];
+        if (name) {
+            const values = new Set();
+            
+            // Add values from all variants
+            product.variants.forEach(variant => {
+                const value = variant[`option${optionNum}_value`];
+                if (value) values.add(value);
+            });
+            
+            if (values.size > 0) {
+                options.push({
+                    name,
+                    values: Array.from(values)
+                });
             }
-        });
+        }
+    };
+    
+    // Check for both option1 and option2
+    addOption(1);
+    addOption(2);
+    
+    return options;
+}
 
-        quantityInput.addEventListener('change', () => {
-            let value = parseInt(quantityInput.value) || 1;
-            value = Math.max(1, Math.min(99, value));
-            quantityInput.value = value;
+function findVariantWithColor(product, colorValue) {
+    return product.variants.find(variant => 
+        variant.option1_value === colorValue || 
+        variant.option2_value === colorValue
+    );
+}
+
+function findSelectedVariant(product) {
+    return product.variants.find(variant => {
+        return Object.entries(selectedOptions).every(([name, value]) => {
+            const optionIndex = product[`option1_name`] === name ? 1 : 
+                              product[`option2_name`] === name ? 2 : null;
+            
+            if (!optionIndex) return true;
+            return variant[`option${optionIndex}_value`] === value;
         });
+    });
+}
+
+function updateSelectedVariant(product) {
+    const variant = findSelectedVariant(product);
+    if (!variant) return;
+    
+    // Update price
+    const priceElement = document.getElementById('product-price');
+    if (priceElement) {
+        const price = variant.price;
+        const comparePrice = variant.compare_at_price;
+        
+        if (comparePrice && comparePrice > price) {
+            priceElement.innerHTML = `
+                <span class="price-item price-item--sale">€${price.toFixed(2)}</span>
+                <s class="price-item price-item--regular">€${comparePrice.toFixed(2)}</s>
+            `;
+        } else {
+            priceElement.innerHTML = `<span class="price-item">€${price.toFixed(2)}</span>`;
+        }
+    }
+    
+    // Update image if variant has one
+    if (variant.image) {
+        const mainImage = document.getElementById('main-image');
+        if (mainImage) mainImage.src = variant.image;
     }
 }
 
