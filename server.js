@@ -29,9 +29,11 @@ const { products } = require('./public/js/data/products.js');
 // Secure payment endpoint with proper validation and error handling
 app.post('/api/create-payment', async (req, res) => {
     try {
+        console.log('Payment request received:', req.body);
         const { cartItems } = req.body;
         
         if (!Array.isArray(cartItems) || cartItems.length === 0) {
+            console.error('Invalid cart items:', cartItems);
             return res.status(400).json({ error: 'Invalid cart items' });
         }
 
@@ -41,33 +43,36 @@ app.post('/api/create-payment', async (req, res) => {
         }, 0);
 
         if (isNaN(total) || total <= 0) {
+            console.error('Invalid total amount:', total);
             return res.status(400).json({ error: 'Invalid total amount' });
         }
 
         // Format amount to 2 decimal places
         const amount = total.toFixed(2);
+        console.log('Calculated amount:', amount);
 
-        // Create payment with Mollie
-        const payment = await mollieClient.payments.create({
-            amount: {
-                currency: 'EUR',
-                value: amount
-            },
-            description: 'Order from Resell Depot',
-            redirectUrl: `${process.env.APP_URL}/pages/order-confirmation.html`,
-            webhookUrl: `${process.env.APP_URL}/api/webhooks/mollie`,
-            metadata: {
-                cartItems: cartItems
-            },
-            method: ['creditcard', 'applepay', 'banktransfer', 'klarnapaylater', 'klarnapaynow'],
-            locale: 'en_US'
-        });
-
-        res.json({ 
-            checkoutUrl: payment.getCheckoutUrl(),
-            paymentId: payment.id
-        });
-
+        // Create payment with Mollie - using minimal required fields as per memory
+        try {
+            const payment = await mollieClient.payments.create({
+                amount: {
+                    currency: 'EUR',
+                    value: amount
+                },
+                description: 'Order from Resell Depot',
+                redirectUrl: `${process.env.APP_URL}/pages/order-confirmation.html`
+            });
+            
+            console.log('Payment created successfully:', payment.id);
+            res.json({ 
+                checkoutUrl: payment.getCheckoutUrl(),
+                paymentId: payment.id
+            });
+        } catch (mollieError) {
+            console.error('Mollie API error:', mollieError);
+            res.status(500).json({
+                error: 'Payment provider error: ' + (mollieError.message || 'Unknown error')
+            });
+        }
     } catch (error) {
         console.error('Payment creation failed:', error);
         res.status(500).json({
@@ -199,6 +204,11 @@ app.get('/pages/*', (req, res, next) => {
     });
 });
 
+// Catch-all route for SPA
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running on port ${port}`);
 });
