@@ -1,6 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadBestsellers();
+    setupBestsellerButtons();
 });
+
+function setupBestsellerButtons() {
+    const section = document.querySelector('.bestsellers');
+    if (!section) return;
+    
+    const container = document.getElementById('bestsellers-container');
+    const prevButton = section.querySelector('.carousel-control.prev');
+    const nextButton = section.querySelector('.carousel-control.next');
+    
+    if (prevButton && nextButton && container) {
+        prevButton.addEventListener('click', () => {
+            container.scrollLeft -= 320;
+        });
+        
+        nextButton.addEventListener('click', () => {
+            container.scrollLeft += 320;
+        });
+    }
+}
 
 async function loadBestsellers() {
     try {
@@ -76,41 +96,6 @@ function displayBestsellers(products) {
             }, 200);
         });
     });
-
-    // Handle desktop arrow navigation
-    const section = document.querySelector('.bestsellers');
-    const prevButton = section.querySelector('.carousel-control.prev');
-    const nextButton = section.querySelector('.carousel-control.next');
-
-    if (prevButton && nextButton && container) {
-        // Calculate scroll amount based on card width plus gap
-        const cardWidth = 300; // Width of the card
-        const gap = 20; // Gap between cards
-        const scrollAmount = cardWidth + gap;
-
-        // Remove any existing event listeners
-        prevButton.replaceWith(prevButton.cloneNode(true));
-        nextButton.replaceWith(nextButton.cloneNode(true));
-        
-        // Get fresh references
-        const newPrevButton = section.querySelector('.carousel-control.prev');
-        const newNextButton = section.querySelector('.carousel-control.next');
-        
-        // Add click event listeners
-        newPrevButton.addEventListener('click', () => {
-            container.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
-        });
-
-        newNextButton.addEventListener('click', () => {
-            container.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        });
-    }
 }
 
 // Format price to currency
