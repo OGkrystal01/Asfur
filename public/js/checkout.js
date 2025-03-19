@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         debugLog('Sending payload to server', payload);
 
         // Send request to the current server
-        fetch('https://resell-depot.onrender.com/api/create-payment', {
+        fetch('/api/create-payment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
