@@ -594,21 +594,33 @@ function displayRelatedProducts(products) {
     const nextButton = section.querySelector('.carousel-control.next');
 
     if (prevButton && nextButton && container) {
-        const scrollAmount = container.offsetWidth;
+        // Calculate scroll amount based on card width plus gap
+        const cardWidth = 280; // Width of the card
+        const gap = 20; // Gap between cards
+        const scrollAmount = cardWidth + gap;
 
-        prevButton.onclick = () => {
+        // Remove any existing event listeners
+        prevButton.replaceWith(prevButton.cloneNode(true));
+        nextButton.replaceWith(nextButton.cloneNode(true));
+        
+        // Get fresh references
+        const newPrevButton = section.querySelector('.carousel-control.prev');
+        const newNextButton = section.querySelector('.carousel-control.next');
+        
+        // Add click event listeners
+        newPrevButton.addEventListener('click', () => {
             container.scrollBy({
                 left: -scrollAmount,
                 behavior: 'smooth'
             });
-        };
+        });
 
-        nextButton.onclick = () => {
+        newNextButton.addEventListener('click', () => {
             container.scrollBy({
                 left: scrollAmount,
                 behavior: 'smooth'
             });
-        };
+        });
     }
 }
 
