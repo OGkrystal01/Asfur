@@ -394,38 +394,24 @@ body {
 }
 
 .bestsellers-carousel {
-    width: 100%;
-    position: relative;
-}
-
-.carousel-container {
-    display: flex;
-    gap: 20px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: 10px 0;
     scroll-snap-type: x mandatory;
 }
 
-.carousel-container::-webkit-scrollbar {
-    display: none;
+.bestsellers-carousel .carousel-container {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
 }
 
 .bestseller-card {
-    flex: 0 0 280px;
-    min-width: 280px;
+    flex: 0 0 300px;
     scroll-snap-align: start;
     background: white;
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
-}
-
-.bestseller-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .bestseller-card__link {
@@ -444,7 +430,7 @@ body {
 
 /* Mobile tap effect */
 @media (hover: none) {
-    .bestseller-card:active {
+    .bestseller-card.tapped {
         transform: scale(0.98);
         transition: transform 0.1s ease;
     }
