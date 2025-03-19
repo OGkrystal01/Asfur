@@ -390,23 +390,17 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     margin-bottom: 40px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.bestsellers-carousel {
-    width: 100%;
-    position: relative;
 }
 
 .carousel-container {
     display: flex;
     gap: 20px;
     overflow-x: auto;
+    scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: 10px 0;
-    scroll-snap-type: x mandatory;
 }
 
 .carousel-container::-webkit-scrollbar {
@@ -414,24 +408,84 @@ body {
 }
 
 .bestseller-card {
-    flex: 0 0 280px;
-    min-width: 280px;
+    flex: 0 0 300px;
     scroll-snap-align: start;
     background: white;
     border-radius: 8px;
     overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.bestseller-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
 .bestseller-card__link {
     display: block;
     text-decoration: none;
     color: inherit;
+}
+
+.bestseller-card__image {
+    position: relative;
+    padding-top: 100%;
+    overflow: hidden;
+}
+
+.bestseller-card__image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bestseller-card__info {
+    padding: 15px;
+}
+
+.bestseller-card__title {
+    font-size: 16px;
+    margin: 0 0 10px;
+    font-weight: 500;
+}
+
+.bestseller-card__price {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.bestseller-card__price .price {
+    font-weight: 600;
+    color: #000;
+}
+
+.bestseller-card__price .compare-at-price {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.carousel-control {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.carousel-control:hover {
+    transform: translateY(-2px);
+    background-color: #f5f5f5;
 }
 
 /* Desktop hover effect */
@@ -444,7 +498,7 @@ body {
 
 /* Mobile tap effect */
 @media (hover: none) {
-    .bestseller-card:active {
+    .bestseller-card.tapped {
         transform: scale(0.98);
         transition: transform 0.1s ease;
     }

@@ -540,7 +540,7 @@ function displayRelatedProducts(products) {
         const hasDiscount = variant.compare_at_price && variant.compare_at_price > variant.price;
         const rating = product.rating_count ? product.rating_count : 0;
         const ratingStars = Math.round(rating / 5 * 5);
-        
+
         return `
             <div class="bestseller-card">
                 <div class="bestseller-card__content">
@@ -588,20 +588,27 @@ function displayRelatedProducts(products) {
         });
     });
 
-    // Handle desktop arrow navigation
-    const section = document.querySelector('.related-products');
+    // Handle desktop arrow navigation for related products
+    const section = document.querySelector('.bestsellers');
     const prevButton = section.querySelector('.carousel-control.prev');
     const nextButton = section.querySelector('.carousel-control.next');
-    const carouselContainer = section.querySelector('.carousel-container');
 
-    if (prevButton && nextButton && carouselContainer) {
-        prevButton.addEventListener('click', () => {
-            carouselContainer.scrollBy({ left: -300, behavior: 'smooth' });
-        });
+    if (prevButton && nextButton && container) {
+        const scrollAmount = container.offsetWidth;
 
-        nextButton.addEventListener('click', () => {
-            carouselContainer.scrollBy({ left: 300, behavior: 'smooth' });
-        });
+        prevButton.onclick = () => {
+            container.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        };
+
+        nextButton.onclick = () => {
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        };
     }
 }
 

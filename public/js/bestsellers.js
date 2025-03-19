@@ -78,16 +78,24 @@ function displayBestsellers(products) {
     const section = document.querySelector('.bestsellers');
     const prevButton = section.querySelector('.carousel-control.prev');
     const nextButton = section.querySelector('.carousel-control.next');
-    const carouselContainer = section.querySelector('.carousel-container');
+    const carouselContainer = container;
 
     if (prevButton && nextButton && carouselContainer) {
-        prevButton.addEventListener('click', () => {
-            carouselContainer.scrollBy({ left: -300, behavior: 'smooth' });
-        });
+        const scrollAmount = 300;
 
-        nextButton.addEventListener('click', () => {
-            carouselContainer.scrollBy({ left: 300, behavior: 'smooth' });
-        });
+        prevButton.onclick = () => {
+            carouselContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        };
+
+        nextButton.onclick = () => {
+            carouselContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        };
     }
 }
 
