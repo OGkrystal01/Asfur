@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalElement = document.getElementById('total');
     const checkoutForm = document.getElementById('checkout-form');
     const continueToPaymentBtn = document.getElementById('continue-to-payment');
+    
+    // Flag to track if we've redirected to Mollie
+    let redirectedToMollie = false;
 
     // Debug function to log detailed information
     function debugLog(message, data) {
@@ -33,8 +36,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize checkout
     function initializeCheckout() {
         loadCartItems();
-        resetButtonState(); // Call the resetButtonState function here
+        resetButtonState(); // Reset button on initial load
     }
+
+    // Reset the button state when the page is shown (including when navigating back)
+    window.addEventListener('pageshow', function(event) {
+        // This will fire when navigating back to the page
+        debugLog('pageshow event fired', { persisted: event.persisted });
+        
+        // Reset button state regardless of how the page was loaded
+        resetButtonState();
+        
+        // Reset the redirect flag
+        redirectedToMollie = false;
+    });
+    
+    // Also listen for visibility changes (tab becomes visible again)
+    document.addEventListener('visibilitychange', function() {
+        debugLog('visibility changed', { hidden: document.hidden, redirectedToMollie: redirectedToMollie });
+        
+        // If the page becomes visible again and we previously redirected to Mollie
+        if (!document.hidden && redirectedToMollie) {
+            resetButtonState();
+            redirectedToMollie = false;
+        }
+    });
 
     // Load cart items from localStorage
     function loadCartItems() {
@@ -162,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 debugLog('Redirecting to checkout URL', data.checkoutUrl);
                 // Use a small timeout to ensure the debug logs are visible
                 setTimeout(function() {
+                    redirectedToMollie = true;
                     window.location.href = data.checkoutUrl;
                 }, 100);
             } else {
