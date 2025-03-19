@@ -114,9 +114,5 @@ function displayBestsellers(products) {
 
 // Format price to currency
 function formatPrice(price) {
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
-    }).format(price).replace('€', '') + '€';
+    return price.toFixed(2).replace('.', ',') + '€';
 }

@@ -702,11 +702,7 @@ function initializeQuantityControls() {
 
 function formatPrice(price) {
     if (!price) return '';
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2
-    }).format(price).replace('€', '') + '€';
+    return price.toFixed(2).replace('.', ',') + '€';
 }
 
 function fetchProducts() {
