@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Get cart data exactly as stored by cart.js
+        // Get cart data directly from localStorage without reformatting
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         
         // Check if cart is empty
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const customerData = Object.fromEntries(formData.entries());
         localStorage.setItem('customerData', JSON.stringify(customerData));
 
-        // Create Mollie payment with cart items exactly as they are stored
+        // Send only cartItems to the server as per the working implementation
         fetch('https://resell-depot.onrender.com/api/create-payment', {
             method: 'POST',
             headers: {
@@ -84,15 +84,17 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({ cartItems: cart })
         })
-        .then(response => {
+        .then(function(response) {
             if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.error || 'Payment creation failed');
+                return response.json().then(function(errorData) {
+                    throw new Error(errorData.error || 'Payment creation failed');
                 });
             }
             return response.json();
         })
-        .then(data => {
+        .then(function(data) {
+            console.log('Payment created successfully:', data);
+            
             // Store payment ID for verification
             if (data.paymentId) {
                 localStorage.setItem('currentPaymentId', data.paymentId);
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('No checkout URL received');
             }
         })
-        .catch(error => {
+        .catch(function(error) {
             console.error('Checkout error:', error);
             
             // Reset button state
