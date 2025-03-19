@@ -228,25 +228,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function setupRelatedProductsButtons() {
-    const section = document.querySelector('.bestsellers');
-    if (!section) return;
-    
-    const container = document.getElementById('related-products-container');
-    const prevButton = section.querySelector('.carousel-control.prev');
-    const nextButton = section.querySelector('.carousel-control.next');
-    
-    if (prevButton && nextButton && container) {
-        prevButton.addEventListener('click', () => {
-            container.scrollLeft -= 320;
-        });
-        
-        nextButton.addEventListener('click', () => {
-            container.scrollLeft += 320;
-        });
-    }
-}
-
 function displayProduct(product) {
     currentProduct = product;
     document.title = `${product.title} - Resell Depot`;
@@ -587,6 +568,9 @@ function displayRelatedProducts(products) {
         `;
     }).join('');
 
+    // Add an extra spacer div to ensure scrolling to the end
+    container.innerHTML += '<div style="flex: 0 0 20px; min-width: 20px;"></div>';
+
     // Handle card clicks with animation
     const cards = container.getElementsByClassName('bestseller-card');
     Array.from(cards).forEach(card => {
@@ -607,7 +591,39 @@ function displayRelatedProducts(products) {
         });
     });
 
-    setupRelatedProductsButtons();
+    // Handle desktop arrow navigation
+    const section = document.querySelector('.bestsellers');
+    const prevButton = section.querySelector('.carousel-control.prev');
+    const nextButton = section.querySelector('.carousel-control.next');
+
+    if (prevButton && nextButton && container) {
+        // Calculate scroll amount based on card width plus gap
+        const cardWidth = 300; // Width of the card
+        const gap = 20; // Gap between cards
+        const scrollAmount = cardWidth + gap;
+
+        // Remove any existing event listeners
+        const newPrevButton = prevButton.cloneNode(true);
+        const newNextButton = nextButton.cloneNode(true);
+        
+        prevButton.parentNode.replaceChild(newPrevButton, prevButton);
+        nextButton.parentNode.replaceChild(newNextButton, nextButton);
+        
+        // Add click event listeners
+        newPrevButton.addEventListener('click', () => {
+            container.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+
+        newNextButton.addEventListener('click', () => {
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+    }
 }
 
 async function loadProductFromAPI(handle) {

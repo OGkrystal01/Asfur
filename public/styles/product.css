@@ -414,7 +414,6 @@ body {
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: 10px 0;
-    padding-right: 60px; /* Add extra padding to ensure last item is fully visible */
 }
 
 .carousel-container::-webkit-scrollbar {
