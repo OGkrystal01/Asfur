@@ -75,12 +75,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const itemTotal = parseFloat(item.price) * item.quantity;
             subtotal += itemTotal;
 
+            // Display variant information if available
+            let variantDisplay = '';
+            if (item.variant && item.variant !== 'Default') {
+                variantDisplay = `<p class="checkout-item-variant">${item.variant}</p>`;
+            }
+
             const itemElement = document.createElement('div');
             itemElement.className = 'checkout-item';
             itemElement.innerHTML = `
                 <img src="${item.image}" alt="${item.title}">
                 <div class="checkout-item-details">
                     <h3>${item.title}</h3>
+                    ${variantDisplay}
                     <p>Quantity: ${item.quantity}</p>
                 </div>
                 <div class="checkout-item-price">
@@ -200,10 +207,65 @@ document.addEventListener('DOMContentLoaded', function() {
             debugLog('Checkout error', { message: error.message, stack: error.stack });
             console.error('Checkout error:', error);
             
+            // Show error notification
+            showNotification('error', 'There was an error processing your payment. Please try again.');
+            
             // Reset button state
             resetButtonState();
-            
-            alert('There was an error processing your payment. Please try again.');
         });
     });
+
+    // Function to show notifications
+    function showNotification(type, message) {
+        // Create notification element if it doesn't exist
+        let notification = document.querySelector('.checkout-notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.className = 'checkout-notification';
+            document.querySelector('.checkout-form-container').prepend(notification);
+        }
+        
+        // Set notification content
+        notification.innerHTML = `
+            <div class="notification-content ${type}">
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+                ${message}
+            </div>
+        `;
+        
+        // Show notification
+        notification.style.display = 'block';
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 5000);
+    }
+
+    // Add styles for variant display in checkout
+    const style = document.createElement('style');
+    style.textContent = `
+        .checkout-item-variant {
+            font-size: 14px;
+            color: #666;
+            margin: 4px 0;
+        }
+        .notification-content {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .notification-content.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        .notification-content i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+    `;
+    document.head.appendChild(style);
 });

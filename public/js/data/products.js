@@ -9,13 +9,54 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        variants: [{
-            price: 34.95,
-            compare_at_price: 64.95,
-            inventory_quantity: -1,
-            requires_shipping: false,
-            taxable: false
-        }],
+        options: [
+            {
+                name: 'Size',
+                values: ['XS', 'S', 'M', 'XL', 'XXL']
+            }
+        ],
+        variants: [
+            {
+                option1: 'XS',
+                price: 24.95,
+                compare_at_price: 54.99,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: 'S',
+                price: 24.95,
+                compare_at_price: 54.99,
+                inventory_quantity: -7,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: 'M',
+                price: 24.95,
+                compare_at_price: 54.99,
+                inventory_quantity: -22,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: 'XL',
+                price: 24.95,
+                compare_at_price: 54.99,
+                inventory_quantity: -16,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: 'XXL',
+                price: 24.95,
+                compare_at_price: 54.99,
+                inventory_quantity: -2,
+                requires_shipping: false,
+                taxable: false
+            }
+        ],
         image: {
             src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/07e84d_6d869f53bc43432a820d01b544d5a46b_mv2.webp?v=1729621576',
             alt: ''
@@ -120,13 +161,94 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        variants: [{
-            price: 19.95,
-            compare_at_price: 39.95,
-            inventory_quantity: 0,
-            requires_shipping: false,
-            taxable: false
-        }],
+        options: [
+            {
+                name: 'Size',
+                values: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
+            }
+        ],
+        variants: [
+            {
+                option1: '36',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '37',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '38',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '39',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -4,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '40',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '41',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -3,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '42',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -2,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '43',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -2,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '44',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false
+            },
+            {
+                option1: '45',
+                price: 12.95,
+                compare_at_price: 22.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false
+            }
+        ],
         image: {
             src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/5375_618cee3da69a25.11590256_CW2288-111-2.webp?v=1729621612',
             alt: ''
@@ -344,13 +466,126 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        variants: [{
-            price: 109.99,
-            compare_at_price: 179.99,
-            inventory_quantity: -2,
-            requires_shipping: false,
-            taxable: false
-        }],
+        options: [
+            {
+                name: 'Color',
+                values: ['Black', 'Gray', 'Green']
+            },
+            {
+                name: 'Storage',
+                values: ['128GB', '256GB', '512GB']
+            }
+        ],
+        variants: [
+            {
+                option1: 'Black',
+                option2: '128GB',
+                price: 79.99,
+                compare_at_price: 99.99,
+                inventory_quantity: -2,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558'
+                }
+            },
+            {
+                option1: 'Black',
+                option2: '256GB',
+                price: 84.99,
+                compare_at_price: 99.99,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558'
+                }
+            },
+            {
+                option1: 'Black',
+                option2: '512GB',
+                price: 94.99,
+                compare_at_price: 99.99,
+                inventory_quantity: -2,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558'
+                }
+            },
+            {
+                option1: 'Gray',
+                option2: '128GB',
+                price: 79.99,
+                compare_at_price: 99.99,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/65038654434d0-iPhone15ProNaturaltitaniumpng.png?v=1729621558'
+                }
+            },
+            {
+                option1: 'Gray',
+                option2: '256GB',
+                price: 84.99,
+                compare_at_price: 99.99,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/65038654434d0-iPhone15ProNaturaltitaniumpng.png?v=1729621558'
+                }
+            },
+            {
+                option1: 'Gray',
+                option2: '512GB',
+                price: 94.99,
+                compare_at_price: 99.99,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/65038654434d0-iPhone15ProNaturaltitaniumpng.png?v=1729621558'
+                }
+            },
+            {
+                option1: 'Green',
+                option2: '128GB',
+                price: 79.99,
+                compare_at_price: 99.99,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/iPhone_15_Plus_iPhone_15_Green_Combo_Screen__WWEN_800x_aca2ece5-6db5-4405-ad1f-f1445bdfa772.webp?v=1729621558'
+                }
+            },
+            {
+                option1: 'Green',
+                option2: '256GB',
+                price: 84.99,
+                compare_at_price: 99.99,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/iPhone_15_Plus_iPhone_15_Green_Combo_Screen__WWEN_800x_aca2ece5-6db5-4405-ad1f-f1445bdfa772.webp?v=1729621558'
+                }
+            },
+            {
+                option1: 'Green',
+                option2: '512GB',
+                price: 94.99,
+                compare_at_price: 99.99,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/iPhone_15_Plus_iPhone_15_Green_Combo_Screen__WWEN_800x_aca2ece5-6db5-4405-ad1f-f1445bdfa772.webp?v=1729621558'
+                }
+            }
+        ],
         image: {
             src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Final_iPhone-14-Pro-Split-Full-Wrap-Vinyl-Skin-Design-Mockup-Front-Back-Angled-View_7c8b1dba-0ddc-4f69-b26e-160550b46b97.webp?v=1729621558',
             alt: ''
@@ -367,13 +602,90 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        variants: [{
-            price: 114.95,
-            compare_at_price: 189.95,
-            inventory_quantity: 0,
-            requires_shipping: false,
-            taxable: false
-        }],
+        options: [
+            {
+                name: 'Color',
+                values: ['Black', 'Pink']
+            },
+            {
+                name: 'Storage',
+                values: ['256GB', '512GB', '1024GB']
+            }
+        ],
+        variants: [
+            {
+                option1: 'Black',
+                option2: '256GB',
+                price: 84.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/full_body_housing_for_samsung_galaxy_s23_ultra_black_maxbhi_com_54246.jpg?v=1729621568'
+                }
+            },
+            {
+                option1: 'Black',
+                option2: '512GB',
+                price: 89.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/full_body_housing_for_samsung_galaxy_s23_ultra_black_maxbhi_com_54246.jpg?v=1729621568'
+                }
+            },
+            {
+                option1: 'Black',
+                option2: '1024GB',
+                price: 99.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/full_body_housing_for_samsung_galaxy_s23_ultra_black_maxbhi_com_54246.jpg?v=1729621568'
+                }
+            },
+            {
+                option1: 'Pink',
+                option2: '256GB',
+                price: 84.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/back.png?v=1729621568'
+                }
+            },
+            {
+                option1: 'Pink',
+                option2: '512GB',
+                price: 89.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/back.png?v=1729621568'
+                }
+            },
+            {
+                option1: 'Pink',
+                option2: '1024GB',
+                price: 99.99,
+                compare_at_price: 119.95,
+                inventory_quantity: 0,
+                requires_shipping: false,
+                taxable: false,
+                image: {
+                    src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/back.png?v=1729621568'
+                }
+            }
+        ],
         image: {
             src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/full_body_housing_for_samsung_galaxy_s23_ultra_black_maxbhi_com_54246.jpg?v=1729621568',
             alt: ''
@@ -409,14 +721,20 @@ const products = [
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { products };
 } else {
-    // For browser environment
     window.shopifyProducts = products;
 }
 
 // Function to fetch products - maintaining exact Shopify functionality
-async function fetchProducts() {
-    if (typeof window !== 'undefined') {
-        return window.shopifyProducts || [];
-    }
-    return products;
+function fetchProducts() {
+    return new Promise((resolve) => {
+        // Simulating API call with local data
+        setTimeout(() => {
+            resolve(products);
+        }, 100);
+    });
+}
+
+// Make fetchProducts available globally
+if (typeof window !== 'undefined') {
+    window.fetchProducts = fetchProducts;
 }

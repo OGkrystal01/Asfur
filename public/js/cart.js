@@ -9,7 +9,20 @@ function addToCart(product) {
     }
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItem = cart.find(item => item.handle === product.handle);
+    
+    // Create a unique identifier for the product variant
+    const variantIdentifier = product.selectedVariant ? 
+        `${product.handle}_${JSON.stringify(product.selectedVariant.options)}` : 
+        product.handle;
+    
+    // Check if this exact variant is already in the cart
+    const existingItem = cart.find(item => {
+        if (item.selectedVariant && product.selectedVariant) {
+            return item.handle === product.handle && 
+                   JSON.stringify(item.selectedVariant.options) === JSON.stringify(product.selectedVariant.options);
+        }
+        return item.handle === product.handle;
+    });
     
     if (existingItem) {
         existingItem.quantity += product.quantity || 1;
@@ -19,7 +32,9 @@ function addToCart(product) {
             title: product.title,
             price: parseFloat(product.price),
             image: product.image,
-            quantity: product.quantity || 1
+            quantity: product.quantity || 1,
+            variant: product.variant || 'Default',
+            selectedVariant: product.selectedVariant || null
         });
     }
     
@@ -96,18 +111,26 @@ function updateCartDisplay() {
     cart.forEach(item => {
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
+        
+        // Display variant information if available
+        let variantDisplay = '';
+        if (item.variant && item.variant !== 'Default') {
+            variantDisplay = `<p class="cart-item__variant">${item.variant}</p>`;
+        }
+        
         cartItem.innerHTML = `
             <img src="${item.image}" alt="${item.title}" class="cart-item__image">
             <div class="cart-item__info">
                 <h3 class="cart-item__title">${item.title}</h3>
+                ${variantDisplay}
                 <p class="cart-item__price">${formatPrice(item.price)}</p>
                 <div class="cart-item__quantity">
-                    <button class="quantity-btn decrease" data-handle="${item.handle}">-</button>
-                    <input type="number" value="${item.quantity}" min="1" max="99" data-handle="${item.handle}">
-                    <button class="quantity-btn increase" data-handle="${item.handle}">+</button>
+                    <button class="quantity-btn decrease" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>-</button>
+                    <input type="number" value="${item.quantity}" min="1" max="99" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>
+                    <button class="quantity-btn increase" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>+</button>
                 </div>
             </div>
-            <button class="cart-item__remove" data-handle="${item.handle}">&times;</button>
+            <button class="cart-item__remove" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>&times;</button>
         `;
         cartItems.appendChild(cartItem);
     });
@@ -117,8 +140,39 @@ function updateCartDisplay() {
     quantityInputs.forEach(input => {
         input.addEventListener('change', (e) => {
             const handle = e.target.dataset.handle;
+            const variantData = e.target.dataset.variant;
             const quantity = parseInt(e.target.value) || 1;
-            updateQuantity(handle, quantity);
+            updateQuantity(handle, quantity, variantData ? JSON.parse(variantData) : null);
+        });
+    });
+
+    // Add event listeners for decrease buttons
+    const decreaseButtons = cartItems.querySelectorAll('.quantity-btn.decrease');
+    decreaseButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const handle = e.target.dataset.handle;
+            const variantData = e.target.dataset.variant;
+            const input = e.target.parentNode.querySelector('input[type="number"]');
+            const currentValue = parseInt(input.value) || 1;
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                updateQuantity(handle, currentValue - 1, variantData ? JSON.parse(variantData) : null);
+            }
+        });
+    });
+
+    // Add event listeners for increase buttons
+    const increaseButtons = cartItems.querySelectorAll('.quantity-btn.increase');
+    increaseButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const handle = e.target.dataset.handle;
+            const variantData = e.target.dataset.variant;
+            const input = e.target.parentNode.querySelector('input[type="number"]');
+            const currentValue = parseInt(input.value) || 1;
+            if (currentValue < 99) {
+                input.value = currentValue + 1;
+                updateQuantity(handle, currentValue + 1, variantData ? JSON.parse(variantData) : null);
+            }
         });
     });
 
@@ -127,7 +181,8 @@ function updateCartDisplay() {
     removeButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             const handle = e.target.dataset.handle;
-            removeFromCart(handle);
+            const variantData = e.target.dataset.variant;
+            removeFromCart(handle, variantData ? JSON.parse(variantData) : null);
         });
     });
 
@@ -135,20 +190,41 @@ function updateCartDisplay() {
 }
 
 // Remove item from cart
-function removeFromCart(handle) {
+function removeFromCart(handle, variantOptions = null) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart = cart.filter(item => item.handle !== handle);
+    
+    if (variantOptions) {
+        // Remove specific variant
+        cart = cart.filter(item => {
+            if (item.selectedVariant && item.handle === handle) {
+                return JSON.stringify(item.selectedVariant.options) !== JSON.stringify(variantOptions);
+            }
+            return item.handle !== handle;
+        });
+    } else {
+        // Remove all variants of this product
+        cart = cart.filter(item => item.handle !== handle);
+    }
+    
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartUI();
 }
 
 // Update item quantity
-function updateQuantity(handle, quantity) {
+function updateQuantity(handle, quantity, variantOptions = null) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const item = cart.find(item => item.handle === handle);
+    
+    const item = cart.find(item => {
+        if (variantOptions && item.selectedVariant) {
+            return item.handle === handle && 
+                   JSON.stringify(item.selectedVariant.options) === JSON.stringify(variantOptions);
+        }
+        return item.handle === handle;
+    });
+    
     if (item) {
         if (quantity <= 0) {
-            removeFromCart(handle);
+            removeFromCart(handle, variantOptions);
         } else {
             item.quantity = Math.min(99, Math.max(1, quantity));
             localStorage.setItem('cart', JSON.stringify(cart));
@@ -162,6 +238,12 @@ function showCartNotification(product) {
     const notification = document.querySelector('.cart-notification');
     if (!notification) return;
 
+    // Display variant information if available
+    let variantDisplay = '';
+    if (product.variant && product.variant !== 'Default') {
+        variantDisplay = `<p class="cart-notification__variant">${product.variant}</p>`;
+    }
+
     notification.innerHTML = `
         <div class="cart-notification__content">
             <button class="cart-notification__close">&times;</button>
@@ -173,6 +255,7 @@ function showCartNotification(product) {
                 <img id="cart-notification-image" src="${product.image}" alt="${product.title}">
                 <div class="cart-notification__product-info">
                     <h3 id="cart-notification-title" class="cart-notification__product-title">${product.title}</h3>
+                    ${variantDisplay}
                     <p id="cart-notification-price" class="cart-notification__product-price">${formatPrice(product.price)}</p>
                 </div>
             </div>
@@ -199,123 +282,76 @@ function showCartNotification(product) {
 
 // Format price
 function formatPrice(price) {
-    return new Intl.NumberFormat('de-DE', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(price);
+    return `€${parseFloat(price).toFixed(2)}`;
+}
+
+// Reset checkout button state
+function resetCheckoutButton(button) {
+    if (button) {
+        button.disabled = false;
+        button.textContent = 'Proceed to Checkout';
+        button.style.backgroundColor = '#000000';
+    }
 }
 
 // Initialize cart UI on page load
-// Reset checkout button state
-function resetCheckoutButton(button) {
-    button.disabled = false;
-    button.textContent = 'Proceed to Checkout';
-    button.style.backgroundColor = '#000000';
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
 
     // Initialize checkout button
     const checkoutButton = document.getElementById('checkout-button');
     if (checkoutButton) {
-        // Reset button state on page load
-        resetCheckoutButton(checkoutButton);
-
-        // Handle visibility change to detect when user returns from payment page
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                resetCheckoutButton(checkoutButton);
+        checkoutButton.addEventListener('click', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add items to your cart before checkout.');
+                return;
             }
-        });
-
-        checkoutButton.addEventListener('click', async () => {
-            try {
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                
-                if (cart.length === 0) {
-                    // Removed alert
-                    return;
-                }
-
-                // Show loading state
-                checkoutButton.disabled = true;
-                checkoutButton.textContent = 'Processing...';
-                checkoutButton.style.backgroundColor = '#333333';
-
-                // Create Mollie payment
-                const response = await fetch('/api/create-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        cartItems: cart
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Payment creation failed');
-                }
-
-                const { checkoutUrl } = await response.json();
-                
-                // Redirect to Mollie checkout
-                window.location.href = checkoutUrl;
-
-            } catch (error) {
-                console.error('Checkout error:', error);
-                
-                // Show a more user-friendly error message
-                const errorMessage = error.message === 'Payment creation failed' 
-                    ? 'Payment processing failed. Please try again or contact support.'
-                    : 'Checkout was canceled. You can try again when ready.';
-                
-                // Create a notification div if it doesn't exist
-                let notification = document.querySelector('.checkout-notification');
-                if (!notification) {
-                    notification = document.createElement('div');
-                    notification.className = 'checkout-notification';
-                    document.querySelector('.cart-summary').prepend(notification);
-                }
-                
-                // Show the error message
-                notification.innerHTML = `
-                    <div class="notification-content error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        ${errorMessage}
-                    </div>
-                `;
-                
-                // Remove the notification after 5 seconds
-                setTimeout(() => {
-                    notification.remove();
-                }, 5000);
-                
-                // Reset button state
-                resetCheckoutButton(checkoutButton);
-            }
-        });
-
-        // Style checkout button
-        checkoutButton.style.backgroundColor = '#000000';
-        checkoutButton.style.color = '#ffffff';
-        checkoutButton.style.border = 'none';
-        checkoutButton.style.width = '100%';
-        checkoutButton.style.padding = '15px';
-        checkoutButton.style.fontSize = '16px';
-        checkoutButton.style.fontWeight = 'bold';
-        checkoutButton.style.cursor = 'pointer';
-        checkoutButton.style.transition = 'all 0.3s ease';
-        
-        checkoutButton.addEventListener('mouseover', () => {
+            
+            // Show loading state
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = 'Processing...';
             checkoutButton.style.backgroundColor = '#333333';
-        });
-        
-        checkoutButton.addEventListener('mouseout', () => {
-            checkoutButton.style.backgroundColor = '#000000';
+            
+            // Redirect to checkout page
+            window.location.href = '/pages/checkout.html';
         });
     }
+
+    // Initialize cart notification
+    if (!document.querySelector('.cart-notification')) {
+        const notification = document.createElement('div');
+        notification.className = 'cart-notification';
+        document.body.appendChild(notification);
+    }
+
+    // Initialize empty cart message
+    const emptyCartElement = document.getElementById('empty-cart');
+    if (emptyCartElement) {
+        const continueShoppingButton = emptyCartElement.querySelector('.continue-shopping');
+        if (continueShoppingButton) {
+            continueShoppingButton.addEventListener('click', () => {
+                window.location.href = '/index.html';
+            });
+        }
+    }
+
+    // Style cart buttons with black theme
+    const cartButtons = document.querySelectorAll('.cart-button');
+    cartButtons.forEach(button => {
+        button.style.backgroundColor = '#000000';
+        button.style.color = '#ffffff';
+        button.style.border = 'none';
+        button.style.padding = '10px 20px';
+        button.style.cursor = 'pointer';
+        button.style.transition = 'background-color 0.3s ease';
+        
+        button.addEventListener('mouseover', () => {
+            button.style.backgroundColor = '#333333';
+        });
+        
+        button.addEventListener('mouseout', () => {
+            button.style.backgroundColor = '#000000';
+        });
+    });
 });

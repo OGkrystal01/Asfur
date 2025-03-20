@@ -52,25 +52,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Display order items
         orderItems.innerHTML = '';
         cart.forEach(item => {
-            const product = window.products.find(p => p.id === item.id);
-            if (product) {
-                const itemTotal = product.price * item.quantity;
-                subtotal += itemTotal;
+            const itemTotal = parseFloat(item.price) * item.quantity;
+            subtotal += itemTotal;
 
-                const itemElement = document.createElement('div');
-                itemElement.className = 'order-item';
-                itemElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <div class="order-item-details">
-                        <h3>${product.name}</h3>
-                        <p>Quantity: ${item.quantity}</p>
-                    </div>
-                    <div class="order-item-price">
-                        €${itemTotal.toFixed(2)}
-                    </div>
-                `;
-                orderItems.appendChild(itemElement);
+            // Display variant information if available
+            let variantDisplay = '';
+            if (item.variant && item.variant !== 'Default') {
+                variantDisplay = `<p class="order-item-variant">${item.variant}</p>`;
             }
+
+            const itemElement = document.createElement('div');
+            itemElement.className = 'order-item';
+            itemElement.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <div class="order-item-details">
+                    <h3>${item.title}</h3>
+                    ${variantDisplay}
+                    <p>Quantity: ${item.quantity}</p>
+                </div>
+                <div class="order-item-price">
+                    €${itemTotal.toFixed(2)}
+                </div>
+            `;
+            orderItems.appendChild(itemElement);
         });
 
         // Display shipping details
@@ -89,6 +93,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Update totals
         subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
         totalElement.textContent = `€${subtotal.toFixed(2)}`;
+
+        // Add styles for variant display
+        const style = document.createElement('style');
+        style.textContent = `
+            .order-item-variant {
+                font-size: 14px;
+                color: #666;
+                margin: 4px 0;
+            }
+        `;
+        document.head.appendChild(style);
 
         // Clear cart and customer data
         localStorage.removeItem('cart');

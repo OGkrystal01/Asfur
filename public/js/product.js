@@ -252,99 +252,100 @@ function displayProduct(product) {
     if (titleElement) titleElement.textContent = product.title;
     if (descriptionElement) descriptionElement.innerHTML = product.body_html;
 
-    // Variablen für die aktuelle Variantenauswahl
+    // Variables for current variant selection
     let selectedOptions = {};
     
-    // Variantenauswahl anzeigen, wenn das Produkt Optionen hat
+    // Display variant selectors if product has options
     const variantSelectorContainer = document.getElementById('variant-selector');
     if (variantSelectorContainer && product.options && product.options.length > 0) {
-        variantSelectorContainer.innerHTML = ''; // Container leeren
+        variantSelectorContainer.innerHTML = ''; // Clear container
         
-        // Für jede Option (z.B. Größe, Farbe) ein Auswahlmenü erstellen
+        // Create a selector for each option (e.g., Size, Color)
         product.options.forEach(option => {
             const optionName = option.name;
             const optionValues = option.values;
             
-            // Container für diese Option erstellen
+            // Create container for this option
             const optionContainer = document.createElement('div');
-            optionContainer.className = 'variant-option-container';
+            optionContainer.className = 'option-group';
             
-            // Label für die Option
-            const optionLabel = document.createElement('span');
-            optionLabel.className = 'variant-selector-label';
+            // Label for the option
+            const optionLabel = document.createElement('label');
             optionLabel.textContent = optionName;
             optionContainer.appendChild(optionLabel);
             
-            // Container für die Optionswerte
+            // Container for option values
             const optionsContainer = document.createElement('div');
             
-            // Spezielle Behandlung für Farbvarianten
-            if (optionName.toLowerCase() === 'color' || optionName.toLowerCase() === 'farbe') {
+            // Special handling for color variants
+            if (optionName.toLowerCase() === 'color' || optionName.toLowerCase() === 'farbe' || optionName.toLowerCase() === 'colour') {
                 optionsContainer.className = 'color-variant-options';
                 
-                // Für jeden Farbwert einen Button erstellen
+                // Create a button for each color value
                 optionValues.forEach(value => {
                     const optionButton = document.createElement('div');
                     optionButton.className = 'color-variant-option';
                     optionButton.setAttribute('data-value', value);
                     
-                    // Hintergrundfarbe basierend auf dem Farbnamen setzen
-                    // Für bekannte Farben direkt den CSS-Farbnamen verwenden
+                    // Set background color based on color name
                     let bgColor = value.toLowerCase();
                     optionButton.style.backgroundColor = bgColor;
                     
-                    // Wenn es eine Variante mit diesem Farbwert gibt, das Bild als Hintergrund verwenden
-                    const variantWithColor = product.variants.find(v => v.option1 === value || v.option2 === value || v.option3 === value);
+                    // If a variant with this color value exists and has an image, use it as background
+                    const variantWithColor = product.variants.find(v => 
+                        v.option1 === value || v.option2 === value || v.option3 === value
+                    );
+                    
                     if (variantWithColor && variantWithColor.image) {
                         optionButton.style.backgroundImage = `url(${variantWithColor.image.src})`;
                         optionButton.style.backgroundSize = 'cover';
                         optionButton.style.backgroundPosition = 'center';
                     }
                     
-                    // Event-Listener für die Auswahl
+                    // Event listener for selection
                     optionButton.addEventListener('click', () => {
-                        // Alle anderen Optionen dieser Kategorie deselektieren
+                        // Deselect all other options in this category
                         optionsContainer.querySelectorAll('.color-variant-option').forEach(btn => {
                             btn.classList.remove('selected');
                         });
                         
-                        // Diese Option selektieren
+                        // Select this option
                         optionButton.classList.add('selected');
                         
-                        // Ausgewählte Option speichern
+                        // Save selected option
                         selectedOptions[optionName] = value;
                         
-                        // Variante basierend auf der Auswahl aktualisieren
+                        // Update variant based on selection
                         updateSelectedVariant();
                     });
                     
                     optionsContainer.appendChild(optionButton);
                 });
             } else {
-                // Standard-Optionen (nicht Farbe)
+                // Standard options (not color)
                 optionsContainer.className = 'variant-options';
                 
-                // Für jeden Wert einen Button erstellen
+                // Create a button for each value
                 optionValues.forEach(value => {
                     const optionButton = document.createElement('button');
                     optionButton.className = 'variant-option';
                     optionButton.setAttribute('data-value', value);
                     optionButton.textContent = value;
                     
-                    // Event-Listener für die Auswahl
+                    // Event listener for selection
                     optionButton.addEventListener('click', () => {
-                        // Alle anderen Optionen dieser Kategorie deselektieren
+                        // Deselect all other options in this category
                         optionsContainer.querySelectorAll('.variant-option').forEach(btn => {
                             btn.classList.remove('selected');
                         });
                         
-                        // Diese Option selektieren
+                        // Select this option
                         optionButton.classList.add('selected');
                         
-                        // Ausgewählte Option speichern
+                        // Save selected option
                         selectedOptions[optionName] = value;
                         
-                        // Variante basierend auf der Auswahl aktualisieren
+                        // Update variant based on selection
                         updateSelectedVariant();
                     });
                     
@@ -356,48 +357,57 @@ function displayProduct(product) {
             variantSelectorContainer.appendChild(optionContainer);
         });
         
-        // Standard-Optionen auswählen (erste Option jeder Kategorie)
+        // Select default options (first option in each category)
         product.options.forEach(option => {
             const optionName = option.name;
             const firstValue = option.values[0];
             selectedOptions[optionName] = firstValue;
             
-            // Den entsprechenden Button als ausgewählt markieren
-            const optionContainer = variantSelectorContainer.querySelector(`.variant-option-container:has(.variant-selector-label:contains('${optionName}'))`);
-            if (optionContainer) {
-                const firstButton = optionContainer.querySelector('.variant-option, .color-variant-option');
+            // Mark the corresponding button as selected
+            if (optionName.toLowerCase() === 'color' || optionName.toLowerCase() === 'farbe' || optionName.toLowerCase() === 'colour') {
+                const firstButton = variantSelectorContainer.querySelector(`.color-variant-option[data-value="${firstValue}"]`);
+                if (firstButton) {
+                    firstButton.classList.add('selected');
+                }
+            } else {
+                const firstButton = variantSelectorContainer.querySelector(`.variant-option[data-value="${firstValue}"]`);
                 if (firstButton) {
                     firstButton.classList.add('selected');
                 }
             }
         });
         
-        // Funktion zum Aktualisieren der ausgewählten Variante
+        // Function to update the selected variant
         function updateSelectedVariant() {
-            // Die passende Variante basierend auf den ausgewählten Optionen finden
-            currentProduct.selectedVariant = product.variants.find(variant => {
-                // Prüfen, ob alle ausgewählten Optionen mit dieser Variante übereinstimmen
+            // Find the matching variant based on selected options
+            const matchingVariant = product.variants.find(variant => {
+                // Check if all selected options match this variant
                 return product.options.every((option, index) => {
                     const optionName = option.name;
                     const optionValue = selectedOptions[optionName];
                     const variantOptionValue = variant[`option${index + 1}`];
                     return optionValue === variantOptionValue;
                 });
-            }) || product.variants[0]; // Fallback zur ersten Variante, wenn keine Übereinstimmung gefunden wird
+            });
             
-            // Preis aktualisieren
+            // Use matching variant or fallback to first variant
+            currentProduct.selectedVariant = matchingVariant || product.variants[0];
+            
+            // Update price
             updatePrice(currentProduct.selectedVariant);
             
-            // Bild aktualisieren, wenn die Variante ein eigenes Bild hat
+            // Update image if variant has its own image
             if (currentProduct.selectedVariant.image && mainImage) {
                 mainImage.src = currentProduct.selectedVariant.image.src;
+            } else if (product.image && mainImage) {
+                mainImage.src = product.image.src;
             }
         }
         
-        // Initial die erste Variante auswählen
+        // Initially select the first variant
         updateSelectedVariant();
     } else {
-        // Wenn keine Varianten vorhanden sind, Variantenauswahl ausblenden
+        // If no variants are available, hide variant selector
         if (variantSelectorContainer) {
             variantSelectorContainer.style.display = 'none';
         }
@@ -542,7 +552,7 @@ function displayProduct(product) {
         }
     }
     
-    // Initial den Preis mit der ersten Variante anzeigen
+    // Initially show price with first variant
     updatePrice(currentProduct.selectedVariant);
 
     // Update product details with black color scheme
@@ -612,13 +622,34 @@ function displayProduct(product) {
         // Add to cart functionality
         newAddToCartBtn.addEventListener('click', () => {
             const quantity = parseInt(document.getElementById('quantity')?.value || '1');
+            
+            // Create variant info string
+            let variantInfo = '';
+            if (product.options && product.options.length > 0) {
+                const variantDetails = [];
+                product.options.forEach((option, index) => {
+                    const optionValue = currentProduct.selectedVariant[`option${index + 1}`];
+                    if (optionValue && optionValue !== 'Default Title') {
+                        variantDetails.push(`${option.name}: ${optionValue}`);
+                    }
+                });
+                
+                if (variantDetails.length > 0) {
+                    variantInfo = variantDetails.join(', ');
+                }
+            }
+            
             window.addToCart({
                 handle: product.handle,
                 title: product.title,
                 price: currentProduct.selectedVariant.price,
                 image: currentProduct.selectedVariant.image ? currentProduct.selectedVariant.image.src : product.image.src,
                 quantity,
-                variant: currentProduct.selectedVariant.option1 || 'Default'
+                variant: variantInfo || 'Default',
+                selectedVariant: {
+                    options: selectedOptions,
+                    variantId: currentProduct.selectedVariant.id
+                }
             });
 
             // Show notification menu
@@ -626,26 +657,20 @@ function displayProduct(product) {
             const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
             const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
             const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
-            const closeButton = notificationMenu.querySelector('.cart-notification-menu__close');
 
             productImage.src = currentProduct.selectedVariant.image ? currentProduct.selectedVariant.image.src : product.image.src;
             productImage.alt = product.title;
             
-            // Titel mit Varianteninformation anzeigen, wenn vorhanden
+            // Show title with variant information if available
             let titleWithVariant = product.title;
-            if (currentProduct.selectedVariant.option1 && currentProduct.selectedVariant.option1 !== 'Default Title') {
-                titleWithVariant += ` - ${currentProduct.selectedVariant.option1}`;
+            if (variantInfo) {
+                titleWithVariant += ` - ${variantInfo}`;
             }
             productTitle.textContent = titleWithVariant;
             
             productPrice.textContent = formatPrice(currentProduct.selectedVariant.price);
-
+            
             notificationMenu.classList.add('visible');
-
-            // Close notification on X button click
-            closeButton.addEventListener('click', () => {
-                notificationMenu.classList.remove('visible');
-            });
 
             // Show feedback with black color scheme
             const originalText = newAddToCartBtn.textContent;
