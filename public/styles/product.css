@@ -216,6 +216,81 @@ body {
     cursor: pointer;
 }
 
+/* Variant Selector Styles */
+.variant-selector {
+    margin-bottom: 20px;
+}
+
+.variant-selector-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.variant-option {
+    border: 1px solid #000000;
+    background-color: transparent;
+    color: #000000;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.variant-option:hover {
+    background-color: #f0f0f0;
+}
+
+.variant-option.selected {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* Color variant specific styles */
+.color-variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.color-variant-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.color-variant-option.selected {
+    border-color: #000000;
+}
+
+.color-variant-option.selected::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 /* Product Features */
 .product-features {
     display: grid;

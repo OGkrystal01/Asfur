@@ -242,6 +242,158 @@ function displayProduct(product) {
     if (titleElement) titleElement.textContent = product.title;
     if (descriptionElement) descriptionElement.innerHTML = product.body_html;
 
+    // Variablen für die aktuelle Variantenauswahl
+    let selectedVariant = product.variants[0];
+    let selectedOptions = {};
+    
+    // Variantenauswahl anzeigen, wenn das Produkt Optionen hat
+    const variantSelectorContainer = document.getElementById('variant-selector');
+    if (variantSelectorContainer && product.options && product.options.length > 0) {
+        variantSelectorContainer.innerHTML = ''; // Container leeren
+        
+        // Für jede Option (z.B. Größe, Farbe) ein Auswahlmenü erstellen
+        product.options.forEach(option => {
+            const optionName = option.name;
+            const optionValues = option.values;
+            
+            // Container für diese Option erstellen
+            const optionContainer = document.createElement('div');
+            optionContainer.className = 'variant-option-container';
+            
+            // Label für die Option
+            const optionLabel = document.createElement('span');
+            optionLabel.className = 'variant-selector-label';
+            optionLabel.textContent = optionName;
+            optionContainer.appendChild(optionLabel);
+            
+            // Container für die Optionswerte
+            const optionsContainer = document.createElement('div');
+            
+            // Spezielle Behandlung für Farbvarianten
+            if (optionName.toLowerCase() === 'color' || optionName.toLowerCase() === 'farbe') {
+                optionsContainer.className = 'color-variant-options';
+                
+                // Für jeden Farbwert einen Button erstellen
+                optionValues.forEach(value => {
+                    const optionButton = document.createElement('div');
+                    optionButton.className = 'color-variant-option';
+                    optionButton.setAttribute('data-value', value);
+                    
+                    // Hintergrundfarbe basierend auf dem Farbnamen setzen
+                    // Für bekannte Farben direkt den CSS-Farbnamen verwenden
+                    let bgColor = value.toLowerCase();
+                    optionButton.style.backgroundColor = bgColor;
+                    
+                    // Wenn es eine Variante mit diesem Farbwert gibt, das Bild als Hintergrund verwenden
+                    const variantWithColor = product.variants.find(v => v.option1 === value || v.option2 === value || v.option3 === value);
+                    if (variantWithColor && variantWithColor.image) {
+                        optionButton.style.backgroundImage = `url(${variantWithColor.image.src})`;
+                        optionButton.style.backgroundSize = 'cover';
+                        optionButton.style.backgroundPosition = 'center';
+                    }
+                    
+                    // Event-Listener für die Auswahl
+                    optionButton.addEventListener('click', () => {
+                        // Alle anderen Optionen dieser Kategorie deselektieren
+                        optionsContainer.querySelectorAll('.color-variant-option').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+                        
+                        // Diese Option selektieren
+                        optionButton.classList.add('selected');
+                        
+                        // Ausgewählte Option speichern
+                        selectedOptions[optionName] = value;
+                        
+                        // Variante basierend auf der Auswahl aktualisieren
+                        updateSelectedVariant();
+                    });
+                    
+                    optionsContainer.appendChild(optionButton);
+                });
+            } else {
+                // Standard-Optionen (nicht Farbe)
+                optionsContainer.className = 'variant-options';
+                
+                // Für jeden Wert einen Button erstellen
+                optionValues.forEach(value => {
+                    const optionButton = document.createElement('button');
+                    optionButton.className = 'variant-option';
+                    optionButton.setAttribute('data-value', value);
+                    optionButton.textContent = value;
+                    
+                    // Event-Listener für die Auswahl
+                    optionButton.addEventListener('click', () => {
+                        // Alle anderen Optionen dieser Kategorie deselektieren
+                        optionsContainer.querySelectorAll('.variant-option').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+                        
+                        // Diese Option selektieren
+                        optionButton.classList.add('selected');
+                        
+                        // Ausgewählte Option speichern
+                        selectedOptions[optionName] = value;
+                        
+                        // Variante basierend auf der Auswahl aktualisieren
+                        updateSelectedVariant();
+                    });
+                    
+                    optionsContainer.appendChild(optionButton);
+                });
+            }
+            
+            optionContainer.appendChild(optionsContainer);
+            variantSelectorContainer.appendChild(optionContainer);
+        });
+        
+        // Standard-Optionen auswählen (erste Option jeder Kategorie)
+        product.options.forEach(option => {
+            const optionName = option.name;
+            const firstValue = option.values[0];
+            selectedOptions[optionName] = firstValue;
+            
+            // Den entsprechenden Button als ausgewählt markieren
+            const optionContainer = variantSelectorContainer.querySelector(`.variant-option-container:has(.variant-selector-label:contains('${optionName}'))`);
+            if (optionContainer) {
+                const firstButton = optionContainer.querySelector('.variant-option, .color-variant-option');
+                if (firstButton) {
+                    firstButton.classList.add('selected');
+                }
+            }
+        });
+        
+        // Funktion zum Aktualisieren der ausgewählten Variante
+        function updateSelectedVariant() {
+            // Die passende Variante basierend auf den ausgewählten Optionen finden
+            selectedVariant = product.variants.find(variant => {
+                // Prüfen, ob alle ausgewählten Optionen mit dieser Variante übereinstimmen
+                return product.options.every((option, index) => {
+                    const optionName = option.name;
+                    const optionValue = selectedOptions[optionName];
+                    const variantOptionValue = variant[`option${index + 1}`];
+                    return optionValue === variantOptionValue;
+                });
+            }) || product.variants[0]; // Fallback zur ersten Variante, wenn keine Übereinstimmung gefunden wird
+            
+            // Preis aktualisieren
+            updatePrice(selectedVariant);
+            
+            // Bild aktualisieren, wenn die Variante ein eigenes Bild hat
+            if (selectedVariant.image && mainImage) {
+                mainImage.src = selectedVariant.image.src;
+            }
+        }
+        
+        // Initial die erste Variante auswählen
+        updateSelectedVariant();
+    } else {
+        // Wenn keine Varianten vorhanden sind, Variantenauswahl ausblenden
+        if (variantSelectorContainer) {
+            variantSelectorContainer.style.display = 'none';
+        }
+    }
+
     // Add rating if product has reviews
     if (product.rating_count) {
         const ratingElement = document.getElementById('product-rating');
@@ -368,17 +520,21 @@ function displayProduct(product) {
     }
 
     // Update price with compare at price if available
-    if (priceElement && product.variants && product.variants[0]) {
-        const variant = product.variants[0];
-        if (variant.compare_at_price) {
-            priceElement.innerHTML = `
-                <span class="price-item price-item--sale">€${variant.price}</span>
-                <s class="price-item price-item--regular">€${variant.compare_at_price}</s>
-            `;
-        } else {
-            priceElement.innerHTML = `<span class="price-item">€${variant.price}</span>`;
+    function updatePrice(variant) {
+        if (priceElement && variant) {
+            if (variant.compare_at_price) {
+                priceElement.innerHTML = `
+                    <span class="price-item price-item--sale">€${variant.price}</span>
+                    <s class="price-item price-item--regular">€${variant.compare_at_price}</s>
+                `;
+            } else {
+                priceElement.innerHTML = `<span class="price-item">€${variant.price}</span>`;
+            }
         }
     }
+    
+    // Initial den Preis mit der ersten Variante anzeigen
+    updatePrice(selectedVariant);
 
     // Update product details with black color scheme
     // Add cart notification menu if it doesn't exist
@@ -450,9 +606,10 @@ function displayProduct(product) {
             window.addToCart({
                 handle: product.handle,
                 title: product.title,
-                price: product.variants[0].price,
-                image: product.image.src,
-                quantity
+                price: selectedVariant.price,
+                image: selectedVariant.image ? selectedVariant.image.src : product.image.src,
+                quantity,
+                variant: selectedVariant.option1 || 'Default'
             });
 
             // Show notification menu
@@ -462,10 +619,17 @@ function displayProduct(product) {
             const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
             const closeButton = notificationMenu.querySelector('.cart-notification-menu__close');
 
-            productImage.src = product.image.src;
+            productImage.src = selectedVariant.image ? selectedVariant.image.src : product.image.src;
             productImage.alt = product.title;
-            productTitle.textContent = product.title;
-            productPrice.textContent = formatPrice(product.variants[0].price);
+            
+            // Titel mit Varianteninformation anzeigen, wenn vorhanden
+            let titleWithVariant = product.title;
+            if (selectedVariant.option1 && selectedVariant.option1 !== 'Default Title') {
+                titleWithVariant += ` - ${selectedVariant.option1}`;
+            }
+            productTitle.textContent = titleWithVariant;
+            
+            productPrice.textContent = formatPrice(selectedVariant.price);
 
             notificationMenu.classList.add('visible');
 
