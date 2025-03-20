@@ -774,15 +774,9 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        options: [
-            {
-                name: 'Title',
-                values: ['Default Title']
-            }
-        ],
+        options: [],
         variants: [
             {
-                option1: 'Default Title',
                 price: 239.95,
                 compare_at_price: 349.95,
                 inventory_quantity: -1,
