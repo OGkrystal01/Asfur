@@ -120,15 +120,7 @@ const products = [
         type: '',
         tags: '',
         published: true,
-        options: [
-            {
-                name: 'Size',
-                values: ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']
-            }
-        ],
-        variants: [
-            {
-                option1: '36',
+        variants: [{
             price: 19.95,
             compare_at_price: 39.95,
             inventory_quantity: 0,
