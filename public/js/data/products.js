@@ -764,6 +764,37 @@ const products = [
             alt: ''
         },
         status: 'active'
+    },
+    {
+        handle: 'all-vendors-bundle-save-75',
+        title: 'All Vendors Bundle (Save 75%)',
+        body_html: '<p>Get Everything from our Site once so you can try everything and then decide what you want to sell its an one time offer wich and you save yourself alot of money instead of buying everything seperately. This also includes the R3ceipt Generator!</p>',
+        vendor: 'Resell-Depot',
+        product_category: 'Electronics > Electronics Accessories > Computer Components > Computer Starter Kits',
+        type: '',
+        tags: '',
+        published: true,
+        options: [
+            {
+                name: 'Title',
+                values: ['Default Title']
+            }
+        ],
+        variants: [
+            {
+                option1: 'Default Title',
+                price: 239.95,
+                compare_at_price: 349.95,
+                inventory_quantity: -1,
+                requires_shipping: false,
+                taxable: false
+            }
+        ],
+        image: {
+            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Allvendorsbild.jpg?v=1729621537',
+            alt: 'All Vendors Bundle'
+        },
+        status: 'active'
     }
 ];
 
