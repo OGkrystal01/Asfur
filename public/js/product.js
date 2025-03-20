@@ -315,17 +315,6 @@ function displayProduct(product) {
                     let bgColor = value.toLowerCase();
                     optionButton.style.backgroundColor = bgColor;
                     
-                    // If a variant with this color value exists and has an image, use it as background
-                    const variantWithColor = product.variants.find(v => 
-                        v.option1 === value || v.option2 === value || v.option3 === value
-                    );
-                    
-                    if (variantWithColor && variantWithColor.image) {
-                        optionButton.style.backgroundImage = `url(${variantWithColor.image.src})`;
-                        optionButton.style.backgroundSize = 'cover';
-                        optionButton.style.backgroundPosition = 'center';
-                    }
-                    
                     // Event listener for selection
                     optionButton.addEventListener('click', () => {
                         // Deselect all other options in this category
