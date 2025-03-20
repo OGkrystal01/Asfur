@@ -79,7 +79,7 @@ const products = [
         variants: [{
             price: 34.95,
             compare_at_price: 89.95,
-            inventory_quantity: -1,
+            inventory_quantity: -2,
             requires_shipping: false,
             taxable: false
         }],
