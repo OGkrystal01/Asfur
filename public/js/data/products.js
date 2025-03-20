@@ -10,8 +10,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 24.95,
-            compare_at_price: 54.99,
+            price: 34.95,
+            compare_at_price: 64.95,
             inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
@@ -33,8 +33,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 49.95,
-            compare_at_price: 109.95,
+            price: 149.95,
+            compare_at_price: 289.95,
             inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
@@ -55,8 +55,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 59.95,
-            compare_at_price: 129.95,
+            price: 94.95,
+            compare_at_price: 189.95,
             inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
@@ -77,9 +77,9 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 34.95,
+            price: 39.95,
             compare_at_price: 89.95,
-            inventory_quantity: -2,
+            inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
         }],
@@ -99,8 +99,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 69.95,
-            compare_at_price: 149.95,
+            price: 169.95,
+            compare_at_price: 245.95,
             inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
@@ -121,8 +121,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 12.95,
-            compare_at_price: 22.95,
+            price: 19.95,
+            compare_at_price: 39.95,
             inventory_quantity: 0,
             requires_shipping: false,
             taxable: false
@@ -144,8 +144,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 14.95,
-            compare_at_price: 24.95,
+            price: 19.95,
+            compare_at_price: 29.95,
             inventory_quantity: -404,
             requires_shipping: false,
             taxable: false
@@ -167,8 +167,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 21.95,
-            compare_at_price: 44.95,
+            price: 28.95,
+            compare_at_price: 55.95,
             inventory_quantity: -74,
             requires_shipping: false,
             taxable: false
@@ -190,8 +190,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 21.95,
-            compare_at_price: 44.95,
+            price: 29.95,
+            compare_at_price: 59.95,
             inventory_quantity: -19,
             requires_shipping: false,
             taxable: false
@@ -212,8 +212,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 24.95,
-            compare_at_price: 49.95,
+            price: 39.95,
+            compare_at_price: 79.95,
             inventory_quantity: -13,
             requires_shipping: false,
             taxable: false
@@ -234,8 +234,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 14.95,
-            compare_at_price: 29.95,
+            price: 21.95,
+            compare_at_price: 32.95,
             inventory_quantity: -6,
             requires_shipping: false,
             taxable: false
@@ -256,7 +256,7 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 12.95,
+            price: 17.95,
             compare_at_price: 29.95,
             inventory_quantity: -6,
             requires_shipping: false,
@@ -279,8 +279,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 17.95,
-            compare_at_price: 32.95,
+            price: 24.95,
+            compare_at_price: 39.95,
             inventory_quantity: -1,
             requires_shipping: false,
             taxable: false
@@ -301,8 +301,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 17.95,
-            compare_at_price: 24.95,
+            price: 24.95,
+            compare_at_price: 42.95,
             inventory_quantity: 0,
             requires_shipping: false,
             taxable: false
@@ -323,8 +323,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 12.95,
-            compare_at_price: 22.95,
+            price: 17.95,
+            compare_at_price: 24.95,
             inventory_quantity: -9,
             requires_shipping: false,
             taxable: false
@@ -345,8 +345,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 79.99,
-            compare_at_price: 99.99,
+            price: 109.99,
+            compare_at_price: 179.99,
             inventory_quantity: -2,
             requires_shipping: false,
             taxable: false
@@ -368,8 +368,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 84.99,
-            compare_at_price: 119.95,
+            price: 114.95,
+            compare_at_price: 189.95,
             inventory_quantity: 0,
             requires_shipping: false,
             taxable: false
@@ -391,8 +391,8 @@ const products = [
         tags: '',
         published: true,
         variants: [{
-            price: 14.95,
-            compare_at_price: 24.95,
+            price: 19.95,
+            compare_at_price: 29.95,
             inventory_quantity: -2,
             requires_shipping: false,
             taxable: false
