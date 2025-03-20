@@ -417,7 +417,7 @@ const products = [
             taxable: false
         }],
         image: {
-            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/1_JBL_PULSE_5_HERO_34364_x2_406d3d40-68f9-4482-a929-ba5cf1d5b3d0.webp?v=1729621587',
+            src: 'https://cdn.shopify.com/s/files/1/0855/1576/4040/files/1_JBL_PULSE_5_HERO_34364_x2_406d3d40-be44-4952-8add-d0422d834572.webp?v=1729621587',
             alt: ''
         },
         status: 'active'
