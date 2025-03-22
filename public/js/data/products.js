@@ -18,40 +18,40 @@ const products = [
         variants: [
             {
                 option1: 'XS',
-                price: 24.95,
-                compare_at_price: 54.99,
+                price: 39.95,
+                compare_at_price: 69.99,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: 'S',
-                price: 24.95,
-                compare_at_price: 54.99,
+                price: 39.95,
+                compare_at_price: 69.99,
                 inventory_quantity: -7,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: 'M',
-                price: 24.95,
-                compare_at_price: 54.99,
+                price: 39.95,
+                compare_at_price: 69.99,
                 inventory_quantity: -22,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: 'XL',
-                price: 24.95,
-                compare_at_price: 54.99,
+                price: 39.95,
+                compare_at_price: 69.99,
                 inventory_quantity: -16,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: 'XXL',
-                price: 24.95,
-                compare_at_price: 54.99,
+                price: 39.95,
+                compare_at_price: 69.99,
                 inventory_quantity: -2,
                 requires_shipping: false,
                 taxable: false
@@ -170,80 +170,80 @@ const products = [
         variants: [
             {
                 option1: '36',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '37',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '38',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '39',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -4,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '40',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '41',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -3,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '42',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -2,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '43',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -2,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '44',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false
             },
             {
                 option1: '45',
-                price: 12.95,
-                compare_at_price: 22.95,
+                price: 22.95,
+                compare_at_price: 44.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false
@@ -364,7 +364,7 @@ const products = [
         variants: [
             {
                 option1: 'Black',
-                price: 14.95,
+                price: 19.95,
                 compare_at_price: 29.95,
                 inventory_quantity: -6,
                 requires_shipping: false,
@@ -376,7 +376,7 @@ const products = [
             },
             {
                 option1: 'Red',
-                price: 14.95,
+                price: 19.95,
                 compare_at_price: 29.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
@@ -411,7 +411,7 @@ const products = [
         variants: [
             {
                 option1: 'Black',
-                price: 12.95,
+                price: 19.95,
                 compare_at_price: 29.95,
                 inventory_quantity: -6,
                 requires_shipping: false,
@@ -423,7 +423,7 @@ const products = [
             },
             {
                 option1: 'Blue',
-                price: 12.95,
+                price: 19.95,
                 compare_at_price: 29.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
@@ -530,8 +530,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '128GB',
-                price: 79.99,
-                compare_at_price: 99.99,
+                price: 99.99,
+                compare_at_price: 169.99,
                 inventory_quantity: -2,
                 requires_shipping: false,
                 taxable: false,
@@ -542,8 +542,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '256GB',
-                price: 84.99,
-                compare_at_price: 99.99,
+                price: 109.95,
+                compare_at_price: 189.99,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false,
@@ -554,8 +554,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '512GB',
-                price: 94.99,
-                compare_at_price: 99.99,
+                price: 119.99,
+                compare_at_price: 224.99,
                 inventory_quantity: -2,
                 requires_shipping: false,
                 taxable: false,
@@ -566,8 +566,8 @@ const products = [
             {
                 option1: 'Gray',
                 option2: '128GB',
-                price: 79.99,
-                compare_at_price: 99.99,
+                price: 99.99,
+                compare_at_price: 169.99,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false,
@@ -578,8 +578,8 @@ const products = [
             {
                 option1: 'Gray',
                 option2: '256GB',
-                price: 84.99,
-                compare_at_price: 99.99,
+                price: 109.99,
+                compare_at_price: 189.99,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -590,8 +590,8 @@ const products = [
             {
                 option1: 'Gray',
                 option2: '512GB',
-                price: 94.99,
-                compare_at_price: 99.99,
+                price: 119.99,
+                compare_at_price: 224.99,
                 inventory_quantity: -1,
                 requires_shipping: false,
                 taxable: false,
@@ -602,8 +602,8 @@ const products = [
             {
                 option1: 'Green',
                 option2: '128GB',
-                price: 79.99,
-                compare_at_price: 99.99,
+                price: 99.99,
+                compare_at_price: 169.99,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -614,8 +614,8 @@ const products = [
             {
                 option1: 'Green',
                 option2: '256GB',
-                price: 84.99,
-                compare_at_price: 99.99,
+                price: 109.99,
+                compare_at_price: 189.99,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -626,8 +626,8 @@ const products = [
             {
                 option1: 'Green',
                 option2: '512GB',
-                price: 94.99,
-                compare_at_price: 99.99,
+                price: 119.99,
+                compare_at_price: 224.99,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -666,8 +666,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '256GB',
-                price: 84.99,
-                compare_at_price: 119.95,
+                price: 109.95,
+                compare_at_price: 189.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -678,8 +678,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '512GB',
-                price: 89.99,
-                compare_at_price: 119.95,
+                price: 129.99,
+                compare_at_price: 224.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -690,8 +690,8 @@ const products = [
             {
                 option1: 'Black',
                 option2: '1024GB',
-                price: 99.99,
-                compare_at_price: 119.95,
+                price: 139.99,
+                compare_at_price: 249.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -702,8 +702,8 @@ const products = [
             {
                 option1: 'Pink',
                 option2: '256GB',
-                price: 84.99,
-                compare_at_price: 119.95,
+                price: 109.95,
+                compare_at_price: 189.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -714,8 +714,8 @@ const products = [
             {
                 option1: 'Pink',
                 option2: '512GB',
-                price: 89.99,
-                compare_at_price: 119.95,
+                price: 129.99,
+                compare_at_price: 224.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
@@ -726,8 +726,8 @@ const products = [
             {
                 option1: 'Pink',
                 option2: '1024GB',
-                price: 99.99,
-                compare_at_price: 119.95,
+                price: 139.99,
+                compare_at_price: 249.95,
                 inventory_quantity: 0,
                 requires_shipping: false,
                 taxable: false,
