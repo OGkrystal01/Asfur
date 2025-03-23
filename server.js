@@ -41,10 +41,16 @@ const mollieClient = createMollieClient({
 
 // Initialize Nodemailer transporter
 const transporter = nodemailer.createTransport({
-    host: EMAIL_HOST,  // Only specify the host
+    host: EMAIL_HOST,
+    port: EMAIL_PORT,
+    secure: true,  // Set to true for port 465
     auth: {
         user: EMAIL_USER,
         pass: EMAIL_PASS,
+    },
+    tls: {
+        // Remove rejectUnauthorized: false
+        // The default is true, which is what we want for SSL
     }
 });
 
