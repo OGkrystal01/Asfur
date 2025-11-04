@@ -1,71 +1,56 @@
-document.addEventListener('DOMContentLoaded', function() {
+// Stripe Payment Element Integration
+let stripe;
+let elements;
+let paymentElement;
+let clientSecret;
+
+document.addEventListener('DOMContentLoaded', async function() {
     const checkoutItems = document.getElementById('checkout-items');
     const subtotalElement = document.getElementById('subtotal');
     const totalElement = document.getElementById('total');
     const checkoutForm = document.getElementById('checkout-form');
     const continueToPaymentBtn = document.getElementById('continue-to-payment');
-    
-    // Flag to track if we've redirected to Mollie
-    let redirectedToMollie = false;
+    const paymentMessage = document.getElementById('payment-message');
 
-    // Debug function to log detailed information
-    function debugLog(message, data) {
-        console.log('DEBUG: ' + message, data);
-        // Create a hidden debug element if it doesn't exist
-        let debugElement = document.getElementById('debug-log');
-        if (!debugElement) {
-            debugElement = document.createElement('div');
-            debugElement.id = 'debug-log';
-            debugElement.style.display = 'none';
-            document.body.appendChild(debugElement);
+    // Initialize Stripe (publishable key should be loaded from server or env)
+    // For now, we'll fetch it from the server or use a placeholder
+    // You need to replace this with your actual Stripe publishable key
+    const STRIPE_PUBLISHABLE_KEY = await getStripePublishableKey();
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+    // Function to get Stripe publishable key from server or environment
+    async function getStripePublishableKey() {
+        // In production, you should fetch this from your server
+        // For now, return a placeholder that you'll replace in .env
+        return 'pk_test_YOUR_PUBLISHABLE_KEY_HERE';
+    }
+
+    // Show message to user
+    function showMessage(messageText, isError = false) {
+        paymentMessage.textContent = messageText;
+        paymentMessage.style.display = 'block';
+        paymentMessage.style.color = isError ? '#c62828' : '#2e7d32';
+        paymentMessage.style.padding = '10px';
+        paymentMessage.style.marginTop = '10px';
+        paymentMessage.style.borderRadius = '4px';
+        paymentMessage.style.backgroundColor = isError ? '#ffebee' : '#e8f5e9';
+    }
+
+    // Set loading state
+    function setLoading(isLoading) {
+        if (isLoading) {
+            continueToPaymentBtn.disabled = true;
+            continueToPaymentBtn.textContent = 'Processing...';
+        } else {
+            continueToPaymentBtn.disabled = false;
+            continueToPaymentBtn.textContent = 'Complete Payment';
         }
-        // Add the debug message
-        const debugItem = document.createElement('div');
-        debugItem.textContent = 'DEBUG: ' + message + ' ' + JSON.stringify(data);
-        debugElement.appendChild(debugItem);
     }
-
-    // Function to reset button state to default
-    function resetButtonState() {
-        continueToPaymentBtn.disabled = false;
-        continueToPaymentBtn.textContent = 'Continue to Payment';
-        continueToPaymentBtn.style.backgroundColor = '#000000';
-        debugLog('Button state reset to default', {});
-    }
-
-    // Initialize checkout
-    function initializeCheckout() {
-        loadCartItems();
-        resetButtonState(); // Reset button on initial load
-    }
-
-    // Reset the button state when the page is shown (including when navigating back)
-    window.addEventListener('pageshow', function(event) {
-        // This will fire when navigating back to the page
-        debugLog('pageshow event fired', { persisted: event.persisted });
-        
-        // Reset button state regardless of how the page was loaded
-        resetButtonState();
-        
-        // Reset the redirect flag
-        redirectedToMollie = false;
-    });
-    
-    // Also listen for visibility changes (tab becomes visible again)
-    document.addEventListener('visibilitychange', function() {
-        debugLog('visibility changed', { hidden: document.hidden, redirectedToMollie: redirectedToMollie });
-        
-        // If the page becomes visible again and we previously redirected to Mollie
-        if (!document.hidden && redirectedToMollie) {
-            resetButtonState();
-            redirectedToMollie = false;
-        }
-    });
 
     // Load cart items from localStorage
     function loadCartItems() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        debugLog('Cart loaded from localStorage', cart);
+        console.log('Cart loaded from localStorage', cart);
         
         let subtotal = 0;
 
@@ -105,140 +90,141 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize the checkout
-    initializeCheckout();
+    loadCartItems();
+    await initializeStripePayment();
 
-    // Handle form submission and continue to payment
-    continueToPaymentBtn.addEventListener('click', function(e) {
+    // Initialize Stripe Payment Element
+    async function initializeStripePayment() {
+        // Validate form first
+        if (!checkoutForm.checkValidity()) {
+            console.log('Form not valid yet, waiting for user input');
+            return;
+        }
+
+        // Get cart and customer data
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const formData = new FormData(checkoutForm);
+        const customerData = Object.fromEntries(formData.entries());
+
+        if (cart.length === 0) {
+            showMessage('Your cart is empty', true);
+            return;
+        }
+
+        try {
+            // Create PaymentIntent on the server
+            const response = await fetch('/api/payment-intents', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cartItems: cart,
+                    customerName: `${customerData.firstName || ''} ${customerData.lastName || ''}`.trim() || 'Customer',
+                    customerEmail: customerData.email || 'customer@example.com'
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to initialize payment');
+            }
+
+            const { clientSecret: secret, orderNumber } = await response.json();
+            clientSecret = secret;
+
+            // Store order number for confirmation page
+            localStorage.setItem('orderNumber', orderNumber);
+
+            // Create Stripe Elements instance
+            const appearance = {
+                theme: 'stripe',
+                variables: {
+                    colorPrimary: '#000000',
+                    colorBackground: '#ffffff',
+                    colorText: '#000000',
+                    colorDanger: '#c62828',
+                    fontFamily: 'system-ui, sans-serif',
+                    borderRadius: '4px'
+                }
+            };
+
+            elements = stripe.elements({ appearance, clientSecret });
+
+            // Create and mount the Payment Element
+            paymentElement = elements.create('payment');
+            paymentElement.mount('#payment-element');
+
+            console.log('Stripe Payment Element initialized successfully');
+
+        } catch (error) {
+            console.error('Error initializing payment:', error);
+            showMessage(error.message, true);
+        }
+    }
+
+    // Handle payment form submission
+    continueToPaymentBtn.addEventListener('click', async function(e) {
         e.preventDefault();
-        debugLog('Checkout button clicked', {});
 
         // Validate form
         if (!checkoutForm.checkValidity()) {
-            debugLog('Form validation failed', {});
             checkoutForm.reportValidity();
             return;
         }
 
-        // Get cart data directly from localStorage without reformatting
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        debugLog('Cart data for checkout', cart);
-        
-        // Show loading state
-        continueToPaymentBtn.disabled = true;
-        continueToPaymentBtn.textContent = 'Processing...';
-        continueToPaymentBtn.style.backgroundColor = '#333333';
-        debugLog('Button state changed to processing', {});
+        // If payment element not initialized, initialize it first
+        if (!elements || !clientSecret) {
+            await initializeStripePayment();
+            showMessage('Please complete the payment information below');
+            return;
+        }
 
-        // Store form data for order confirmation
+        setLoading(true);
+
+        // Store customer data for order confirmation
         const formData = new FormData(checkoutForm);
         const customerData = Object.fromEntries(formData.entries());
         localStorage.setItem('customerData', JSON.stringify(customerData));
-        debugLog('Customer data stored', customerData);
 
-        // Create the request payload
-        const payload = { 
-            cartItems: cart,
-            customerName: `${customerData.firstName} ${customerData.lastName}`,
-            customerEmail: customerData.email
-        };
-        debugLog('Sending payload to server', payload);
-
-        // Send request to the current server
-        fetch('/api/create-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload),
-            cache: 'no-cache'
-        })
-        .then(function(response) {
-            debugLog('Server response received', { 
-                status: response.status, 
-                ok: response.ok,
-                statusText: response.statusText
-            });
-            
-            if (!response.ok) {
-                return response.text().then(function(text) {
-                    try {
-                        const errorData = JSON.parse(text);
-                        debugLog('Error response body', errorData);
-                        throw new Error(errorData.error || 'Payment creation failed');
-                    } catch (e) {
-                        debugLog('Error response is not JSON', text);
-                        throw new Error('Payment creation failed: ' + text);
+        // Confirm payment with Stripe
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: `${window.location.origin}/pages/order-confirmation.html`,
+                receipt_email: customerData.email,
+                shipping: {
+                    name: `${customerData.firstName} ${customerData.lastName}`,
+                    phone: customerData.phone,
+                    address: {
+                        line1: customerData.address,
+                        line2: customerData.apartment || '',
+                        city: customerData.city,
+                        postal_code: customerData.postalCode,
+                        country: customerData.country
                     }
-                });
+                }
             }
-            
-            return response.json();
-        })
-        .then(function(data) {
-            debugLog('Payment created successfully', data);
-            
-            // Store payment ID for verification
-            if (data.paymentId) {
-                localStorage.setItem('currentPaymentId', data.paymentId);
-                debugLog('Payment ID stored', data.paymentId);
-            } else {
-                debugLog('No payment ID in response', data);
-                throw new Error('No payment ID received from server');
-            }
-            
-            // Redirect to Mollie checkout
-            if (data.checkoutUrl) {
-                debugLog('Redirecting to checkout URL', data.checkoutUrl);
-                // Use a small timeout to ensure the debug logs are visible
-                setTimeout(function() {
-                    redirectedToMollie = true;
-                    window.location.href = data.checkoutUrl;
-                }, 100);
-            } else {
-                debugLog('No checkout URL in response', data);
-                throw new Error('No checkout URL received from server');
-            }
-        })
-        .catch(function(error) {
-            debugLog('Checkout error', { message: error.message, stack: error.stack });
-            console.error('Checkout error:', error);
-            
-            // Show error notification
-            showNotification('error', 'There was an error processing your payment. Please try again.');
-            
-            // Reset button state
-            resetButtonState();
         });
+
+        // This point will only be reached if there is an immediate error
+        // Otherwise, customer will be redirected to return_url
+        if (error) {
+            if (error.type === 'card_error' || error.type === 'validation_error') {
+                showMessage(error.message, true);
+            } else {
+                showMessage('An unexpected error occurred. Please try again.', true);
+            }
+            setLoading(false);
+        }
     });
 
-    // Function to show notifications
-    function showNotification(type, message) {
-        // Create notification element if it doesn't exist
-        let notification = document.querySelector('.checkout-notification');
-        if (!notification) {
-            notification = document.createElement('div');
-            notification.className = 'checkout-notification';
-            document.querySelector('.checkout-form-container').prepend(notification);
+    // Re-initialize payment when form is filled
+    checkoutForm.addEventListener('change', async function() {
+        if (checkoutForm.checkValidity() && !clientSecret) {
+            await initializeStripePayment();
         }
-        
-        // Set notification content
-        notification.innerHTML = `
-            <div class="notification-content ${type}">
-                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
-                ${message}
-            </div>
-        `;
-        
-        // Show notification
-        notification.style.display = 'block';
-        
-        // Remove notification after 5 seconds
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 5000);
-    }
+    });
 
-    // Add styles for variant display in checkout
+    // Add styles for Stripe Payment Element and messages
     const style = document.createElement('style');
     style.textContent = `
         .checkout-item-variant {
@@ -246,21 +232,19 @@ document.addEventListener('DOMContentLoaded', function() {
             color: #666;
             margin: 4px 0;
         }
-        .notification-content {
-            padding: 10px 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
+        .payment-element-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
-        .notification-content.error {
-            background-color: #ffebee;
-            color: #c62828;
-            border-left: 4px solid #c62828;
+        .payment-message {
+            display: none;
+            margin-top: 15px;
+            font-size: 14px;
         }
-        .notification-content i {
-            margin-right: 10px;
-            font-size: 18px;
+        #payment-element {
+            margin-bottom: 20px;
         }
     `;
     document.head.appendChild(style);

@@ -69,7 +69,11 @@
 
                         <div class="form-section payment-section">
                             <h2>Payment Method</h2>
-                            <p class="payment-info">You'll select your payment method in the next step</p>
+                            <!-- Stripe Payment Element will be mounted here -->
+                            <div id="payment-element" class="payment-element-container">
+                                <!-- Stripe.js injects the Payment Element here -->
+                            </div>
+                            <div id="payment-message" class="payment-message"></div>
                         </div>
                     </form>
                 </div>
@@ -96,13 +100,15 @@
                             </div>
                         </div>
                     </div>
-                    <button id="continue-to-payment" class="checkout-button">Continue to Payment</button>
+                    <button id="continue-to-payment" class="checkout-button">Complete Payment</button>
                     <a href="/pages/cart.html" class="return-to-cart">Return to cart</a>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Load Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="/js/data/shopify-products.js"></script>
     <script src="/js/checkout.js"></script>
 </body>
