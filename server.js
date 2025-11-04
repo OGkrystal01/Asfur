@@ -17,6 +17,7 @@ const EMAIL_PASS = process.env.EMAIL_PASS;
 const EMAIL_HOST = process.env.EMAIL_HOST;
 const EMAIL_PORT = process.env.EMAIL_PORT;
 const EMAIL_FROM = process.env.EMAIL_FROM;
+const STRIPE_PUBLISHABLE_KEY = process.env.STRIPE_PUBLISHABLE_KEY;
 
 if (!STRIPE_SECRET_KEY) {
     console.warn('WARNING: Missing STRIPE_SECRET_KEY environment variable. Payment features will be disabled until configured.');
@@ -151,6 +152,13 @@ app.use(express.static('public'));
 
 // Import hardcoded products data
 const { products } = require('./public/js/data/products.js');
+
+// Endpoint to serve Stripe publishable key to frontend
+app.get('/api/stripe-config', (req, res) => {
+    res.json({ 
+        publishableKey: STRIPE_PUBLISHABLE_KEY || ''
+    });
+});
 
 // Stripe Payment Intents endpoint - creates a payment intent and returns client secret
 app.post('/api/payment-intents', async (req, res) => {

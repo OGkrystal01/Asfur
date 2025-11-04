@@ -21,8 +21,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     // Function to get Stripe publishable key from server or environment
     async function getStripePublishableKey() {
         // In production, you should fetch this from your server
-        // For now, return a placeholder that you'll replace in .env
-        return 'pk_test_YOUR_PUBLISHABLE_KEY_HERE';
+        try {
+            const response = await fetch('/api/stripe-publishable-key');
+            if (!response.ok) {
+                throw new Error('Failed to fetch Stripe publishable key');
+            }
+            const { publishableKey } = await response.json();
+            return publishableKey;
+        } catch (error) {
+            console.error('Error fetching Stripe publishable key:', error);
+            return 'pk_test_YOUR_PUBLISHABLE_KEY_HERE'; // Fallback to placeholder if fetch fails
+        }
     }
 
     // Show message to user
