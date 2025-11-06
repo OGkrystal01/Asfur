@@ -100,6 +100,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Initialize the checkout
     loadCartItems();
+    
+    // Show loading state immediately
+    showMessage('Initializing secure payment...', false);
+    
     await initializeStripePayment();
 
     // Initialize Stripe Payment Element
