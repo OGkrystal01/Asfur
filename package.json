@@ -1,12 +1,15 @@
 {
-  "name": "resell-depot",
+  "name": "dupelify",
   "version": "1.0.0",
-  "description": "Independent e-commerce platform",
+  "description": "Dupelify - Premium Resale Marketplace",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
+  "keywords": ["ecommerce", "resale", "marketplace"],
+  "author": "Dupelify",
+  "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",

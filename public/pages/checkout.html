@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Resell Depot</title>
+    <title>Checkout - Dupelify</title>
     <link rel="icon" href="../images/logo/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/styles/header.css">
@@ -18,7 +18,7 @@
         <div class="header-container">
             <div class="logo-container">
                 <a href="/">
-                    <img src="/images/logo/Logo.png" alt="Resell Depot Logo" class="logo">
+                    <img src="/images/logo/Logo.png" alt="Dupelify" class="logo">
                 </a>
             </div>
         </div>
@@ -77,6 +77,9 @@
                                 <!-- Stripe.js injects the Payment Element here -->
                             </div>
                             <div id="payment-message" class="payment-message"></div>
+                            <!-- Payment button inside form -->
+                            <button id="continue-to-payment" class="checkout-button">Complete Payment</button>
+                            <a href="/pages/cart.html" class="return-to-cart">Return to cart</a>
                         </div>
                     </form>
                 </div>
@@ -103,8 +106,6 @@
                             </div>
                         </div>
                     </div>
-                    <button id="continue-to-payment" class="checkout-button">Complete Payment</button>
-                    <a href="/pages/cart.html" class="return-to-cart">Return to cart</a>
                 </div>
             </div>
         </div>

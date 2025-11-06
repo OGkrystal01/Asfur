@@ -1,5 +1,5 @@
 :root {
-    --color-primary: #000000;
+    --color-primary: #0A0F2C;
     --color-primary-light: #f0f0f0;
     --color-primary-dark: #333333;
     --border-color: #ddd;
@@ -251,7 +251,7 @@ body {
 }
 
 .variant-option.selected {
-    background-color: #000000;
+    background-color: #0A0F2C;
     color: #ffffff;
 }
 
@@ -274,7 +274,7 @@ body {
 }
 
 .color-variant-option.selected {
-    border-color: #000000;
+    border-color: #0A0F2C;
 }
 
 .color-variant-option.selected::after {
@@ -330,15 +330,15 @@ body {
     text-align: center;
     transition: all 0.2s;
     box-sizing: border-box;
-    background: #000000;
+    background: #0A0F2C;
     color: #ffffff;
-    border: 1px solid #000000;
+    border: 1px solid #0A0F2C;
 }
 
 .product-button--outline {
     background: transparent;
-    color: #000000;
-    border: 1px solid #000000;
+    color: #0A0F2C;
+    border: 1px solid #0A0F2C;
 }
 
 .product-button--outline:hover {
@@ -346,9 +346,9 @@ body {
 }
 
 .product-button--primary {
-    background: #000000;
+    background: #0A0F2C;
     color: #ffffff;
-    border: 1px solid #000000;
+    border: 1px solid #0A0F2C;
 }
 
 .product-button--primary:hover {
@@ -962,14 +962,14 @@ body {
 
     .product-button--outline {
         background: transparent;
-        color: #000000;
-        border: 1px solid #000000;
+        color: #0A0F2C;
+        border: 1px solid #0A0F2C;
     }
 
     .product-button--primary {
-        background: #000000;
+        background: #0A0F2C;
         color: #ffffff;
-        border: 1px solid #000000;
+        border: 1px solid #0A0F2C;
     }
 
     .product-features {

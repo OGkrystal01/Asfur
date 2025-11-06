@@ -956,3 +956,6 @@ function generateStarRating(rating) {
     }
     return stars.join('');
 }
+
+// Generate order number for tracking
+const orderNumber = 'DP' + Date.now().toString().slice(-6);

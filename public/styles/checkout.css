@@ -88,22 +88,63 @@
 
 .payment-element-container {
     margin-top: 1.25rem;
+    margin-bottom: 1.5rem;
     padding: 0;
     background: transparent;
     border-radius: 0;
 }
 
 #payment-element {
-    margin-bottom: 0;
+    margin-bottom: 1.5rem;
 }
 
 .payment-message {
     display: none;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 0.875rem 1rem;
     border-radius: 5px;
     font-size: 0.875rem;
     line-height: 1.5;
+}
+
+.checkout-button {
+    width: 100%;
+    padding: 1.125rem 1.5rem;
+    background-color: #005bd3;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background-color 0.2s ease;
+    letter-spacing: 0.01em;
+}
+
+.checkout-button:hover:not(:disabled) {
+    background-color: #004fc4;
+}
+
+.checkout-button:disabled {
+    background-color: #8c9196;
+    cursor: not-allowed;
+}
+
+.return-to-cart {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #005bd3;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.return-to-cart:hover {
+    color: #004fc4;
+    text-decoration: underline;
 }
 
 /* Order Summary Styles */
@@ -193,45 +234,6 @@
     font-size: 1.125rem;
     font-weight: 600;
     color: #202223;
-}
-
-.checkout-button {
-    width: 100%;
-    padding: 1.125rem 1.5rem;
-    background-color: #005bd3;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 1.5rem;
-    transition: background-color 0.2s ease;
-    letter-spacing: 0.01em;
-}
-
-.checkout-button:hover:not(:disabled) {
-    background-color: #004fc4;
-}
-
-.checkout-button:disabled {
-    background-color: #8c9196;
-    cursor: not-allowed;
-}
-
-.return-to-cart {
-    display: block;
-    text-align: center;
-    margin-top: 1rem;
-    color: #005bd3;
-    text-decoration: none;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.return-to-cart:hover {
-    color: #004fc4;
-    text-decoration: underline;
 }
 
 /* Responsive Design */

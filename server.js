@@ -59,7 +59,7 @@ async function sendOrderConfirmationEmail(order) {
         const htmlContent = createOrderConfirmationEmail(order);
         
         const mailOptions = {
-            from: `"Resell Depot" <${EMAIL_FROM}>`,
+            from: `"Dupelify" <${EMAIL_FROM}>`,
             to: order.customerEmail,
             subject: `Order Confirmation #${order.orderNumber}`,
             html: htmlContent,
@@ -105,7 +105,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
                 
                 // Extract order metadata
                 const metadata = paymentIntent.metadata;
-                const orderNumber = metadata.orderNumber || 'RD' + Date.now().toString().slice(-6);
+                const orderNumber = metadata.orderNumber || 'DP' + Date.now().toString().slice(-6);
                 
                 // Parse cart items from metadata
                 let items = [];
@@ -194,7 +194,7 @@ app.post('/api/payment-intents', async (req, res) => {
         console.log('Calculated amount in cents:', amountInCents);
 
         // Generate order number
-        const orderNumber = 'RD' + Date.now().toString().slice(-6);
+        const orderNumber = 'DP' + Date.now().toString().slice(-6);
 
         // Create a PaymentIntent with Stripe
         const paymentIntent = await stripe.paymentIntents.create({
@@ -215,7 +215,7 @@ app.post('/api/payment-intents', async (req, res) => {
                 })))
             },
             receipt_email: customerEmail,
-            description: `Resell Depot Order #${orderNumber}`
+            description: `Order from Dupelify - ${cartItems.length} item(s)`
         });
 
         console.log('PaymentIntent created:', paymentIntent.id);
@@ -317,7 +317,7 @@ app.get('/api/test-email', async (req, res) => {
     try {
         // Sample order data
         const order = {
-            orderNumber: 'RD' + Date.now().toString().slice(-6),
+            orderNumber: 'DP' + Date.now().toString().slice(-6),
             customerName: 'Test Customer',
             customerEmail: req.query.email || 'test@example.com',
             items: [

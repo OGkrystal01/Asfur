@@ -6,60 +6,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create footer HTML
         const footerHTML = `
             <footer class="footer">
-                <div class="footer-content">
+                <div class="footer-container">
                     <div class="footer-section">
-                        <h3>About Us</h3>
-                        <p>Resell Depot - Your trusted source for digital products.</p>
+                        <h3>About Dupelify</h3>
+                        <p>Your trusted source for premium pre-owned items. Quality guaranteed.</p>
                     </div>
                     <div class="footer-section">
-                        <h3>Quick Links</h3>
+                        <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="/">Home</a></li>
                             <li><a href="/pages/products.html">Products</a></li>
                             <li><a href="/pages/contact.html">Contact</a></li>
-                            <li><a href="/pages/newsletter.html">Newsletter</a></li>
+                            <li><a href="/pages/terms-of-service.html">Terms of Service</a></li>
+                            <li><a href="/pages/privacy-policy.html">Privacy Policy</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
-                        <h3>Contact</h3>
-                        <p>Email: support@reselldepot.com</p>
-                        <p>Need help? Contact our support team.</p>
+                        <h4>Contact</h4>
+                        <p>Email: support@dupelify.com</p>
                     </div>
                     <div class="footer-section">
-                        <h3>Payment Methods</h3>
-                        <div class="payment-methods">
-                            <div class="payment-icon">
-                                <i class="fab fa-cc-visa"></i>
-                            </div>
-                            <div class="payment-icon">
-                                <i class="fab fa-cc-mastercard"></i>
-                            </div>
-                            <div class="payment-icon">
-                                <i class="fab fa-cc-amex"></i>
-                            </div>
-                            <div class="payment-icon">
-                                <i class="fab fa-cc-apple-pay"></i>
-                            </div>
-                            <div class="payment-icon">
-                                <i class="fab fa-google-pay"></i>
-                            </div>
-                            <div class="payment-icon">
-                                <i class="fab fa-klarna"></i>
-                            </div>
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                         </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <div class="footer-policies">
-                        <a href="/pages/terms-of-service.html" class="policy-link">Terms of Service</a>
-                        <span class="policy-separator">|</span>
-                        <a href="/pages/privacy-policy.html" class="policy-link">Privacy Policy</a>
-                        <span class="policy-separator">|</span>
-                        <a href="/pages/refund-policy.html" class="policy-link">Refund Policy</a>
-                        <span class="policy-separator">|</span>
-                        <a href="/pages/legal-notice.html" class="policy-link">Legal Notice</a>
-                    </div>
-                    <p>&copy; ${new Date().getFullYear()} Resell Depot. All rights reserved.</p>
+                    <p>&copy; ${new Date().getFullYear()} Dupelify. All rights reserved.</p>
                 </div>
             </footer>
         `;
@@ -74,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     margin-top: 60px;
                 }
 
-                .footer-content {
+                .footer-container {
                     max-width: 1200px;
                     margin: 0 auto;
                     display: grid;
@@ -87,6 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     color: #ffffff;
                     margin-bottom: 20px;
                     font-size: 1.2em;
+                }
+
+                .footer-section h4 {
+                    color: #ffffff;
+                    margin-bottom: 20px;
+                    font-size: 1.1em;
                 }
 
                 .footer-section ul {
@@ -118,45 +99,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     color: #888;
                 }
 
-                .footer-policies {
-                    margin-bottom: 15px;
+                .social-links {
+                    display: flex;
+                    gap: 20px;
                 }
 
-                .policy-link {
-                    color: #888;
-                    text-decoration: underline;
-                    transition: color 0.3s ease;
-                    font-size: 0.85em;
-                }
-
-                .policy-link:hover {
+                .social-links a {
                     color: #ffffff;
+                    transition: color 0.3s ease;
                 }
 
-                .policy-separator {
-                    margin: 0 10px;
-                    color: #555;
+                .social-links a:hover {
+                    color: #007bff;
                 }
 
                 @media (max-width: 768px) {
-                    .footer-content {
+                    .footer-container {
                         grid-template-columns: 1fr;
                         text-align: center;
                     }
 
                     .footer-section {
                         margin-bottom: 30px;
-                    }
-
-                    .footer-policies {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        gap: 10px;
-                    }
-
-                    .policy-separator {
-                        display: none;
                     }
                 }
             </style>

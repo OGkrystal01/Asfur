@@ -6,9 +6,9 @@ module.exports = function createOrderConfirmationEmail(order) {
     <!DOCTYPE html>
     <html>
     <head>
-      <meta charset="utf-8">
+      <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Order Confirmation - Resell Depot</title>
+      <title>Order Confirmation - Dupelify</title>
       <style>
         body {
           font-family: Arial, sans-serif;
@@ -89,21 +89,25 @@ module.exports = function createOrderConfirmationEmail(order) {
       </style>
     </head>
     <body>
-      <div class="container">
-        <div class="header">
-          <img src="https://cdn.shopify.com/s/files/1/0855/1576/4040/files/Logo.png" alt="Resell Depot Logo" class="logo">
-          <h1>Order Confirmation</h1>
+      <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333;">
+        <div style="background-color: #0A0F2C; padding: 30px; text-align: center;">
+          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Dupelify</h1>
+          <p style="color: #ffffff; margin: 10px 0 0 0;">Order Confirmation</p>
         </div>
         
-        <div class="content">
-          <p>Hello ${customerName},</p>
-          <p>Thank you for your purchase from Resell Depot. Your order has been successfully processed.</p>
+        <div style="padding: 30px; background-color: #ffffff;">
+          <h2 style="color: #0A0F2C; margin-top: 0;">Thank you for your order!</h2>
+          <p>Hi ${customerName},</p>
+          <p>We've received your order and will process it shortly. Here are your order details:</p>
           
-          <div class="order-details">
-            <h3>Order #${orderNumber}</h3>
-            
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0; font-size: 14px; color: #666;">Order Number</p>
+            <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #0A0F2C;">#${orderNumber}</p>
+          </div>
+          
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
             ${items.map(item => `
-              <div class="order-item">
+              <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
                 <div>
                   <strong>${item.title}</strong>
                   ${item.variant ? `<br><small>${item.variant}</small>` : ''}
@@ -113,12 +117,12 @@ module.exports = function createOrderConfirmationEmail(order) {
               </div>
             `).join('')}
             
-            <div class="total">
+            <div style="font-weight: bold; margin-top: 15px; text-align: right;">
               Total: €${total.toFixed(2)}
             </div>
           </div>
           
-          <div class="highlight-box">
+          <div style="background-color: #f8f8f8; border-left: 4px solid #000; padding: 15px; margin: 20px 0;">
             <h3>🎉 Your PDF files are ready to download!</h3>
             <p>You can access your purchased tutorial files by logging into your account on our website. These tutorials will guide you step-by-step on how to successfully resell these products for maximum profit.</p>
           </div>
@@ -126,15 +130,17 @@ module.exports = function createOrderConfirmationEmail(order) {
           <p>If you have any questions about your order or need assistance with the tutorials, please don't hesitate to reply to this email - we're here to help you succeed!</p>
           
           <div style="text-align: center;">
-            <a href="https://resell-depot.eth/pages/contact.html" class="button button-outline">Contact Support</a>
-            <a href="https://resell-depot.eth/pages/order-tracking.html?order=${orderNumber}" class="button button-primary">Track Your Order</a>
+            <a href="https://dupelify.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold;">Contact Support</a>
+            <a href="https://dupelify.com/pages/order-tracking.html?order=${orderNumber}" style="color: #ffffff; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold; background-color: #0A0F2C;">Track Your Order</a>
           </div>
         </div>
         
-        <div class="footer">
-          <p>This email was sent to ${customerEmail}. You're receiving this email because you made a purchase at Resell Depot.</p>
-          <p>If you have any questions, please reply directly to this email or contact our support team.</p>
-          <p>&copy; ${new Date().getFullYear()} Resell Depot. All rights reserved.</p>
+        <div style="background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666;">
+          <p style="margin: 0;">&copy; ${new Date().getFullYear()} Dupelify. All rights reserved.</p>
+          <p style="margin: 10px 0 0 0;">
+            <a href="https://dupelify.com" style="color: #0A0F2C; text-decoration: none;">Visit our website</a> | 
+            <a href="https://dupelify.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none;">Contact Support</a>
+          </p>
         </div>
       </div>
     </body>

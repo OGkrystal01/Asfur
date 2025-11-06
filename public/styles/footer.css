@@ -1,5 +1,5 @@
 .footer {
-    background: #000000;
+    background: #0A0F2C;
     padding: 40px 0;
     margin-top: auto;
     width: 100%;
@@ -87,7 +87,7 @@
 }
 
 .payment-icon .fa-cc-apple-pay {
-    color: #000000;
+    color: #0A0F2C;
 }
 
 .payment-icon .fa-google-pay {

@@ -64,7 +64,7 @@
 .button.button--primary {
     font-size: 18px;
     padding: 15px 40px;
-    background-color: black;
+    background-color: #0A0F2C;
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -92,18 +92,18 @@
 .button.button--outline:hover {
     transform: translateY(-2px);
     background-color: white;
-    color: black;
+    color: #0A0F2C;
 }
 
 /* Override button styles in hero section */
 .hero .button.button--primary {
     background-color: white;
-    color: black;
+    color: #0A0F2C;
 }
 
 .hero .button.button--primary:hover {
     background-color: white;
-    color: black;
+    color: #0A0F2C;
     opacity: 0.9;
 }
 
@@ -653,7 +653,7 @@
 .bundle-card .add-to-cart-btn {
     width: 100%;
     padding: 12px;
-    background: #000000;
+    background: #0A0F2C;
     color: white;
     border: none;
     cursor: pointer;
@@ -726,7 +726,7 @@
 
 .our-story__content h2 {
     font-size: 36px;
-    color: #000000;
+    color: #0A0F2C;
     margin-bottom: 30px;
     font-weight: 700;
 }
@@ -795,7 +795,7 @@
 .spotlight-bestseller__title {
     text-align: center;
     font-size: 36px;
-    color: #000000;
+    color: #0A0F2C;
     margin-bottom: 40px;
     font-weight: 700;
 }
@@ -869,7 +869,7 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: #000000;
+    background-color: #0A0F2C;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
@@ -883,7 +883,7 @@
 
 .spotlight-bestseller__content h3 {
     font-size: 32px;
-    color: #000000;
+    color: #0A0F2C;
     margin-bottom: 20px;
     font-weight: 700;
 }
@@ -895,7 +895,7 @@
 .spotlight-bestseller__price .price {
     font-size: 24px;
     font-weight: 700;
-    color: #000000;
+    color: #0A0F2C;
     margin-right: 12px;
 }
 
@@ -913,14 +913,14 @@
 }
 
 .spotlight-bestseller__description strong {
-    color: #000000;
+    color: #0A0F2C;
 }
 
 .spotlight-bestseller .button.button--primary {
     display: inline-block;
     padding: 15px 40px;
     font-size: 18px;
-    background-color: #000000;
+    background-color: #0A0F2C;
     color: white;
     text-decoration: none;
     border-radius: 4px;
