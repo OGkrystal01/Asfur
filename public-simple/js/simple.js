@@ -47,33 +47,54 @@ async function initCheckout() {
     }
     
     try {
+        console.log('Initializing checkout...');
+        console.log('Cart:', cart);
+        
         // Get Stripe publishable key
         const configResponse = await fetch('/api/stripe-config');
+        if (!configResponse.ok) {
+            throw new Error('Failed to get Stripe config');
+        }
         const config = await configResponse.json();
+        console.log('Stripe config loaded');
         
         // Initialize Stripe
         const stripe = Stripe(config.publishableKey);
+        console.log('Stripe initialized');
         
         // Get form data for email
         const emailInput = document.getElementById('email');
         const nameInput = document.getElementById('name');
         
         // Create payment intent immediately to get clientSecret
-        const response = await fetch('/api/create-payment-intent', {
+        console.log('Creating payment intent...');
+        const response = await fetch('/api/payment-intents', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 cartItems: cart,
+                customerName: nameInput?.value || 'Customer',
                 customerEmail: emailInput?.value || 'customer@example.com'
             })
         });
         
-        const { clientSecret } = await response.json();
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to create payment intent');
+        }
+        
+        const data = await response.json();
+        console.log('Payment intent created');
+        
+        if (!data.clientSecret) {
+            throw new Error('No client secret received');
+        }
         
         // Create and mount payment element immediately
-        const elements = stripe.elements({ clientSecret });
+        const elements = stripe.elements({ clientSecret: data.clientSecret });
         const paymentElement = elements.create('payment');
         paymentElement.mount('#payment-element');
+        console.log('Payment element mounted');
         
         // Handle form submission
         const form = document.getElementById('checkout-form');
@@ -118,6 +139,14 @@ async function initCheckout() {
         });
     } catch (error) {
         console.error('Checkout initialization error:', error);
-        alert('Failed to initialize checkout. Please refresh the page.');
+        const paymentElement = document.getElementById('payment-element');
+        if (paymentElement) {
+            paymentElement.innerHTML = `
+                <div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+                    <strong>Error:</strong> ${error.message}<br>
+                    <small>Please check the console for details or contact support.</small>
+                </div>
+            `;
+        }
     }
 }
