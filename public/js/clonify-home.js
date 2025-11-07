@@ -24,8 +24,8 @@ function createProductCard(product) {
     card.className = 'product-card-scroll';
 
     // Get product image
-    const imageUrl = product.images && product.images.length > 0 
-        ? product.images[0] 
+    const imageUrl = product.image && product.image.src 
+        ? product.image.src 
         : '/images/logo/Logo.png';
 
     // Get price (use first variant price)
