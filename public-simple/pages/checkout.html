@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Dupelify</title>
+    <link rel="stylesheet" href="/styles/simple.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <img src="/images/logo/Logo.png" alt="Dupelify" class="logo">
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="checkout-container">
+            <h1>Checkout</h1>
+            
+            <div class="digital-notice-checkout">
+                <strong>📧 Digital Product Delivery</strong><br>
+                Your e-book will be delivered instantly to your email address after payment.
+            </div>
+
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div id="order-summary"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <div id="payment-element" class="payment-element">
+                        <!-- Stripe Payment Element will be inserted here -->
+                    </div>
+                </div>
+
+                <button type="submit" id="complete-payment" class="btn-checkout">
+                    Complete Payment - $20
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
+                <p>🔒 Secure payment powered by Stripe</p>
+                <p>Your digital product will be emailed immediately</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Dupelify. All rights reserved.</p>
+            <p>Digital products delivered via email only</p>
+        </div>
+    </footer>
+
+    <script src="/js/simple.js"></script>
+</body>
+</html>

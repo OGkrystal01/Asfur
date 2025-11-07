@@ -80,6 +80,19 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 
+// Store version toggle: 'full' or 'simple'
+const STORE_VERSION = process.env.STORE_VERSION || 'full';
+const PUBLIC_DIR = STORE_VERSION === 'simple' ? 'public-simple' : 'public';
+
+console.log(`🏪 Running ${STORE_VERSION} store version`);
+console.log(`📁 Serving from: ${PUBLIC_DIR}`);
+
+// Validate that the directory exists
+if (!fs.existsSync(path.join(__dirname, PUBLIC_DIR))) {
+    console.error(`❌ Error: ${PUBLIC_DIR} directory not found!`);
+    console.log(`💡 Tip: Set STORE_VERSION=full to use the main store`);
+}
+
 // Webhook endpoint needs raw body for signature verification
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
     const sig = req.headers['stripe-signature'];
@@ -148,7 +161,13 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
 // For all other routes, use JSON parser
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files from the selected store version
+app.use(express.static(PUBLIC_DIR));
+app.use('/images', express.static(path.join(PUBLIC_DIR, 'images')));
+app.use('/js', express.static(path.join(PUBLIC_DIR, 'js')));
+app.use('/styles', express.static(path.join(PUBLIC_DIR, 'styles')));
+app.use('/pages', express.static(path.join(PUBLIC_DIR, 'pages')));
 
 // Import hardcoded products data
 const { products } = require('./public/js/data/products.js');
