@@ -21,7 +21,7 @@ function loadFeaturedProducts() {
     });
 }
 
-// Create product card for horizontal scroll
+// Create product card for grid layout
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card-scroll';
@@ -40,13 +40,23 @@ function createProductCard(product) {
         ? product.variants[0].compare_at_price 
         : null;
 
+    // Get rating
+    const rating = product.rating_count || 0;
+    const ratingStars = Math.min(5, Math.round(rating / 20));
+
     card.innerHTML = `
         <a href="/pages/product.html?handle=${product.handle}" style="text-decoration: none; color: inherit;">
             <img src="${imageUrl}" alt="${product.title}" loading="lazy">
             <div class="product-card-scroll__content">
                 <h3 class="product-card-scroll__title">${product.title}</h3>
+                <div class="product-card-scroll__rating">
+                    <div class="star-rating">
+                        ${Array(5).fill().map((_, i) => `<span class="star ${i < ratingStars ? 'filled' : ''}">★</span>`).join('')}
+                    </div>
+                    <span class="rating-count">(${rating})</span>
+                </div>
                 <div class="product-card-scroll__price">
-                    ${comparePrice ? `<span style="text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 10px;">€${comparePrice.toFixed(2)}</span>` : ''}
+                    ${comparePrice ? `<span class="compare-at-price">€${comparePrice.toFixed(2)}</span>` : ''}
                     <span>€${price.toFixed(2)}</span>
                 </div>
             </div>

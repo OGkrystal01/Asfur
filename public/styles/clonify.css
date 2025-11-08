@@ -3,27 +3,33 @@
 /* Hero Section */
 .clonify-hero {
     position: relative;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #0A0F2C;
     color: white;
-    padding: 100px 20px;
+    padding: 120px 20px;
     text-align: center;
-    min-height: 500px;
+    min-height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
-.clonify-hero::before {
-    content: '';
+.hero-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(10, 15, 44, 0.7) 0%, rgba(26, 36, 86, 0.7) 100%);
+    background: linear-gradient(135deg, rgba(10, 15, 44, 0.75) 0%, rgba(26, 36, 86, 0.75) 100%);
     z-index: 1;
 }
 
@@ -86,58 +92,41 @@
     text-align: center;
 }
 
-.products-scroll {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
     padding: 20px 0;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-}
-
-.products-scroll::-webkit-scrollbar {
-    height: 10px;
-}
-
-.products-scroll::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.products-scroll::-webkit-scrollbar-thumb {
-    background: #0A0F2C;
-    border-radius: 10px;
-}
-
-.products-scroll::-webkit-scrollbar-thumb:hover {
-    background: #1a2456;
 }
 
 .product-card-scroll {
-    min-width: 320px;
-    flex-shrink: 0;
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     transition: transform 0.3s, box-shadow 0.3s;
-    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card-scroll:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
 .product-card-scroll img {
     width: 100%;
-    height: 280px;
-    object-fit: cover;
+    height: 320px;
+    object-fit: contain;
+    background: #f9f9f9;
+    padding: 20px;
 }
 
 .product-card-scroll__content {
     padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card-scroll__title {
@@ -145,12 +134,47 @@
     color: #0A0F2C;
     margin-bottom: 10px;
     font-weight: 600;
+    line-height: 1.4;
+}
+
+.product-card-scroll__rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 2px;
+}
+
+.star {
+    color: #ddd;
+    font-size: 1rem;
+}
+
+.star.filled {
+    color: #ffa500;
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: #666;
 }
 
 .product-card-scroll__price {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: #0A0F2C;
     font-weight: 700;
+    margin-top: auto;
+}
+
+.compare-at-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1rem;
+    margin-right: 10px;
 }
 
 /* Profitable Reselling Section */
@@ -184,30 +208,34 @@
 
 .feature-card {
     text-align: center;
-    padding: 30px;
-    background: #f9f9f9;
+    padding: 40px 30px;
+    background: white;
     border-radius: 12px;
-    transition: transform 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    color: #0A0F2C;
 }
 
 .feature-card h3 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #0A0F2C;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-weight: 600;
 }
 
 .feature-card p {
     color: #666;
+    line-height: 1.6;
 }
 
 /* Trust Section */
@@ -218,7 +246,7 @@
 
 .trust-badges {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 30px;
     max-width: 1000px;
     margin: 40px auto;
@@ -226,11 +254,19 @@
 
 .trust-badge {
     text-align: center;
-    padding: 20px;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s;
+}
+
+.trust-badge:hover {
+    transform: translateY(-5px);
 }
 
 .badge-icon {
-    font-size: 3rem;
+    font-size: 3.5rem;
     margin-bottom: 15px;
 }
 
@@ -238,22 +274,32 @@
     font-size: 1rem;
     color: #333;
     font-weight: 500;
+    line-height: 1.5;
 }
 
 /* Why Best Section */
 .why-best {
-    padding: 80px 20px;
-    background: #0A0F2C;
+    position: relative;
+    padding: 120px 20px;
     color: white;
     text-align: center;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .why-best .section-heading {
     color: white;
+    font-size: 3rem;
+    margin-bottom: 20px;
 }
 
 .why-best .section-subheading {
-    color: rgba(255,255,255,0.8);
+    color: rgba(255,255,255,0.9);
+    font-size: 1.3rem;
+    margin-bottom: 30px;
 }
 
 /* Guarantee Section */
@@ -365,31 +411,51 @@
         grid-template-columns: 1fr;
     }
     
-    .product-card-scroll {
-        min-width: 75vw;
-        max-width: 340px;
-    }
-    
-    .products-scroll {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 15px;
-        padding: 20px 10px;
-    }
-    
-    .category-section::after {
-        top: 40px;
-        right: 10px;
-        font-size: 0.8rem;
     }
     
     .product-card-scroll img {
-        height: 300px;
+        height: 200px;
+        padding: 15px;
+    }
+    
+    .product-card-scroll__content {
+        padding: 15px;
+    }
+    
+    .product-card-scroll__title {
+        font-size: 0.95rem;
+    }
+    
+    .product-card-scroll__price {
+        font-size: 1.2rem;
+    }
+    
+    .clonify-hero {
+        padding: 80px 20px;
+        min-height: 450px;
+    }
+    
+    .why-best {
+        padding: 80px 20px;
+        min-height: 400px;
+    }
+    
+    .why-best .section-heading {
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 480px) {
-    .product-card-scroll {
-        min-width: 85vw;
-        max-width: 360px;
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .product-card-scroll img {
+        height: 180px;
     }
     
     .clonify-hero__title {
@@ -399,6 +465,10 @@
     .btn-clonify {
         padding: 12px 30px;
         font-size: 1rem;
+    }
+    
+    .trust-badges {
+        grid-template-columns: 1fr;
     }
 }
 
