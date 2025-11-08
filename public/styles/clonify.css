@@ -92,14 +92,37 @@
     text-align: center;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 25px;
+.products-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
     padding: 20px 0;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.products-scroll::-webkit-scrollbar {
+    height: 10px;
+}
+
+.products-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.products-scroll::-webkit-scrollbar-thumb {
+    background: #0A0F2C;
+    border-radius: 10px;
+}
+
+.products-scroll::-webkit-scrollbar-thumb:hover {
+    background: #1a2456;
 }
 
 .product-card-scroll {
+    min-width: 300px;
+    flex-shrink: 0;
     background: white;
     border-radius: 12px;
     overflow: hidden;
@@ -107,6 +130,7 @@
     transition: transform 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
+    scroll-snap-align: start;
 }
 
 .product-card-scroll:hover {
@@ -118,7 +142,7 @@
     width: 100%;
     height: 320px;
     object-fit: contain;
-    background: #f9f9f9;
+    background: white;
     padding: 20px;
 }
 
@@ -411,13 +435,17 @@
         grid-template-columns: 1fr;
     }
     
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .products-scroll {
         gap: 15px;
+        padding: 20px 10px;
+    }
+    
+    .product-card-scroll {
+        min-width: 280px;
     }
     
     .product-card-scroll img {
-        height: 200px;
+        height: 280px;
         padding: 15px;
     }
     
@@ -449,13 +477,16 @@
 }
 
 @media (max-width: 480px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .products-scroll {
         gap: 12px;
     }
     
+    .product-card-scroll {
+        min-width: 260px;
+    }
+    
     .product-card-scroll img {
-        height: 180px;
+        height: 240px;
     }
     
     .clonify-hero__title {
@@ -472,9 +503,159 @@
     }
 }
 
+/* Testimonials Section */
+.testimonials-section {
+    padding: 80px 20px;
+    background: #f9f9f9;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 40px auto 0;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.testimonial-rating {
+    color: #ffa500;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.testimonial-rating i {
+    margin-right: 3px;
+}
+
+.testimonial-text {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 25px;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.testimonial-author strong {
+    color: #0A0F2C;
+    font-size: 1.1rem;
+}
+
+.testimonial-author span {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Comparison Table Section */
+.comparison-section {
+    padding: 80px 20px;
+    background: white;
+}
+
+.comparison-table-wrapper {
+    max-width: 900px;
+    margin: 40px auto 0;
+    overflow-x: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.comparison-table thead {
+    background: #0A0F2C;
+    color: white;
+}
+
+.comparison-table th {
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.comparison-table th.highlight-col {
+    background: #1a2456;
+}
+
+.comparison-table td {
+    padding: 18px 20px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 1rem;
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: #333;
+}
+
+.comparison-table td.highlight-col {
+    background: #f8f9ff;
+}
+
+.comparison-table i.fa-check-circle {
+    color: #22c55e;
+    font-size: 1.5rem;
+}
+
+.comparison-table i.fa-times-circle {
+    color: #ef4444;
+    font-size: 1.5rem;
+}
+
+.comparison-table i.fa-minus-circle {
+    color: #fbbf24;
+    font-size: 1.5rem;
+}
+
+.comparison-table tbody tr:hover {
+    background: #fafafa;
+}
+
 /* Container */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+/* Mobile Responsive for New Sections */
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-card {
+        padding: 25px;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+    }
 }

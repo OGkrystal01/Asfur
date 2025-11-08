@@ -80,7 +80,7 @@
     <main>
         <!-- Hero Section -->
         <section class="clonify-hero">
-            <img src="images/hero/banner.jpg" alt="Hero Banner" class="hero-bg-image">
+            <img src="/images/hero/banner.jpg" alt="Hero Banner" class="hero-bg-image" onerror="this.style.display='none'">
             <div class="hero-overlay"></div>
             <div class="container">
                 <h1 class="clonify-hero__title">We provide you with 1:1 Clones</h1>
@@ -95,7 +95,7 @@
             <div class="container">
                 <div class="category-section">
                     <h2 class="category-title">Bestsellers</h2>
-                    <div class="products-grid" id="featured-products">
+                    <div class="products-scroll" id="featured-products">
                         <!-- Products will be loaded dynamically -->
                     </div>
                 </div>
@@ -162,7 +162,7 @@
 
         <!-- Why We're The Best Section -->
         <section class="why-best">
-            <img src="images/hero/banner2.jpg" alt="Why We're The Best" class="hero-bg-image">
+            <img src="/images/hero/banner2.jpg" alt="Why We're The Best" class="hero-bg-image">
             <div class="hero-overlay"></div>
             <div class="container">
                 <h2 class="section-heading">Why We're The Best in The Business</h2>
@@ -208,6 +208,117 @@
                         <summary>Do products have receipt?</summary>
                         <p>Yes! Every purchase includes an original-looking receipt and packaging for authentic reselling.</p>
                     </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="container">
+                <h2 class="section-heading">What Our Customers Say</h2>
+                <p class="section-subheading">Join thousands of satisfied resellers worldwide</p>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Best supplier I've ever worked with. The quality is indistinguishable from originals and my customers are always satisfied. Made over €10k in my first month!"</p>
+                        <div class="testimonial-author">
+                            <strong>Marcus T.</strong>
+                            <span>Verified Buyer</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"The receipts and packaging are perfect. My reselling business has grown 300% since I started using Dupelify. Customer support is amazing too!"</p>
+                        <div class="testimonial-author">
+                            <strong>Sarah K.</strong>
+                            <span>Verified Buyer</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p class="testimonial-text">"Fast shipping, premium quality, and the tutorial included helped me start immediately. Already made back my investment in the first week!"</p>
+                        <div class="testimonial-author">
+                            <strong>David M.</strong>
+                            <span>Verified Buyer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table Section -->
+        <section class="comparison-section">
+            <div class="container">
+                <h2 class="section-heading">Why Choose Dupelify?</h2>
+                <p class="section-subheading">See how we compare to other suppliers</p>
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Features</th>
+                                <th class="highlight-col">Dupelify</th>
+                                <th>Other Suppliers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1:1 Quality Products</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Original Packaging</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Receipt Included</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Fast Shipping (4-7 Days)</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-minus-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>24/7 Support</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Free Reselling Tutorial</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                            <tr>
+                                <td>30-Day Money Back</td>
+                                <td class="highlight-col"><i class="fas fa-check-circle"></i></td>
+                                <td><i class="fas fa-times-circle"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="/pages/products.html" class="btn-clonify">Start Shopping Now</a>
                 </div>
             </div>
         </section>
