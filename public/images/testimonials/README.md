@@ -1,28 +1,30 @@
-# Testimonial Customer Photos
+# Testimonial Review Photos
 
-## 📸 Upload Customer Avatar Images Here
+## 📸 Upload Customer Review Photos Here
 
 ### Required Images:
-1. **`customer1.jpg`** - Photo for Marcus T.
-2. **`customer2.jpg`** - Photo for Sarah K.
-3. **`customer3.jpg`** - Photo for David M.
+1. **`review1.jpg`** - Review photo for Marcus T.
+2. **`review2.jpg`** - Review photo for Sarah K.
+3. **`review3.jpg`** - Review photo for David M.
 
 ## 📐 Recommended Specifications:
 
-- **Dimensions:** 200x200px (square)
+- **Dimensions:** 600x400px (landscape ratio)
 - **Format:** JPG or PNG
-- **File Size:** Keep under 100KB each
-- **Style:** Professional headshots or avatars
+- **File Size:** Keep under 300KB each
+- **Style:** Product photos, unboxing, packaging with receipts
 
-## 💡 Tips:
-- Use diverse, professional-looking photos
-- Ensure faces are clearly visible
-- Good lighting and quality
-- Can use stock photos of business people
-- Images will be displayed as 60px circles with border
+## 💡 Photo Ideas:
+- Products with original packaging and receipts
+- Unboxing photos showing quality
+- Products laid out professionally
+- Close-ups of packaging details
+- Multiple products together
+- Receipt and packaging combo shots
 
 ## 🎨 Display:
-- Desktop: 60x60px circular avatars
-- Mobile: 50x50px circular avatars
-- Dark blue border around each photo
-- Displayed next to customer name and "Verified Buyer" badge
+- Desktop: 250px height, full width of card
+- Mobile: 200px height, full width of card
+- Images appear at top of testimonial card
+- Text and rating below the image
+- Professional card layout matching clonify.eu style
