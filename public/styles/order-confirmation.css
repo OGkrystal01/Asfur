@@ -41,6 +41,42 @@
     font-size: 1rem;
 }
 
+.confirmation-message {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    background: #f0f9ff;
+    border-radius: 8px;
+    border-left: 4px solid #080046;
+    text-align: left;
+}
+
+.confirmation-message p {
+    margin-bottom: 0.75rem;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.confirmation-message p:last-child {
+    margin-bottom: 0;
+}
+
+.confirmation-message strong {
+    color: #080046;
+    font-size: 1.05rem;
+}
+
+.contact-link {
+    color: #080046;
+    font-weight: 600;
+    text-decoration: underline;
+    transition: opacity 0.2s;
+}
+
+.contact-link:hover {
+    opacity: 0.8;
+}
+
 .confirmation-section {
     margin-bottom: 2rem;
 }

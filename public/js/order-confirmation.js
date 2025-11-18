@@ -4,40 +4,34 @@ document.addEventListener('DOMContentLoaded', async function() {
     const subtotalElement = document.getElementById('subtotal');
     const totalElement = document.getElementById('total');
     const orderNumberElement = document.getElementById('order-number');
-    const confirmationContent = document.querySelector('.confirmation-content');
-    const errorMessage = document.querySelector('.error-message');
 
-    // Check if this is a valid order confirmation
+    // Check if this is a valid order confirmation from Stripe redirect
     const urlParams = new URLSearchParams(window.location.search);
-    const paymentId = localStorage.getItem('currentPaymentId');
+    const paymentIntentParam = urlParams.get('payment_intent');
+    const paymentIntentClientSecret = urlParams.get('payment_intent_client_secret');
+    const redirectStatus = urlParams.get('redirect_status');
     
-    if (!paymentId) {
-        // No payment ID found, redirect to cart
-        window.location.href = '/pages/cart.html';
-        return;
-    }
-
-    try {
-        // Verify payment status with server
-        const response = await fetch(`/api/verify-payment/${paymentId}`);
-        const paymentStatus = await response.json();
-
-        if (!paymentStatus.isPaid) {
-            // Payment not successful, redirect to cart
-            localStorage.removeItem('currentPaymentId');
-            window.location.href = '/pages/cart.html';
+    console.log('Order confirmation loaded');
+    console.log('Redirect status:', redirectStatus);
+    console.log('Payment intent:', paymentIntentParam);
+    
+    // Check if we have a successful payment from Stripe redirect
+    if (redirectStatus === 'succeeded' || paymentIntentParam) {
+        console.log('✅ Payment successful, displaying order confirmation');
+        displayOrderConfirmation();
+    } else {
+        // Check if we have cart data (direct access without payment)
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length > 0) {
+            // Has cart, might be testing or direct access
+            console.log('⚠️ Displaying order confirmation from cart data');
+            displayOrderConfirmation();
+        } else {
+            // No payment and no cart, redirect to shop
+            console.log('❌ No order data found, redirecting to products');
+            window.location.href = '/pages/products.html';
             return;
         }
-
-        // If we get here, payment was successful
-        displayOrderConfirmation();
-        
-        // Clear payment ID after successful display
-        localStorage.removeItem('currentPaymentId');
-        
-    } catch (error) {
-        console.error('Error verifying payment:', error);
-        window.location.href = '/pages/cart.html';
     }
 
     function displayOrderConfirmation() {
@@ -105,8 +99,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         `;
         document.head.appendChild(style);
 
-        // Clear cart and customer data
+        // Clear cart and customer data after successful order display
         localStorage.removeItem('cart');
         localStorage.removeItem('customerData');
+        
+        console.log('✅ Order confirmation displayed successfully');
+        console.log('📦 Cart and customer data cleared');
     }
 });

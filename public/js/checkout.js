@@ -118,6 +118,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Update totals
         subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
+        
+        // Update shipping to FREE
+        const shippingElement = document.getElementById('shipping');
+        if (shippingElement) {
+            shippingElement.textContent = 'FREE';
+            shippingElement.style.color = '#080046';
+            shippingElement.style.fontWeight = '600';
+        }
+        
         totalElement.textContent = `€${subtotal.toFixed(2)}`;
 
         return subtotal;

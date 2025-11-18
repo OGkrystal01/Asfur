@@ -79,6 +79,51 @@
     color: #8c9196;
 }
 
+/* Shipping Method Section Styles */
+.shipping-method-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e3e5;
+}
+
+.shipping-option {
+    border: 2px solid #080046;
+    border-radius: 8px;
+    padding: 0;
+    background: #f8f9fa;
+    cursor: default;
+}
+
+.shipping-option-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+}
+
+.shipping-option-details {
+    flex: 1;
+}
+
+.shipping-option-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #080046;
+    margin-bottom: 0.35rem;
+}
+
+.shipping-option-description {
+    font-size: 0.8125rem;
+    color: #6d7175;
+}
+
+.shipping-option-price {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #080046;
+    padding-left: 1rem;
+}
+
 /* Payment Section Styles */
 .payment-section {
     margin-top: 2rem;
@@ -279,6 +324,23 @@
 
     .checkout-content {
         gap: 1.5rem;
+    }
+    
+    .shipping-option-content {
+        padding: 1rem;
+    }
+    
+    .shipping-option-name {
+        font-size: 0.9375rem;
+    }
+    
+    .shipping-option-description {
+        font-size: 0.75rem;
+    }
+    
+    .shipping-option-price {
+        font-size: 1rem;
+        padding-left: 0.75rem;
     }
 }
 
