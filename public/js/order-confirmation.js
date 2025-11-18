@@ -74,13 +74,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Display shipping details
         if (customerData) {
             shippingDetails.innerHTML = `
-                <p><strong>${customerData.firstName} ${customerData.lastName}</strong></p>
-                <p>${customerData.address}</p>
+                <p><strong>${customerData.firstName || ''} ${customerData.lastName || ''}</strong></p>
+                <p>${customerData.address || ''}</p>
                 ${customerData.apartment ? `<p>${customerData.apartment}</p>` : ''}
-                <p>${customerData.city}, ${customerData.postalCode}</p>
-                <p>${customerData.country}</p>
-                <p>Email: ${customerData.email}</p>
-                <p>Phone: ${customerData.phone}</p>
+                <p>${customerData.city || ''}, ${customerData.postalCode || ''}</p>
+                <p>${customerData.country || ''}</p>
+                <p>Email: ${customerData.email || ''}</p>
             `;
         }
 
