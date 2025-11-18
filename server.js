@@ -81,7 +81,10 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 
 // Store version - read from environment variable or default to 'full'
-const STORE_VERSION = process.env.STORE_VERSION || 'full';
+console.log('🔍 DEBUG: process.env.STORE_VERSION =', process.env.STORE_VERSION);
+console.log('🔍 DEBUG: Raw env value type:', typeof process.env.STORE_VERSION);
+
+const STORE_VERSION = (process.env.STORE_VERSION || 'full').toLowerCase().trim();
 const PUBLIC_DIR = STORE_VERSION === 'simple' ? 'public-simple' : 'public';
 
 console.log(`🏪 Running ${STORE_VERSION} store version`);
