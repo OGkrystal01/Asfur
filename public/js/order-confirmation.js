@@ -100,13 +100,41 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.head.appendChild(style);
 
         // Track successful purchase with Meta Pixel
-        if (window.metaPixel && typeof window.metaPixel.trackPurchase === 'function') {
-            window.metaPixel.trackPurchase({
-                items: cart,
-                total: subtotal,
-                orderNumber: orderNumber
-            });
-        }
+        // Wait a moment to ensure pixel is fully loaded
+        setTimeout(() => {
+            console.log('🔍 Checking Meta Pixel...');
+            console.log('Meta Pixel available?', !!window.metaPixel);
+            console.log('trackPurchase function available?', typeof window.metaPixel?.trackPurchase);
+            console.log('fbq available?', typeof fbq);
+            
+            if (window.metaPixel && typeof window.metaPixel.trackPurchase === 'function') {
+                console.log('🎯 Tracking Purchase event with Meta Pixel...');
+                window.metaPixel.trackPurchase({
+                    items: cart,
+                    total: subtotal,
+                    orderNumber: orderNumber
+                });
+                console.log('✅ Purchase tracking call completed');
+            } else {
+                console.warn('⚠️ Meta Pixel not available - Purchase event not tracked');
+                console.warn('window.metaPixel:', window.metaPixel);
+                
+                // Retry after another delay
+                setTimeout(() => {
+                    console.log('🔄 Retrying Purchase tracking...');
+                    if (window.metaPixel && typeof window.metaPixel.trackPurchase === 'function') {
+                        window.metaPixel.trackPurchase({
+                            items: cart,
+                            total: subtotal,
+                            orderNumber: orderNumber
+                        });
+                        console.log('✅ Purchase tracked on retry');
+                    } else {
+                        console.error('❌ Purchase tracking failed - Pixel not loaded');
+                    }
+                }, 1000);
+            }
+        }, 500);
         
         // Clear cart and customer data after successful order display
         localStorage.removeItem('cart');

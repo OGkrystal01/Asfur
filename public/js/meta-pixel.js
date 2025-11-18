@@ -17,12 +17,17 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 if (META_PIXEL_ID && META_PIXEL_ID !== 'YOUR_PIXEL_ID') {
     fbq('init', META_PIXEL_ID);
     console.log('✅ Meta Pixel initialized:', META_PIXEL_ID);
+    
+    // Set as initialized flag
+    window.metaPixelInitialized = true;
 } else {
     console.warn('⚠️ Meta Pixel ID not configured. Please update META_PIXEL_ID in meta-pixel.js');
+    window.metaPixelInitialized = false;
 }
 
 // Track page view on all pages
 fbq('track', 'PageView');
+console.log('📊 Meta Pixel: PageView tracked');
 
 // Helper function to track view content (product pages)
 function trackViewContent(productData) {
@@ -74,9 +79,20 @@ function trackInitiateCheckout(cart) {
 
 // Helper function to track purchase (order confirmation page)
 function trackPurchase(orderData) {
-    if (typeof fbq === 'undefined') return;
+    console.log('📊 trackPurchase called with:', orderData);
+    
+    if (typeof fbq === 'undefined') {
+        console.error('❌ fbq is not defined - Meta Pixel not loaded!');
+        return;
+    }
     
     const content_ids = orderData.items.map(item => item.handle || item.id || item.title);
+    
+    console.log('🎯 Sending Purchase event to Meta Pixel...');
+    console.log('Value:', orderData.total);
+    console.log('Currency: EUR');
+    console.log('Items:', orderData.items.length);
+    console.log('Content IDs:', content_ids);
     
     fbq('track', 'Purchase', {
         content_ids: content_ids,
@@ -85,7 +101,8 @@ function trackPurchase(orderData) {
         currency: 'EUR',
         num_items: orderData.items.length
     });
-    console.log('📊 Meta Pixel: Purchase tracked - €' + orderData.total);
+    
+    console.log('✅ Meta Pixel: Purchase tracked - €' + orderData.total);
 }
 
 // Make functions globally available

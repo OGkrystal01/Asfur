@@ -81,6 +81,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
+    // Discount code state
+    let appliedDiscount = null;
+
+    // Valid discount codes
+    const DISCOUNT_CODES = {
+        'TEST95': { type: 'percentage', value: 95, description: '95% Off (Testing)' },
+        'SAVE10': { type: 'percentage', value: 10, description: '10% Off' },
+        'SAVE20': { type: 'percentage', value: 20, description: '20% Off' }
+    };
+
     // Load cart items from localStorage
     function loadCartItems() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -119,6 +129,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Update totals
         subtotalElement.textContent = `€${subtotal.toFixed(2)}`;
         
+        // Calculate discount if applied
+        let discountAmount = 0;
+        if (appliedDiscount) {
+            if (appliedDiscount.type === 'percentage') {
+                discountAmount = subtotal * (appliedDiscount.value / 100);
+            } else if (appliedDiscount.type === 'fixed') {
+                discountAmount = appliedDiscount.value;
+            }
+        }
+        
+        // Update discount display
+        const discountLine = document.getElementById('discount-line');
+        const discountAmountElement = document.getElementById('discount-amount');
+        if (appliedDiscount && discountAmount > 0) {
+            discountLine.style.display = 'flex';
+            discountAmountElement.textContent = `-€${discountAmount.toFixed(2)}`;
+        } else {
+            discountLine.style.display = 'none';
+        }
+        
         // Update shipping to FREE
         const shippingElement = document.getElementById('shipping');
         if (shippingElement) {
@@ -127,9 +157,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             shippingElement.style.fontWeight = '600';
         }
         
-        totalElement.textContent = `€${subtotal.toFixed(2)}`;
+        // Calculate final total
+        const finalTotal = Math.max(0, subtotal - discountAmount);
+        totalElement.textContent = `€${finalTotal.toFixed(2)}`;
 
-        return subtotal;
+        return finalTotal;
     }
 
     // Initialize the checkout
@@ -149,6 +181,57 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (window.metaPixel && typeof window.metaPixel.trackInitiateCheckout === 'function') {
         window.metaPixel.trackInitiateCheckout(cartData);
     }
+    
+    // Handle discount code application
+    const discountInput = document.getElementById('discount-code');
+    const applyDiscountBtn = document.getElementById('apply-discount');
+    const discountMessage = document.getElementById('discount-message');
+    const discountCodeLabel = document.getElementById('discount-code-label');
+    
+    applyDiscountBtn.addEventListener('click', function() {
+        const code = discountInput.value.trim().toUpperCase();
+        
+        if (!code) {
+            discountMessage.textContent = 'Please enter a discount code';
+            discountMessage.className = 'discount-message error';
+            return;
+        }
+        
+        if (DISCOUNT_CODES[code]) {
+            appliedDiscount = {
+                code: code,
+                ...DISCOUNT_CODES[code]
+            };
+            
+            discountCodeLabel.textContent = code;
+            discountMessage.textContent = `✓ ${DISCOUNT_CODES[code].description} applied!`;
+            discountMessage.className = 'discount-message success';
+            
+            // Disable input and button
+            discountInput.disabled = true;
+            applyDiscountBtn.disabled = true;
+            applyDiscountBtn.textContent = 'Applied';
+            
+            // Reload cart to recalculate totals
+            loadCartItems();
+            
+            // Re-initialize payment with new amount
+            initializeStripePayment();
+            
+            console.log('✅ Discount applied:', code);
+        } else {
+            discountMessage.textContent = 'Invalid discount code';
+            discountMessage.className = 'discount-message error';
+        }
+    });
+    
+    // Allow Enter key to apply discount
+    discountInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            applyDiscountBtn.click();
+        }
+    });
     
     // Show loading state immediately
     console.log('🔄 Loading payment methods...');
