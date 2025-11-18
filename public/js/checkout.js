@@ -233,11 +233,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                     radios: false,
                     spacedAccordionItems: false
                 },
-                fields: {
-                    billingDetails: {
-                        address: 'never'
-                    }
-                },
                 wallets: {
                     applePay: 'auto',
                     googlePay: 'auto'
@@ -297,12 +292,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         try {
             console.log('🔄 Confirming payment with Stripe...');
             
-            // Confirm payment with Stripe
+            // Confirm payment with Stripe - let Stripe handle billing details from payment element
             const { error } = await stripe.confirmPayment({
                 elements,
                 confirmParams: {
                     return_url: `${window.location.origin}/pages/order-confirmation.html`,
                     receipt_email: customerData.email,
+                    payment_method_data: {
+                        billing_details: {
+                            name: `${customerData.firstName} ${customerData.lastName}`,
+                            email: customerData.email,
+                            phone: customerData.phone,
+                            address: {
+                                line1: customerData.address,
+                                line2: customerData.apartment || '',
+                                city: customerData.city,
+                                postal_code: customerData.postalCode,
+                                country: customerData.country
+                            }
+                        }
+                    },
                     shipping: {
                         name: `${customerData.firstName} ${customerData.lastName}`,
                         phone: customerData.phone,
