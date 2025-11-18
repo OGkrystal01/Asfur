@@ -200,7 +200,7 @@ app.post('/api/payment-intents', async (req, res) => {
         }
 
         console.log('Payment Intent request received:', req.body);
-        const { cartItems, customerName, customerEmail } = req.body;
+        const { cartItems, customerName, customerEmail, discountCode, discountAmount, finalTotal } = req.body;
         
         // Validate cart items
         if (!Array.isArray(cartItems) || cartItems.length === 0) {
@@ -208,19 +208,37 @@ app.post('/api/payment-intents', async (req, res) => {
             return res.status(400).json({ error: 'Invalid cart items' });
         }
 
-        // Calculate total amount server-side (never trust client input)
-        const total = cartItems.reduce((sum, item) => {
-            return sum + (parseFloat(item.price) * parseInt(item.quantity));
-        }, 0);
+        // Use finalTotal if provided (with discount), otherwise calculate from cart
+        let total;
+        if (finalTotal !== undefined && finalTotal !== null) {
+            total = parseFloat(finalTotal);
+            console.log('Using discounted total:', total);
+            if (discountCode) {
+                console.log('Discount code applied:', discountCode, 'Amount:', discountAmount);
+            }
+        } else {
+            // Calculate total amount server-side (never trust client input)
+            total = cartItems.reduce((sum, item) => {
+                return sum + (parseFloat(item.price) * parseInt(item.quantity));
+            }, 0);
+            console.log('Calculated total from cart:', total);
+        }
 
-        if (isNaN(total) || total <= 0) {
+        if (isNaN(total) || total < 0) {
             console.error('Invalid total amount:', total);
             return res.status(400).json({ error: 'Invalid total amount' });
         }
 
+        // Ensure minimum charge (50 cents for EUR)
+        const minimumAmount = 0.50;
+        if (total < minimumAmount) {
+            total = minimumAmount;
+            console.log('Adjusted to minimum amount:', total);
+        }
+
         // Convert to cents for Stripe
         const amountInCents = Math.round(total * 100);
-        console.log('Calculated amount in cents:', amountInCents);
+        console.log('Amount to charge in cents:', amountInCents);
 
         // Generate order number
         const orderNumber = 'DP' + Date.now().toString().slice(-6);

@@ -63,11 +63,21 @@ document.addEventListener('DOMContentLoaded', async function() {
     function showMessage(messageText, isError = false) {
         paymentMessage.textContent = messageText;
         paymentMessage.style.display = 'block';
-        paymentMessage.style.color = isError ? '#c62828' : '#2e7d32';
-        paymentMessage.style.padding = '10px';
-        paymentMessage.style.marginTop = '10px';
-        paymentMessage.style.borderRadius = '4px';
-        paymentMessage.style.backgroundColor = isError ? '#ffebee' : '#e8f5e9';
+        paymentMessage.style.backgroundColor = isError ? '#fee' : '#d4edda';
+        paymentMessage.style.color = isError ? '#d32f2f' : '#155724';
+        paymentMessage.style.padding = '14px 16px';
+        paymentMessage.style.borderRadius = '6px';
+        paymentMessage.style.border = isError ? '1px solid #f5c6cb' : '1px solid #c3e6cb';
+        paymentMessage.style.marginTop = '1rem';
+        paymentMessage.style.fontWeight = '500';
+        paymentMessage.style.fontSize = '0.95rem';
+        
+        // Auto-hide success messages after 5 seconds
+        if (!isError) {
+            setTimeout(() => {
+                paymentMessage.style.display = 'none';
+            }, 5000);
+        }
     }
 
     // Set loading state
@@ -255,6 +265,25 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         try {
             console.log('Creating payment intent...');
+            
+            // Calculate total with discount
+            let subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+            let discountAmount = 0;
+            
+            if (appliedDiscount) {
+                if (appliedDiscount.type === 'percentage') {
+                    discountAmount = subtotal * (appliedDiscount.value / 100);
+                } else if (appliedDiscount.type === 'fixed') {
+                    discountAmount = appliedDiscount.value;
+                }
+            }
+            
+            const finalTotal = Math.max(0, subtotal - discountAmount);
+            
+            console.log('💰 Subtotal:', subtotal);
+            console.log('💸 Discount:', discountAmount);
+            console.log('💵 Final Total:', finalTotal);
+            
             // Create PaymentIntent on the server
             const response = await fetch('/api/payment-intents', {
                 method: 'POST',
@@ -262,7 +291,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 body: JSON.stringify({
                     cartItems: cart,
                     customerName: `${customerData.firstName || ''} ${customerData.lastName || ''}`.trim() || 'Customer',
-                    customerEmail: customerData.email || 'customer@example.com'
+                    customerEmail: customerData.email || 'customer@example.com',
+                    discountCode: appliedDiscount ? appliedDiscount.code : null,
+                    discountAmount: discountAmount,
+                    finalTotal: finalTotal
                 })
             });
 
@@ -345,9 +377,34 @@ document.addEventListener('DOMContentLoaded', async function() {
     continueToPaymentBtn.addEventListener('click', async function(e) {
         e.preventDefault();
 
-        // Validate form
-        if (!checkoutForm.checkValidity()) {
-            checkoutForm.reportValidity();
+        // Validate form with custom messages
+        const formData = new FormData(checkoutForm);
+        const customerData = Object.fromEntries(formData.entries());
+        
+        // Check required fields
+        const requiredFields = [
+            { name: 'email', label: 'Email' },
+            { name: 'firstName', label: 'First name' },
+            { name: 'lastName', label: 'Last name' },
+            { name: 'address', label: 'Address' },
+            { name: 'city', label: 'City' },
+            { name: 'postalCode', label: 'Postal code' },
+            { name: 'country', label: 'Country' }
+        ];
+        
+        for (const field of requiredFields) {
+            if (!customerData[field.name] || customerData[field.name].trim() === '') {
+                showMessage(`Please fill out: ${field.label}`, true);
+                document.getElementById(field.name)?.focus();
+                return;
+            }
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(customerData.email)) {
+            showMessage('Please enter a valid email address', true);
+            document.getElementById('email')?.focus();
             return;
         }
 
@@ -367,9 +424,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         setLoading(true);
 
-        // Store customer data for order confirmation
-        const formData = new FormData(checkoutForm);
-        const customerData = Object.fromEntries(formData.entries());
+        // Store customer data for order confirmation (already extracted above)
         localStorage.setItem('customerData', JSON.stringify(customerData));
 
         try {
@@ -385,7 +440,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                         billing_details: {
                             name: `${customerData.firstName} ${customerData.lastName}`,
                             email: customerData.email,
-                            phone: customerData.phone,
                             address: {
                                 line1: customerData.address,
                                 line2: customerData.apartment || '',
@@ -397,7 +451,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                     },
                     shipping: {
                         name: `${customerData.firstName} ${customerData.lastName}`,
-                        phone: customerData.phone,
                         address: {
                             line1: customerData.address,
                             line2: customerData.apartment || '',
