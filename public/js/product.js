@@ -48,14 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
         newAddToCartButton.addEventListener('click', () => {
             if (currentProduct) {
                 const quantity = parseInt(quantityInput.value) || 1;
-                window.addToCart({
+                const cartItem = {
                     handle: currentProduct.handle,
                     title: currentProduct.title,
                     price: currentProduct.selectedVariant.price,
                     image: currentProduct.selectedVariant.image ? currentProduct.selectedVariant.image.src : currentProduct.image.src,
                     quantity,
                     variant: currentProduct.selectedVariant.option1 || 'Default'
-                });
+                };
+                
+                window.addToCart(cartItem);
+
+                // Track AddToCart event with Meta Pixel
+                if (window.metaPixel && typeof window.metaPixel.trackAddToCart === 'function') {
+                    window.metaPixel.trackAddToCart(cartItem);
+                }
 
                 // Show notification menu
                 const notificationMenu = document.querySelector('.cart-notification-menu');
@@ -754,6 +761,16 @@ function displayProduct(product) {
     if (quantityInput) {
         quantityInput.style.border = '1px solid #000000';
         quantityInput.style.color = '#000000';
+    }
+
+    // Track ViewContent event with Meta Pixel
+    if (window.metaPixel && typeof window.metaPixel.trackViewContent === 'function') {
+        window.metaPixel.trackViewContent({
+            title: product.title,
+            handle: product.handle,
+            id: product.id,
+            price: product.selectedVariant.price
+        });
     }
 
     // Load and display related products (using bestsellers)

@@ -144,6 +144,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         return;
     }
     
+    // Track InitiateCheckout event with Meta Pixel
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    if (window.metaPixel && typeof window.metaPixel.trackInitiateCheckout === 'function') {
+        window.metaPixel.trackInitiateCheckout(cartData);
+    }
+    
     // Show loading state immediately
     console.log('🔄 Loading payment methods...');
     showMessage('Loading payment methods...', false);
@@ -289,6 +295,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         localStorage.setItem('customerData', JSON.stringify(customerData));
 
         try {
+            console.log('🔄 Confirming payment with Stripe...');
+            
             // Confirm payment with Stripe
             const { error } = await stripe.confirmPayment({
                 elements,
@@ -312,15 +320,21 @@ document.addEventListener('DOMContentLoaded', async function() {
             // This point will only be reached if there is an immediate error
             // Otherwise, customer will be redirected to return_url
             if (error) {
+                console.error('❌ Payment error:', error);
+                console.error('Error type:', error.type);
+                console.error('Error code:', error.code);
+                console.error('Error message:', error.message);
+                
                 if (error.type === 'card_error' || error.type === 'validation_error') {
                     showMessage(error.message, true);
                 } else {
-                    showMessage('An unexpected error occurred. Please try again.', true);
+                    showMessage('Payment error: ' + error.message, true);
                 }
                 setLoading(false);
             }
         } catch (error) {
-            showMessage('Payment failed. Please try again.', true);
+            console.error('❌ Payment exception:', error);
+            showMessage('Payment failed: ' + error.message, true);
             setLoading(false);
         }
     });

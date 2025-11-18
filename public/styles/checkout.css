@@ -141,12 +141,6 @@
 
 #payment-element {
     margin-bottom: 1.5rem;
-    min-height: 300px;
-}
-
-/* Force Stripe Payment Element to show all methods expanded */
-#payment-element iframe {
-    min-height: 400px !important;
 }
 
 /* Custom styling for expanded payment methods */

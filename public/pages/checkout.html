@@ -91,7 +91,7 @@
                             </div>
                             <div id="payment-message" class="payment-message"></div>
                             <!-- Payment button inside form -->
-                            <button id="continue-to-payment" class="checkout-button">Complete Payment</button>
+                            <button type="button" id="continue-to-payment" class="checkout-button">Complete Payment</button>
                             <a href="/pages/cart.html" class="return-to-cart">Return to cart</a>
                         </div>
                     </form>
@@ -124,9 +124,12 @@
         </div>
     </main>
 
+    <!-- Meta Pixel -->
+    <script src="/js/meta-pixel.js"></script>
+    
     <!-- Load Stripe.js -->
     <script src="https://js.stripe.com/v3/"></script>
-    <script src="/js/data/shopify-products.js"></script>
+    <script src="/js/data/products.js"></script>
     <script src="/js/checkout.js"></script>
 </body>
 </html>

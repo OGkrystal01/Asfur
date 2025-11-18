@@ -99,6 +99,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         `;
         document.head.appendChild(style);
 
+        // Track successful purchase with Meta Pixel
+        if (window.metaPixel && typeof window.metaPixel.trackPurchase === 'function') {
+            window.metaPixel.trackPurchase({
+                items: cart,
+                total: subtotal,
+                orderNumber: orderNumber
+            });
+        }
+        
         // Clear cart and customer data after successful order display
         localStorage.removeItem('cart');
         localStorage.removeItem('customerData');
