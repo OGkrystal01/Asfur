@@ -185,19 +185,49 @@ document.addEventListener('DOMContentLoaded', async function() {
             const appearance = {
                 theme: 'stripe',
                 variables: {
-                    colorPrimary: '#000000',
+                    colorPrimary: '#080046',
                     colorBackground: '#ffffff',
                     colorText: '#000000',
                     colorDanger: '#c62828',
                     fontFamily: 'system-ui, sans-serif',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
+                    spacingUnit: '4px'
+                },
+                rules: {
+                    '.Tab': {
+                        border: '1px solid #E0E6EB',
+                        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02)',
+                    },
+                    '.Tab:hover': {
+                        color: '#080046',
+                    },
+                    '.Tab--selected': {
+                        borderColor: '#080046',
+                        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 6px rgba(18, 42, 66, 0.02), 0 0 0 2px #080046',
+                    }
                 }
             };
 
             elements = stripe.elements({ appearance, clientSecret });
 
-            // Create and mount the Payment Element
-            paymentElement = elements.create('payment');
+            // Create and mount the Payment Element with all methods visible as a vertical list
+            paymentElement = elements.create('payment', {
+                layout: {
+                    type: 'tabs',
+                    defaultCollapsed: false,
+                    radios: false,
+                    spacedAccordionItems: false
+                },
+                fields: {
+                    billingDetails: {
+                        address: 'never'
+                    }
+                },
+                wallets: {
+                    applePay: 'auto',
+                    googlePay: 'auto'
+                }
+            });
             paymentElement.mount('#payment-element');
 
             console.log('✅ Stripe Payment Element mounted successfully');

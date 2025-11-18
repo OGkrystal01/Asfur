@@ -71,8 +71,8 @@
 .checkout-form input:focus,
 .checkout-form select:focus {
     outline: none;
-    border-color: #005bd3;
-    box-shadow: 0 0 0 3px rgba(0, 91, 211, 0.1);
+    border-color: #080046;
+    box-shadow: 0 0 0 3px rgba(8, 0, 70, 0.1);
 }
 
 .checkout-form input::placeholder {
@@ -96,6 +96,17 @@
 
 #payment-element {
     margin-bottom: 1.5rem;
+    min-height: 300px;
+}
+
+/* Force Stripe Payment Element to show all methods expanded */
+#payment-element iframe {
+    min-height: 400px !important;
+}
+
+/* Custom styling for expanded payment methods */
+.payment-element-container {
+    background: transparent !important;
 }
 
 .payment-message {
@@ -111,20 +122,20 @@
 .checkout-button {
     width: 100%;
     padding: 1.125rem 1.5rem;
-    background-color: #005bd3;
-    color: #fff;
+    background-color: #080046;
+    color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 0.9375rem;
+    border-radius: 4px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 1.5rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
     letter-spacing: 0.01em;
 }
 
 .checkout-button:hover:not(:disabled) {
-    background-color: #004fc4;
+    background-color: #333333;
 }
 
 .checkout-button:disabled {
@@ -136,14 +147,14 @@
     display: block;
     text-align: center;
     margin-top: 1rem;
-    color: #005bd3;
+    color: #080046;
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
 }
 
 .return-to-cart:hover {
-    color: #004fc4;
+    color: #333333;
     text-decoration: underline;
 }
 
