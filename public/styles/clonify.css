@@ -2,7 +2,7 @@
 
 /* CSS Variables - Dark brown for luxury bags */
 :root {
-    --color-primary: #6B4423;
+    --color-primary: #5A3518;
     --color-primary-light: #F5F0E8;
     --color-primary-dark: #3D2817;
 }
@@ -93,7 +93,7 @@
 
 .btn-clonify {
     display: inline-block;
-    background: #6B4423;
+    background: #5A3518;
     color: white;
     padding: 15px 40px;
     border-radius: 8px;
@@ -153,7 +153,7 @@
 }
 
 .products-scroll::-webkit-scrollbar-thumb {
-    background: #6B4423;
+    background: #5A3518;
     border-radius: 10px;
 }
 
@@ -431,6 +431,7 @@
 .badge-icon {
     font-size: 3.5rem;
     margin-bottom: 15px;
+    color: #000000;
 }
 
 .trust-badge p {
@@ -936,7 +937,7 @@
 }
 
 .comparison-table thead {
-    background: #6B4423;
+    background: #5A3518;
     color: white;
 }
 
@@ -948,7 +949,7 @@
 }
 
 .comparison-table th.highlight-col {
-    background: #6B4423;
+    background: #5A3518;
 }
 
 .comparison-table td {

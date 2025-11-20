@@ -313,8 +313,8 @@ function displayProduct(product) {
         const rating = Math.min(5, Math.round(product.rating_count / 20)); // Convert 0-100 to 0-5 stars
         const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
         ratingElement.innerHTML = `
-            <span class="star-rating">${stars}</span>
-            <span class="product__rating-count">Based on ${product.rating_count} reviews</span>
+            <span class="star-rating" style="font-size: 0.9rem;">${stars}</span>
+            <span class="product__rating-count">Based on ${product.rating_count} Reviews</span>
         `;
     }
 

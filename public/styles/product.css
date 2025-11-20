@@ -1,5 +1,5 @@
 :root {
-    --color-primary: #6B4423;
+    --color-primary: #5A3518;
     --color-primary-light: #F5F0E8;
     --color-primary-dark: #3D2817;
     --border-color: #ddd;
@@ -180,7 +180,7 @@ body {
     display: flex;
     gap: 15px;
     margin-top: 45px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     flex-wrap: wrap;
 }
 
@@ -504,7 +504,7 @@ body {
 }
 
 .variant-option.selected {
-    background-color: #6B4423;
+    background-color: #5A3518;
     color: #ffffff;
 }
 
@@ -527,7 +527,7 @@ body {
 }
 
 .color-variant-option.selected {
-    border-color: #6B4423;
+    border-color: #5A3518;
 }
 
 .color-variant-option.selected::after {
@@ -583,9 +583,9 @@ body {
     text-align: center;
     transition: all 0.2s;
     box-sizing: border-box;
-    background: #6B4423 !important;
+    background: #5A3518 !important;
     color: #ffffff !important;
-    border: 1px solid #6B4423 !important;
+    border: 1px solid #5A3518 !important;
     height: 52px;
     display: flex;
     align-items: center;
@@ -594,19 +594,19 @@ body {
 
 .product-button--outline {
     background: transparent !important;
-    color: #6B4423 !important;
-    border: 2px solid #6B4423 !important;
+    color: #5A3518 !important;
+    border: 2px solid #5A3518 !important;
 }
 
 .product-button--outline:hover {
-    background: #6B4423 !important;
+    background: #5A3518 !important;
     color: #ffffff !important;
 }
 
 .product-button--primary {
-    background: #6B4423 !important;
+    background: #5A3518 !important;
     color: #ffffff !important;
-    border: 1px solid #6B4423 !important;
+    border: 1px solid #5A3518 !important;
 }
 
 .product-button--primary:hover {
