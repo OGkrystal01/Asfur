@@ -1,10 +1,10 @@
 /* Clonify-Style Homepage CSS */
 
-/* CSS Variables - Elegant brown for luxury bags */
+/* CSS Variables - Dark brown for luxury bags */
 :root {
-    --color-primary: #8B6F47;
+    --color-primary: #6B4423;
     --color-primary-light: #F5F0E8;
-    --color-primary-dark: #5C4A2F;
+    --color-primary-dark: #3D2817;
 }
 
 /* Hero Section */
@@ -93,8 +93,8 @@
 
 .btn-clonify {
     display: inline-block;
-    background: white;
-    color: #080046;
+    background: #6B4423;
+    color: white;
     padding: 15px 40px;
     border-radius: 8px;
     text-decoration: none;
@@ -128,7 +128,7 @@
 
 .category-title {
     font-size: 2rem;
-    color: #080046;
+    color: #000000;
     margin-bottom: 30px;
     text-align: center;
 }
@@ -153,12 +153,12 @@
 }
 
 .products-scroll::-webkit-scrollbar-thumb {
-    background: #080046;
+    background: #6B4423;
     border-radius: 10px;
 }
 
 .products-scroll::-webkit-scrollbar-thumb:hover {
-    background: #1a2456;
+    background: #3D2817;
 }
 
 .product-card-scroll {
@@ -196,7 +196,7 @@
 
 .product-card-scroll__title {
     font-size: 1.1rem;
-    color: #080046;
+    color: #000000;
     margin-bottom: 10px;
     font-weight: 600;
     line-height: 1.4;
@@ -230,7 +230,7 @@
 
 .product-card-scroll__price {
     font-size: 1.4rem;
-    color: #080046;
+    color: #000000;
     font-weight: 700;
     margin-top: auto;
 }
@@ -266,7 +266,7 @@
     padding: 24px 20px;
     text-align: center;
     text-decoration: none;
-    color: #080046;
+    color: #000000;
     border: 1px solid #ececec;
     box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -347,7 +347,7 @@
 
 .section-heading {
     font-size: 2.5rem;
-    color: #080046;
+    color: #000000;
     text-align: center;
     margin-bottom: 15px;
     font-weight: 700;
@@ -385,12 +385,12 @@
 .feature-icon {
     font-size: 3.5rem;
     margin-bottom: 20px;
-    color: #080046;
+    color: #000000;
 }
 
 .feature-card h3 {
     font-size: 1.3rem;
-    color: #080046;
+    color: #000000;
     margin-bottom: 12px;
     font-weight: 600;
 }
@@ -489,7 +489,7 @@
 
 .guarantee-item h3 {
     font-size: 1.5rem;
-    color: #080046;
+    color: #000000;
     margin-bottom: 15px;
 }
 
@@ -774,7 +774,7 @@
 
 .content-text h3 {
     font-size: 2rem;
-    color: #080046;
+    color: #000000;
     margin-bottom: 20px;
 }
 
@@ -888,7 +888,7 @@
 }
 
 .testimonial-author strong {
-    color: #080046;
+    color: #000000;
     font-size: 1.1rem;
 }
 
@@ -936,7 +936,7 @@
 }
 
 .comparison-table thead {
-    background: #080046;
+    background: #6B4423;
     color: white;
 }
 

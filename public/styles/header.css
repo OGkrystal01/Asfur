@@ -21,7 +21,7 @@ textarea,
 }
 
 .announcement-bar {
-    background-color: #8B6F47;
+    background-color: #6B4423;
     color: white;
     overflow: hidden;
     position: relative;
@@ -52,7 +52,7 @@ textarea,
     opacity: 0;
     transform: translateY(100%);
     transition: opacity 0.5s ease, transform 0.5s ease, background-color 0.3s ease;
-    background-color: #8B6F47;
+    background-color: #6B4423;
     box-sizing: border-box;
 }
 
@@ -161,7 +161,7 @@ textarea,
 }
 
 .nav-item a {
-    color: #8B6F47;
+    color: #000000;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
@@ -171,7 +171,7 @@ textarea,
 
 .nav-item a:hover,
 .nav-item a.active {
-    color: #5C4A2F;
+    color: #6B4423;
 }
 
 .nav-item a.active::after {
@@ -181,13 +181,13 @@ textarea,
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #8B6F47;
+    background-color: #6B4423;
 }
 
 .cart-icon {
     position: relative;
     font-size: 1.2rem;
-    color: #8B6F47;
+    color: #000000;
     box-sizing: border-box;
 }
 
@@ -196,7 +196,7 @@ textarea,
     top: 20px;
     right: 20px;
     z-index: 1000;
-    background: #8B6F47;
+    background: #6B4423;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 300px;
@@ -293,7 +293,7 @@ textarea,
     border: 1px solid #f0f0f0;
     border-radius: 4px;
     cursor: pointer;
-    background: #8B6F47;
+    background: #6B4423;
     color: #f0f0f0;
     transition: all 0.2s;
     line-height: 1;
@@ -311,7 +311,7 @@ textarea,
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #8B6F47;
+    color: #000000;
     box-sizing: border-box;
 }
 
@@ -343,7 +343,7 @@ textarea,
 .mobile-menu__close {
     background: none;
     border: none;
-    color: #8B6F47;
+    color: #000000;
     font-size: 24px;
     cursor: pointer;
     box-sizing: border-box;
@@ -367,7 +367,7 @@ textarea,
 }
 
 .mobile-menu__item a {
-    color: #8B6F47;
+    color: #000000;
     text-decoration: none;
     font-size: 16px;
     display: block;
@@ -377,7 +377,7 @@ textarea,
 }
 
 .mobile-menu__item a:hover {
-    color: #5C4A2F;
+    color: #6B4423;
 }
 
 .mobile-menu__item .cart-icon {

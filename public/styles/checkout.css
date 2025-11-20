@@ -71,7 +71,7 @@
 .checkout-form input:focus,
 .checkout-form select:focus {
     outline: none;
-    border-color: #8B6F47;
+    border-color: #6B4423;
     box-shadow: 0 0 0 3px rgba(8, 0, 70, 0.1);
 }
 
@@ -87,7 +87,7 @@
 }
 
 .shipping-option {
-    border: 2px solid #8B6F47;
+    border: 2px solid #6B4423;
     border-radius: 8px;
     padding: 0;
     background: #f8f9fa;
@@ -108,7 +108,7 @@
 .shipping-option-name {
     font-size: 1rem;
     font-weight: 600;
-    color: #8B6F47;
+    color: #6B4423;
     margin-bottom: 0.35rem;
 }
 
@@ -120,7 +120,7 @@
 .shipping-option-price {
     font-size: 1.125rem;
     font-weight: 700;
-    color: #8B6F47;
+    color: #6B4423;
     padding-left: 1rem;
 }
 
@@ -161,7 +161,7 @@
 .checkout-button {
     width: 100%;
     padding: 1.125rem 1.5rem;
-    background-color: #8B6F47;
+    background-color: #6B4423;
     color: white;
     border: none;
     border-radius: 4px;
@@ -186,7 +186,7 @@
     display: block;
     text-align: center;
     margin-top: 1rem;
-    color: #8B6F47;
+    color: #6B4423;
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
@@ -293,7 +293,7 @@
 
 .discount-input:focus {
     outline: none;
-    border-color: #8B6F47;
+    border-color: #6B4423;
 }
 
 .discount-input::placeholder {
@@ -302,7 +302,7 @@
 
 .apply-discount-btn {
     padding: 0.75rem 1.5rem;
-    background-color: #8B6F47;
+    background-color: #6B4423;
     color: white;
     border: none;
     border-radius: 4px;
