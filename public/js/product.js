@@ -306,6 +306,17 @@ function displayProduct(product) {
     if (mainImage) mainImage.src = product.image.src;
     if (titleElement) titleElement.textContent = product.title;
     if (descriptionElement) descriptionElement.innerHTML = product.body_html;
+    
+    // Add rating stars and review count
+    const ratingElement = document.getElementById('product-rating');
+    if (ratingElement && product.rating_count) {
+        const rating = Math.min(5, Math.round(product.rating_count / 20)); // Convert 0-100 to 0-5 stars
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        ratingElement.innerHTML = `
+            <div class="rating-stars" style="color: #ffa500;">${stars}</div>
+            <span class="rating-count" style="color: #666; font-size: 0.9rem; margin-left: 8px;">Based on ${product.rating_count} reviews</span>
+        `;
+    }
 
     // Variables for current variant selection
     let selectedOptions = {};
@@ -967,29 +978,11 @@ function formatPrice(price) {
 }
 
 function fetchProducts() {
-    // Implement logic to fetch products from API or database
-    // For demonstration purposes, return a sample array of products
-    return Promise.resolve([
-        {
-            id: 1,
-            title: 'Product 1',
-            image: 'https://example.com/product1.jpg',
-            price: 19.99,
-            compareAtPrice: 24.99,
-            rating: 4.5,
-            reviewCount: 100
-        },
-        {
-            id: 2,
-            title: 'Product 2',
-            image: 'https://example.com/product2.jpg',
-            price: 9.99,
-            compareAtPrice: null,
-            rating: 4.2,
-            reviewCount: 50
-        },
-        // Add more products to the array...
-    ]);
+    // Return the actual products from products.js data file
+    if (typeof products !== 'undefined') {
+        return Promise.resolve(products);
+    }
+    return Promise.resolve([]);
 }
 
 function generateStarRating(rating) {
