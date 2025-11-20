@@ -802,6 +802,11 @@ const products = [
     }
 ];
 
+// Make products available globally for browser
+if (typeof window !== 'undefined') {
+    window.shopifyProducts = products;
+}
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { products };
 }

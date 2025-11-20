@@ -4,29 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadProducts() {
     try {
-        const products = await fetchProducts();
-        // Separate bundles and regular products
-        const bundles = products.filter(product => {
-            const title = product.title.toLowerCase();
-            return (
-                title === 'all apple vendors bundle' ||
-                title === 'all clothing/accessories bundle' ||
-                title === 'all speaker vendor bundle' ||
-                title === 'all trending vendors bundle'
-            );
-        });
-        const regularProducts = products.filter(product => {
-            const title = product.title.toLowerCase();
-            return !(
-                title === 'all apple vendors bundle' ||
-                title === 'all clothing/accessories bundle' ||
-                title === 'all speaker vendor bundle' ||
-                title === 'all trending vendors bundle'
-            );
-        });
-        
-        // Display regular products first, then bundles
-        displayProducts([...regularProducts, ...bundles]);
+        // Load products from the global products variable (loaded from products.js data file)
+        if (typeof products !== 'undefined' && products.length > 0) {
+            displayProducts(products);
+        } else {
+            console.error('No products found');
+            const container = document.getElementById('products-container');
+            if (container) {
+                container.innerHTML = '<p style="text-align: center; padding: 40px;">No products available at the moment.</p>';
+            }
+        }
     } catch (error) {
         console.error('Error loading products:', error);
     }
