@@ -37,20 +37,20 @@ function loadFeaturedProducts() {
 
     const allProducts = (typeof window !== 'undefined' && window.shopifyProducts) ? window.shopifyProducts : (typeof products !== 'undefined' ? products : []);
 
-    // Custom bestseller selection in a fixed priority order
+    // Bestseller selection prioritizing designer bags
     const priorityGroups = [
-        // 1) AirPods (small in-ears, explicitly excluding AirPods 4)
-        p => titleIncludesHome(p, ['airpods pro 2', 'airpods pro', 'airpods']) && !titleIncludesHome(p, ['airpods 4']),
-        // 2) AirPods Max (over-ear)
-        p => titleIncludesHome(p, ['airpods max']),
-        // 3) Moncler jacket
-        p => titleIncludesHome(p, ['moncler maya']),
-        // 4) All Tom Ford perfumes
-        p => titleIncludesHome(p, ['tom ford']),
-        // 5) iPhones
-        p => titleIncludesHome(p, ['iphone 16', 'iphone 15', 'iphone']),
-        // 6) Samsung phones (e.g. S23 Ultra)
-        p => titleIncludesHome(p, ['s23 ultra', 'galaxy s23', 'samsung'])
+        // 1) Hermès bags (Birkin, Kelly)
+        p => titleIncludesHome(p, ['hermès', 'hermes', 'birkin', 'kelly']),
+        // 2) Louis Vuitton bags
+        p => titleIncludesHome(p, ['louis vuitton', 'lv', 'neverfull', 'speedy']),
+        // 3) Chanel bags
+        p => titleIncludesHome(p, ['chanel', 'classic flap', '2.55']),
+        // 4) Gucci bags
+        p => titleIncludesHome(p, ['gucci', 'marmont', 'dionysus']),
+        // 5) Dior bags
+        p => titleIncludesHome(p, ['dior', 'lady dior', 'saddle']),
+        // 6) All other bags
+        p => titleIncludesHome(p, ['bag', 'handbag', 'purse', 'tote', 'shoulder bag', 'crossbody'])
     ];
 
     const usedHandles = new Set();
