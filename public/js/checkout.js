@@ -352,8 +352,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                         link: 'never'
                     },
                     buttonType: {
-                        applePay: 'buy'
-                    }
+                        applePay: 'plain'
+                    },
+                    buttonHeight: 55
                 });
                 
                 // Mount with faster loading
@@ -396,7 +397,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     applePay: 'auto',
                     googlePay: 'auto'
                 },
-                paymentMethodOrder: ['card', 'klarna', 'paypal', 'apple_pay', 'google_pay', 'sepa_debit']
+                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit']
             });
             paymentElement.mount('#payment-element');
 

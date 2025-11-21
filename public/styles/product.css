@@ -1081,11 +1081,17 @@ body {
     position: relative;
 }
 
+.cart-notification__buttons button,
 .cart-notification__buttons a {
     pointer-events: auto !important;
     cursor: pointer !important;
     display: block;
     text-decoration: none;
+}
+
+.cart-notification__buttons button {
+    border: none;
+    font-family: inherit;
 }
 
 .button--outline {
@@ -1536,14 +1542,17 @@ body {
         flex-direction: column;
     }
     
-    .cart-notification__buttons a,
-    .cart-notification__buttons .button {
+    .cart-notification__buttons button,
+    .cart-notification__buttons a {
         pointer-events: auto !important;
         touch-action: manipulation;
-        min-height: 44px;
+        min-height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        font-size: 15px;
+        padding: 12px 20px;
     }
 }
 

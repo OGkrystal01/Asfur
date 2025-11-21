@@ -260,13 +260,22 @@ function showCartNotification(product) {
                 </div>
             </div>
             <div class="cart-notification__buttons">
-                <a href="/pages/products.html" class="button button--outline">Weiter einkaufen</a>
-                <a href="/pages/checkout.html" class="button button--primary">Zur Kasse</a>
+                <button class="button button--outline" onclick="window.location.href='/pages/products.html'">Weiter einkaufen</button>
+                <button class="button button--primary" onclick="window.location.href='/pages/checkout.html'">Zur Kasse</button>
             </div>
         </div>
     `;
 
     notification.classList.add('visible');
+    
+    // Make buttons clickable
+    setTimeout(() => {
+        const buttons = notification.querySelectorAll('.button');
+        buttons.forEach(btn => {
+            btn.style.pointerEvents = 'auto';
+            btn.style.cursor = 'pointer';
+        });
+    }, 100);
 
     // Close notification after 3 seconds
     setTimeout(() => {
