@@ -340,31 +340,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }
                 }
             };
+            
+            elements = stripe.elements({ clientSecret, appearance });
 
-            elements = stripe.elements({ appearance, clientSecret });
-
-            // Create Express Checkout Element (Only Apple Pay)
+            // Create Express Checkout Element (Apple Pay & Google Pay)
             console.log('🔄 Creating express checkout element...');
             try {
                 expressCheckoutElement = elements.create('expressCheckout', {
                     wallets: {
                         applePay: 'auto',
-                        googlePay: 'never'
-                    },
-                    paymentMethods: {
-                        amazonpay: 'never',
-                        link: 'never',
-                        klarna: 'never'
+                        googlePay: 'auto'
                     },
                     buttonType: {
-                        applePay: 'plain'
+                        applePay: 'buy',
+                        googlePay: 'buy'
                     },
-                    buttonHeight: 55
+                    buttonHeight: 48
                 });
                 
-                // Mount with faster loading
+                // Mount express checkout
                 expressCheckoutElement.mount('#express-checkout-element');
-                console.log('✅ Express checkout element mounted (Apple Pay only)');
+                console.log('✅ Express checkout element mounted');
                 
                 // Prevent hiding on ready
                 expressCheckoutElement.on('ready', () => {
@@ -378,7 +374,23 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Listen for express checkout events
                 expressCheckoutElement.on('confirm', async (event) => {
                     console.log('🎯 Express checkout confirmed');
-                    // Express checkout handles payment automatically
+                    
+                    // Get cart and customer data
+                    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+                    const formData = new FormData(checkoutForm);
+                    const customerData = Object.fromEntries(formData.entries());
+                    
+                    // Store for order confirmation
+                    localStorage.setItem('customerData', JSON.stringify(customerData));
+                    
+                    // Complete the payment
+                    const { error } = await event.resolve();
+                    
+                    if (error) {
+                        console.error('❌ Express checkout error:', error);
+                        showMessage(error.message, true);
+                    }
+                    // Success redirects automatically to return_url
                 });
                 
                 expressCheckoutElement.on('cancel', () => {
@@ -390,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Create and mount the Payment Element with accordion layout for better mobile support
-            // Include Apple Pay, Klarna, and other methods here
+            // Include Klarna and all payment methods
             paymentElement = elements.create('payment', {
                 layout: {
                     type: 'accordion',
@@ -399,10 +411,21 @@ document.addEventListener('DOMContentLoaded', async function() {
                     spacedAccordionItems: false
                 },
                 wallets: {
-                    applePay: 'auto',
-                    googlePay: 'auto'
+                    applePay: 'never',  // Already in express checkout
+                    googlePay: 'never'  // Already in express checkout
                 },
-                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit']
+                paymentMethodOrder: ['card', 'klarna', 'sepa_debit'],
+                fields: {
+                    billingDetails: {
+                        name: 'never',
+                        email: 'never',
+                        phone: 'never',
+                        address: {
+                            country: 'never',
+                            postalCode: 'never'
+                        }
+                    }
+                }
             });
             paymentElement.mount('#payment-element');
 
