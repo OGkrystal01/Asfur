@@ -347,9 +347,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 expressCheckoutElement = elements.create('expressCheckout', {
                     wallets: {
                         applePay: 'auto',
-                        googlePay: 'never',
-                        amazonPay: 'never',
-                        link: 'never'
+                        googlePay: 'never'
+                    },
+                    paymentMethods: {
+                        amazonpay: 'never',
+                        link: 'never',
+                        klarna: 'never'
                     },
                     buttonType: {
                         applePay: 'plain'
@@ -391,13 +394,18 @@ document.addEventListener('DOMContentLoaded', async function() {
                     type: 'accordion',
                     defaultCollapsed: false,
                     radios: true,
-                    spacedAccordionItems: true
+                    spacedAccordionItems: false
                 },
                 wallets: {
                     applePay: 'auto',
                     googlePay: 'auto'
                 },
-                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit']
+                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit'],
+                fields: {
+                    billingDetails: {
+                        address: 'never'
+                    }
+                }
             });
             paymentElement.mount('#payment-element');
 
