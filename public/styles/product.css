@@ -1119,27 +1119,28 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.5);
     display: none;
-    align-items: flex-start;
-    justify-content: center;
     z-index: 10000;
-    padding-top: 100px;
+    pointer-events: auto;
 }
 
 .cart-notification-menu.visible {
-    display: flex;
+    display: block;
 }
 
 .cart-notification-menu__content {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
     background: white;
     border-radius: 12px;
     padding: 24px;
     max-width: 420px;
-    width: 90%;
-    position: relative;
+    width: calc(100% - 40px);
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    margin: 0 auto;
+    z-index: 10001;
 }
 
 .cart-notification-menu__header {
@@ -1246,16 +1247,11 @@ body {
 }
 
 @media (max-width: 768px) {
-    .cart-notification-menu {
-        padding-top: 80px;
-        padding-left: 16px;
-        padding-right: 16px;
-    }
-    
     .cart-notification-menu__content {
+        top: 80px;
         padding: 20px;
-        max-width: 100%;
-        width: 100%;
+        max-width: calc(100% - 32px);
+        width: calc(100% - 32px);
     }
     
     .cart-notification-menu__buttons {
