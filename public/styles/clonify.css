@@ -733,8 +733,15 @@
 }
 
 @media (max-width: 480px) {
+    .product-categories {
+        padding: 40px 0 4px 0; /* remove side padding completely */
+    }
+    
     .product-categories .container {
         padding: 0; /* no side padding so cards can reach screen edge */
+        margin: 0;
+        max-width: 100%;
+        overflow: visible;
     }
     
     .features-grid {
@@ -795,20 +802,24 @@
         margin-bottom: 10px !important;
     }
     
+    .category-title {
+        padding: 0 10px; /* minimal padding for title */
+    }
+    
     .products-scroll {
         gap: 8px;
-        padding: 20px 0; /* remove side padding */
-    }
-
-    /* tighten bottom spacing of Bestsellers section on mobile */
-    .product-categories {
-        padding-bottom: 4px;
+        padding: 20px 0 20px 5px; /* small left padding, no right padding */
+        margin-right: 0;
     }
     
     /* mobile: ~1.5 product cards visible */
     .product-card-scroll {
         min-width: 70%;
         max-width: 70%;
+    }
+    
+    .product-card-scroll:last-child {
+        margin-right: 5px; /* small margin for last card */
     }
     
     .product-card-scroll img {
