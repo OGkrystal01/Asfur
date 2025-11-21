@@ -715,19 +715,21 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: #202223;
-    margin: 2rem 0 0 0;
-    padding: 0;
+    margin: 0;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    border-top: 1px solid #e1e3e5;
 }
 
 /* Order Summary Inline with Payment */
 .order-summary-inline {
     background: transparent;
-    padding: 1rem 0 0 0;
+    padding: 0;
     border-radius: 0;
     border: none;
     border-top: none;
     border-bottom: none;
-    margin-top: 0.75rem;
+    margin-top: 0;
     margin-bottom: 1.5rem;
 }
 
@@ -817,11 +819,12 @@
 
 @media (max-width: 768px) {
     .checkout-main {
-        padding: 1rem;
+        padding: 1rem 1rem 0.25rem 1rem;
     }
 
     .checkout-form-section {
-        padding: 1.5rem;
+        padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+        margin-bottom: 0;
     }
 
     .form-row {
@@ -829,8 +832,21 @@
     }
 
     .order-summary-inline {
-        padding: 1rem 0 0 0;
-        margin-top: 1.5rem;
+        padding: 0;
+        margin-top: 0;
+    }
+    
+    .summary-heading {
+        padding-top: 1.5rem;
+        padding-bottom: 0.75rem;
+    }
+    
+    .checkout-button {
+        margin-bottom: 0.5rem;
+    }
+    
+    .return-to-cart {
+        margin-bottom: 0.75rem;
     }
     
     .form-section:first-child {
@@ -841,6 +857,11 @@
     .form-section:first-child .section-header-simple {
         margin-top: 0 !important;
         padding-top: 0 !important;
+    }
+    
+    .form-section:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
     }
 
     .form-group {
@@ -908,7 +929,8 @@
     /* Mobile Security Badges */
     .security-badges {
         gap: 1rem;
-        padding: 1rem 0;
+        padding: 1rem 0 0.5rem 0;
+        margin-bottom: 0;
         flex-wrap: nowrap;
     }
     

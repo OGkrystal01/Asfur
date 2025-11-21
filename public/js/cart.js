@@ -260,33 +260,71 @@ function showCartNotification(product) {
                 </div>
             </div>
             <div class="cart-notification__buttons">
-                <button class="button button--outline" onclick="window.location.href='/pages/products.html'">Weiter einkaufen</button>
-                <button class="button button--primary" onclick="window.location.href='/pages/checkout.html'">Zur Kasse</button>
+                <button class="button button--outline cart-continue-btn">Weiter einkaufen</button>
+                <button class="button button--primary cart-checkout-btn">Zur Kasse</button>
             </div>
         </div>
     `;
 
+    // Show notification
     notification.classList.add('visible');
     
-    // Make buttons clickable
-    setTimeout(() => {
-        const buttons = notification.querySelectorAll('.button');
-        buttons.forEach(btn => {
-            btn.style.pointerEvents = 'auto';
-            btn.style.cursor = 'pointer';
-        });
-    }, 100);
+    // Add event listeners immediately after DOM update
+    requestAnimationFrame(() => {
+        const continueBtn = notification.querySelector('.cart-continue-btn');
+        const checkoutBtn = notification.querySelector('.cart-checkout-btn');
+        const closeBtn = notification.querySelector('.cart-notification__close');
+        
+        if (continueBtn) {
+            continueBtn.style.pointerEvents = 'auto';
+            continueBtn.style.cursor = 'pointer';
+            continueBtn.style.touchAction = 'manipulation';
+            
+            // Add both click and touchend for mobile
+            const goToProducts = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                notification.classList.remove('visible');
+                setTimeout(() => {
+                    window.location.href = '/pages/products.html';
+                }, 100);
+            };
+            
+            continueBtn.addEventListener('click', goToProducts);
+            continueBtn.addEventListener('touchend', goToProducts);
+        }
+        
+        if (checkoutBtn) {
+            checkoutBtn.style.pointerEvents = 'auto';
+            checkoutBtn.style.cursor = 'pointer';
+            checkoutBtn.style.touchAction = 'manipulation';
+            
+            // Add both click and touchend for mobile
+            const goToCheckout = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                notification.classList.remove('visible');
+                setTimeout(() => {
+                    window.location.href = '/pages/checkout.html';
+                }, 100);
+            };
+            
+            checkoutBtn.addEventListener('click', goToCheckout);
+            checkoutBtn.addEventListener('touchend', goToCheckout);
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                notification.classList.remove('visible');
+            });
+        }
+    });
 
-    // Close notification after 3 seconds
+    // Close notification after 8 seconds
     setTimeout(() => {
         notification.classList.remove('visible');
-    }, 3000);
-
-    // Close on any close button click
-    const closeButtons = notification.querySelectorAll('.cart-notification__close');
-    closeButtons.forEach(button => {
-        button.onclick = () => notification.classList.remove('visible');
-    });
+    }, 8000);
 }
 
 // Format price

@@ -286,6 +286,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
 
+            // Track AddToCart event with Meta Pixel before redirecting
+            if (window.metaPixel && typeof window.metaPixel.trackAddToCart === 'function') {
+                window.metaPixel.trackAddToCart(productForCart);
+            }
+
             // Redirect straight to checkout
             window.location.href = '/pages/checkout.html';
         });
