@@ -39,17 +39,19 @@ function loadFeaturedProducts() {
 
     // Bestseller selection prioritizing designer bags
     const priorityGroups = [
-        // 1) Hermès bags (Birkin, Kelly)
+        // 1) LV Nano Speedy - BESTSELLER
+        p => p.handle === 'louis-vuitton-nano-speedy',
+        // 2) Hermès bags (Birkin, Kelly)
         p => titleIncludesHome(p, ['hermès', 'hermes', 'birkin', 'kelly']),
-        // 2) Louis Vuitton bags
-        p => titleIncludesHome(p, ['louis vuitton', 'lv', 'neverfull', 'speedy']),
-        // 3) Chanel bags
+        // 3) Other Louis Vuitton bags
+        p => titleIncludesHome(p, ['louis vuitton', 'lv', 'neverfull']) && p.handle !== 'louis-vuitton-nano-speedy',
+        // 4) Chanel bags
         p => titleIncludesHome(p, ['chanel', 'classic flap', '2.55']),
-        // 4) Gucci bags
+        // 5) Gucci bags
         p => titleIncludesHome(p, ['gucci', 'marmont', 'dionysus']),
-        // 5) Dior bags
+        // 6) Dior bags
         p => titleIncludesHome(p, ['dior', 'lady dior', 'saddle']),
-        // 6) All other bags
+        // 7) All other bags
         p => titleIncludesHome(p, ['bag', 'handbag', 'purse', 'tote', 'shoulder bag', 'crossbody'])
     ];
 

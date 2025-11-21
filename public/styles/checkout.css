@@ -537,7 +537,17 @@
     background-color: #f8fff9;
 }
 
-/* Continue Buttons */
+/* Validation Indicators */
+.validation-indicator {
+    font-size: 1.25rem;
+    margin-right: 0.5rem;
+}
+
+.validation-indicator i {
+    display: inline-block;
+}
+
+/* Continue Buttons - Outside collapsible sections */
 .continue-btn {
     width: 100%;
     padding: 1rem 1.5rem;
@@ -549,7 +559,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .continue-btn:hover {
@@ -558,8 +569,17 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Express Checkout Section */
+.collapsible-section .continue-btn {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+/* Express Checkout Section - At Top */
 .express-checkout-section {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px 0 rgba(0,0,0,.1);
     margin-bottom: 2rem;
 }
 

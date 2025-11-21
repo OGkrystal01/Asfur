@@ -47,6 +47,17 @@
                         </div>
                     </div>
 
+                    <!-- Express Checkout - Always Visible at Top -->
+                    <div class="express-checkout-section">
+                        <h3 class="express-title">Express Checkout</h3>
+                        <div id="express-checkout-element" class="express-checkout-element">
+                            <!-- Express checkout buttons will be mounted here -->
+                        </div>
+                        <div class="or-divider">
+                            <span>ODER</span>
+                        </div>
+                    </div>
+
                     <form id="checkout-form" class="checkout-form">
                         <!-- Step 1: Contact Information -->
                         <div class="form-section collapsible-section" id="section-contact" data-step="1">
@@ -56,6 +67,7 @@
                                     <span class="step-indicator">Schritt 1/3</span>
                                 </div>
                                 <div class="section-status">
+                                    <span class="validation-indicator"></span>
                                     <span class="edit-btn" style="display:none;">Bearbeiten</span>
                                     <i class="fas fa-chevron-down toggle-icon"></i>
                                 </div>
@@ -65,16 +77,18 @@
                                     <input type="email" id="email" name="email" required placeholder="E-Mail">
                                 </div>
                             </div>
+                            <button type="button" class="continue-btn" onclick="validateAndContinueContact()">Weiter zur Lieferadresse</button>
                         </div>
 
                         <!-- Step 2: Shipping Address -->
-                        <div class="form-section collapsible-section" id="section-shipping" data-step="2">
+                        <div class="form-section collapsible-section" id="section-shipping" data-step="2" style="display:none;">
                             <div class="section-header" onclick="toggleSection('section-shipping')">
                                 <div class="section-title-group">
                                     <h2>Lieferadresse</h2>
                                     <span class="step-indicator">Schritt 2/3</span>
                                 </div>
                                 <div class="section-status">
+                                    <span class="validation-indicator"></span>
                                     <span class="edit-btn" style="display:none;">Bearbeiten</span>
                                     <i class="fas fa-chevron-down toggle-icon"></i>
                                 </div>
@@ -112,14 +126,19 @@
                                     <!-- Add more countries as needed -->
                                 </select>
                             </div>
-                            <button type="button" class="continue-btn" onclick="continueToShipping()">Weiter zur Versandart</button>
                             </div>
+                            <button type="button" class="continue-btn" onclick="validateAndContinueShipping()">Weiter zur Versandart</button>
                         </div>
 
                         <!-- Shipping Method (part of step 2) -->
                         <div class="form-section shipping-method-section collapsible-section" id="section-shipping-method" data-step="2" style="display:none;">
                             <div class="section-header">
-                                <h2>Versandart</h2>
+                                <div class="section-title-group">
+                                    <h2>Versandart</h2>
+                                </div>
+                                <div class="section-status">
+                                    <span class="validation-indicator"></span>
+                                </div>
                             </div>
                             <div class="section-content">
                             <div class="shipping-option">
@@ -131,8 +150,8 @@
                                     <div class="shipping-option-price">KOSTENLOS</div>
                                 </div>
                             </div>
-                            <button type="button" class="continue-btn" onclick="continueToPayment()">Weiter zur Zahlung</button>
                             </div>
+                            <button type="button" class="continue-btn" onclick="continueToPayment()">Weiter zur Zahlung</button>
                         </div>
 
                         <!-- Step 3: Payment -->
@@ -143,22 +162,12 @@
                                     <span class="step-indicator">Schritt 3/3</span>
                                 </div>
                                 <div class="section-status">
+                                    <span class="validation-indicator"></span>
                                     <span class="edit-btn" style="display:none;">Bearbeiten</span>
                                     <i class="fas fa-chevron-down toggle-icon"></i>
                                 </div>
                             </div>
                             <div class="section-content">
-                                <!-- Express Checkout -->
-                                <div class="express-checkout-section">
-                                    <h3 class="express-title">Express Checkout</h3>
-                                    <div id="express-checkout-element" class="express-checkout-element">
-                                        <!-- Express checkout buttons will be mounted here -->
-                                    </div>
-                                    <div class="or-divider">
-                                        <span>ODER</span>
-                                    </div>
-                                </div>
-
                                 <!-- Standard Payment Methods -->
                                 <div id="payment-element" class="payment-element-container">
                                 <!-- Stripe.js injects the Payment Element here -->

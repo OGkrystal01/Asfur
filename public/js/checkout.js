@@ -14,9 +14,33 @@ window.toggleSection = function(sectionId) {
     }
 };
 
-window.continueToShipping = function() {
-    // Validate contact info
+// Validation functions
+window.validateAndContinueContact = function() {
     const email = document.getElementById('email').value;
+    
+    if (!email || !email.includes('@')) {
+        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+        updateSectionValidation('section-contact', false);
+        return;
+    }
+    
+    // Mark section as completed
+    const contactSection = document.getElementById('section-contact');
+    contactSection.classList.add('collapsed', 'completed');
+    contactSection.querySelector('.edit-btn').style.display = 'inline';
+    updateSectionValidation('section-contact', true);
+    
+    // Show shipping section
+    const shippingSection = document.getElementById('section-shipping');
+    shippingSection.style.display = 'block';
+    shippingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    updateProgressStep(1, 'completed');
+    updateProgressStep(2, 'active');
+    currentStep = 2;
+};
+
+window.validateAndContinueShipping = function() {
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;
     const address = document.getElementById('address').value;
@@ -24,32 +48,23 @@ window.continueToShipping = function() {
     const postalCode = document.getElementById('postalCode').value;
     const country = document.getElementById('country').value;
     
-    if (!email || !firstName || !lastName || !address || !city || !postalCode || !country) {
+    if (!firstName || !lastName || !address || !city || !postalCode || !country) {
         alert('Bitte füllen Sie alle erforderlichen Felder aus.');
+        updateSectionValidation('section-shipping', false);
         return;
     }
     
-    // Mark step 1 as completed
-    updateProgressStep(1, 'completed');
-    updateProgressStep(2, 'active');
-    
-    // Collapse contact section and show shipping method
-    const contactSection = document.getElementById('section-contact');
+    // Mark shipping section as completed
     const shippingSection = document.getElementById('section-shipping');
-    const shippingMethodSection = document.getElementById('section-shipping-method');
-    
-    contactSection.classList.add('collapsed', 'completed');
-    contactSection.querySelector('.edit-btn').style.display = 'inline';
-    
     shippingSection.classList.add('collapsed', 'completed');
     shippingSection.querySelector('.edit-btn').style.display = 'inline';
+    updateSectionValidation('section-shipping', true);
     
+    // Show shipping method section
+    const shippingMethodSection = document.getElementById('section-shipping-method');
     shippingMethodSection.style.display = 'block';
-    
-    // Scroll to shipping method
+    updateSectionValidation('section-shipping-method', true);
     shippingMethodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
-    currentStep = 2;
 };
 
 window.continueToPayment = function() {
@@ -82,6 +97,20 @@ function updateProgressStep(stepNumber, status) {
         if (status) {
             step.classList.add(status);
         }
+    }
+}
+
+function updateSectionValidation(sectionId, isValid) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    const indicator = section.querySelector('.validation-indicator');
+    if (!indicator) return;
+    
+    if (isValid) {
+        indicator.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50;"></i>';
+    } else {
+        indicator.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #f44336;"></i>';
     }
 }
 

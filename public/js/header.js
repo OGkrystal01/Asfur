@@ -7,33 +7,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         headerContainer.innerHTML = html;
     }
 
-    // Header visibility control
+    // Sticky header on scroll up - E-commerce style
     let lastScrollTop = 0;
     const header = document.querySelector('.header');
-    const scrollThreshold = 100;
+    const scrollThreshold = 80;
+    let ticking = false;
 
-    // Make header always visible on product pages
-    const isProductPage = window.location.pathname.includes('product.html');
-    if (isProductPage) {
-        header.classList.add('visible');
-        header.style.position = 'relative';
-    } else {
-        // Normal scroll behavior for other pages
+    if (header) {
+        // Initial state
+        header.classList.add('header-visible');
+        
         window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > scrollThreshold) {
-                if (scrollTop < lastScrollTop) {
-                    header.classList.add('visible');
-                } else {
-                    header.classList.remove('visible');
-                }
-            } else {
-                header.classList.add('visible');
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    handleStickyHeader();
+                    ticking = false;
+                });
+                ticking = true;
             }
-            
-            lastScrollTop = scrollTop;
         });
+    }
+
+    function handleStickyHeader() {
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (currentScroll <= scrollThreshold) {
+            // At top of page - normal position
+            header.classList.remove('header-sticky', 'header-hidden');
+            header.classList.add('header-visible');
+        } else if (currentScroll > lastScrollTop) {
+            // Scrolling down - hide header
+            header.classList.remove('header-visible', 'header-sticky');
+            header.classList.add('header-hidden');
+        } else {
+            // Scrolling up - show sticky header
+            header.classList.remove('header-hidden');
+            header.classList.add('header-sticky', 'header-visible');
+        }
+        
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     }
 
     // Update cart count

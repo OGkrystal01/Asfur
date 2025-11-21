@@ -29,12 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="footer-section">
                         <h4>Zahlungsmethoden</h4>
                         <div class="payment-methods" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-                            <img src="/images/payment/visa.svg" alt="Visa" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
-                            <img src="/images/payment/mastercard.svg" alt="Mastercard" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
-                            <img src="/images/payment/american-express.svg" alt="American Express" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
-                            <img src="/images/payment/apple-pay.svg" alt="Apple Pay" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
-                            <img src="/images/payment/google-pay.svg" alt="Google Pay" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
-                            <img src="/images/payment/klarna.svg" alt="Klarna" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
+                            <img src="../images/payment/visa.svg" alt="Visa" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/visa.svg'">
+                            <img src="../images/payment/mastercard.svg" alt="Mastercard" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/mastercard.svg'">
+                            <img src="../images/payment/american-express.svg" alt="American Express" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/american-express.svg'">
+                            <img src="../images/payment/apple-pay.svg" alt="Apple Pay" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/apple-pay.svg'">
+                            <img src="../images/payment/google-pay.svg" alt="Google Pay" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/google-pay.svg'">
+                            <img src="../images/payment/klarna.svg" alt="Klarna" style="height: 24px; max-width: 50px;" onerror="this.src='/images/payment/klarna.svg'">
                         </div>
                         <div style="margin-top: 20px;">
                             <p style="font-size: 0.85em; color: #888; margin-bottom: 10px;">🔒 Sichere Zahlung</p>
