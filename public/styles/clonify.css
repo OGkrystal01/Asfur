@@ -1026,10 +1026,17 @@ hr {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Mobile Responsive for New Sections */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+        max-width: 100%;
+    }
+    
     .content-with-image {
         grid-template-columns: 1fr;
         gap: 30px;
@@ -1064,6 +1071,12 @@ hr {
     .comparison-table td {
         padding: 12px 10px;
         font-size: 0.9rem;
+    }
+    
+    .section-heading,
+    .section-subheading {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 }
 

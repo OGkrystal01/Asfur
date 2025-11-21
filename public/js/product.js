@@ -353,9 +353,18 @@ function displayProduct(product) {
                     optionButton.className = 'color-variant-option';
                     optionButton.setAttribute('data-value', value);
                     
-                    // Set background color based on color name
-                    let bgColor = value.toLowerCase();
-                    optionButton.style.backgroundColor = bgColor;
+                    // Find variant with this option value to get its image
+                    const variantWithThisOption = product.variants.find(v => v.option1 === value);
+                    if (variantWithThisOption && variantWithThisOption.image && variantWithThisOption.image.src) {
+                        // Use variant image as background
+                        optionButton.style.backgroundImage = `url('${variantWithThisOption.image.src}')`;
+                        optionButton.style.backgroundSize = 'cover';
+                        optionButton.style.backgroundPosition = 'center';
+                    } else {
+                        // Fallback to color name if no image
+                        let bgColor = value.toLowerCase();
+                        optionButton.style.backgroundColor = bgColor;
+                    }
                     
                     // Event listener for selection
                     optionButton.addEventListener('click', () => {

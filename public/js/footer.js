@@ -8,33 +8,36 @@ document.addEventListener('DOMContentLoaded', function() {
             <footer class="footer">
                 <div class="footer-container">
                     <div class="footer-section">
-                        <h3>About Dupelify</h3>
-                        <p>Your trusted source for premium pre-owned items. Quality guaranteed.</p>
+                        <h3>Über Dupelify</h3>
+                        <p>Ihre vertrauenswürdige Quelle für Premium-Luxustaschen. Qualität garantiert.</p>
                     </div>
                     <div class="footer-section">
-                        <h4>Quick Links</h4>
+                        <h4>Schnelllinks</h4>
                         <ul>
-                            <li><a href="/pages/products.html">Products</a></li>
-                            <li><a href="/pages/contact.html">Contact</a></li>
-                            <li><a href="/pages/terms-of-service.html">Terms of Service</a></li>
-                            <li><a href="/pages/privacy-policy.html">Privacy Policy</a></li>
+                            <li><a href="/pages/products.html">Produkte</a></li>
+                            <li><a href="/pages/contact.html">Kontakt</a></li>
+                            <li><a href="/pages/terms-of-service.html">Nutzungsbedingungen</a></li>
+                            <li><a href="/pages/privacy-policy.html">Datenschutzerklärung</a></li>
+                            <li><a href="/pages/refund-policy.html">Rückgaberecht</a></li>
                         </ul>
                     </div>
                     <div class="footer-section">
-                        <h4>Contact</h4>
-                        <p>Email: support@dupelify.com</p>
+                        <h4>Kontakt</h4>
+                        <p>Brauchen Sie Hilfe? Kontaktieren Sie unser Support-Team.</p>
+                        <p>E-Mail: support@dupelify.com</p>
                     </div>
                     <div class="footer-section">
-                        <h4>Follow Us</h4>
-                        <div class="social-links">
-                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <h4>Zahlungsmethoden</h4>
+                        <div class="payment-methods" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <img src="/images/payment/visa.svg" alt="Visa" style="height: 30px;">
+                            <img src="/images/payment/mastercard.svg" alt="Mastercard" style="height: 30px;">
+                            <img src="/images/payment/apple-pay.svg" alt="Apple Pay" style="height: 30px;">
+                            <img src="/images/payment/klarna.svg" alt="Klarna" style="height: 30px;">
                         </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; ${new Date().getFullYear()} Dupelify. All rights reserved.</p>
+                    <p>&copy; ${new Date().getFullYear()} Dupelify. Alle Rechte vorbehalten.</p>
                 </div>
             </footer>
         `;
