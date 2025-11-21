@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <div class="checkout-item-details">
                     <h3>${item.title}</h3>
                     ${variantDisplay}
-                    <p>Quantity: ${item.quantity}</p>
+                    <p>Menge: ${item.quantity}</p>
                 </div>
                 <div class="checkout-item-price">
                     €${itemTotal.toFixed(2)}
@@ -350,26 +350,34 @@ document.addEventListener('DOMContentLoaded', async function() {
                         googlePay: 'auto',
                         amazonPay: 'never',
                         link: 'never'
-                    },
-                    paymentMethods: {
-                        klarna: 'always'
                     }
                 });
+                
+                // Mount and keep visible
                 expressCheckoutElement.mount('#express-checkout-element');
                 console.log('✅ Express checkout element mounted (Apple Pay, Google Pay, Klarna)');
+                
+                // Prevent hiding on ready
+                expressCheckoutElement.on('ready', () => {
+                    console.log('✅ Express checkout ready and visible');
+                    const expressSection = document.querySelector('.express-checkout-top');
+                    if (expressSection) {
+                        expressSection.style.display = 'block';
+                    }
+                });
                 
                 // Listen for express checkout events
                 expressCheckoutElement.on('confirm', async (event) => {
                     console.log('🎯 Express checkout confirmed');
                     // Express checkout handles payment automatically
                 });
+                
+                expressCheckoutElement.on('cancel', () => {
+                    console.log('ℹ️ Express checkout cancelled by user');
+                });
             } catch (error) {
-                console.log('ℹ️ Express checkout not available:', error.message);
-                // Hide express checkout section if not available
-                const expressSection = document.querySelector('.express-checkout-top');
-                if (expressSection) {
-                    expressSection.style.display = 'none';
-                }
+                console.error('❌ Express checkout error:', error);
+                // Don't hide, keep trying
             }
 
             // Create and mount the Payment Element with accordion layout for better mobile support

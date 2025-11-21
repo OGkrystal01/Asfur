@@ -123,7 +123,7 @@
                                 <div class="shipping-option-details">
                                     <i class="fas fa-truck"></i>
                                     <div>
-                                        <div class="shipping-option-name">Standard Versand (4-7 Werktage)</div>
+                                        <div class="shipping-option-name">Standard Versand (2-3 Werktage)</div>
                                         <div class="shipping-option-description">Mit Sendungsverfolgung</div>
                                     </div>
                                 </div>
@@ -179,8 +179,14 @@
                                 <!-- Stripe.js injects the Payment Element here -->
                             </div>
                             <div id="payment-message" class="payment-message"></div>
+
+                            <!-- Payment button inside form -->
+                            <button type="button" id="continue-to-payment" class="checkout-button">
+                                <i class="fas fa-lock"></i> Jetzt sicher bezahlen
+                            </button>
+                            <a href="/pages/cart.html" class="return-to-cart">Zurück zum Warenkorb</a>
                             
-                            <!-- Security Badges -->
+                            <!-- Security Badges at Bottom -->
                             <div class="security-badges">
                                 <div class="security-badge">
                                     <i class="fas fa-lock"></i>
@@ -195,12 +201,6 @@
                                     <span>Sichere Zahlung</span>
                                 </div>
                             </div>
-
-                            <!-- Payment button inside form -->
-                            <button type="button" id="continue-to-payment" class="checkout-button">
-                                <i class="fas fa-lock"></i> Jetzt sicher bezahlen
-                            </button>
-                            <a href="/pages/cart.html" class="return-to-cart">Zurück zum Warenkorb</a>
                         </div>
                     </form>
                 </div>
