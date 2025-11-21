@@ -1136,18 +1136,21 @@ body {
     transform: translateX(-50%);
     background: white;
     border-radius: 12px;
-    padding: 24px;
-    max-width: 420px;
-    width: calc(100% - 40px);
+    padding: 0;
+    max-width: 400px;
+    width: auto;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     z-index: 10001;
+    border: none;
+    outline: none;
 }
 
 .cart-notification-menu__header {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
+    margin: 0;
+    padding: 20px 20px 16px 20px;
     font-size: 18px;
     font-weight: 600;
     color: #5A3518;
@@ -1160,8 +1163,8 @@ body {
 
 .cart-notification-menu__close {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    top: 12px;
+    right: 12px;
     background: none;
     border: none;
     font-size: 32px;
@@ -1179,8 +1182,8 @@ body {
 .cart-notification-menu__product {
     display: flex;
     gap: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    margin: 0;
+    padding: 16px 20px;
     border-bottom: 1px solid #e1e3e5;
 }
 
@@ -1213,14 +1216,16 @@ body {
 .cart-notification-menu__buttons {
     display: flex;
     gap: 12px;
+    padding: 16px 20px 20px 20px;
+    margin: 0;
 }
 
 .cart-notification-menu__button {
     flex: 1;
-    padding: 14px 20px;
+    padding: 12px 16px;
     border: 2px solid #5A3518;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1249,14 +1254,22 @@ body {
 @media (max-width: 768px) {
     .cart-notification-menu__content {
         top: 80px;
-        padding: 20px;
         max-width: calc(100% - 32px);
-        width: calc(100% - 32px);
+        width: auto;
+    }
+    
+    .cart-notification-menu__header {
+        padding: 16px 16px 12px 16px;
+    }
+    
+    .cart-notification-menu__product {
+        padding: 12px 16px;
     }
     
     .cart-notification-menu__buttons {
         flex-direction: column;
         gap: 10px;
+        padding: 12px 16px 16px 16px;
     }
     
     .cart-notification-menu__button {

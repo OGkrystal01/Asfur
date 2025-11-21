@@ -83,12 +83,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Set loading state
     function setLoading(isLoading) {
+        if (!continueToPaymentBtn) return;
+        
         if (isLoading) {
             continueToPaymentBtn.disabled = true;
-            continueToPaymentBtn.textContent = 'Processing...';
+            continueToPaymentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         } else {
             continueToPaymentBtn.disabled = false;
-            continueToPaymentBtn.textContent = 'Complete Payment';
+            continueToPaymentBtn.innerHTML = '<i class="fas fa-lock"></i> Jetzt sicher bezahlen';
         }
     }
 
@@ -400,12 +402,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     applePay: 'auto',
                     googlePay: 'auto'
                 },
-                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit'],
-                fields: {
-                    billingDetails: {
-                        address: 'never'
-                    }
-                }
+                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit']
             });
             paymentElement.mount('#payment-element');
 
@@ -507,6 +504,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                                 line1: customerData.address,
                                 line2: customerData.apartment || '',
                                 city: customerData.city,
+                                state: customerData.state || '',
                                 postal_code: customerData.postalCode,
                                 country: customerData.country
                             }
