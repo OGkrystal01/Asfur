@@ -64,31 +64,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.metaPixel.trackAddToCart(cartItem);
                 }
 
-                // Show notification menu
-                const notificationMenu = document.querySelector('.cart-notification-menu');
+                // Show notification using the dynamically created menu
+                let notificationMenu = document.querySelector('.cart-notification-menu');
+                
+                // Ensure menu exists (should be created by displayProduct)
+                if (!notificationMenu) {
+                    console.error('Notification menu not found');
+                    return;
+                }
+                
                 const productImage = notificationMenu.querySelector('.cart-notification-menu__product-image');
                 const productTitle = notificationMenu.querySelector('.cart-notification-menu__product-title');
                 const productPrice = notificationMenu.querySelector('.cart-notification-menu__product-price');
-                const closeButton = notificationMenu.querySelector('.cart-notification-menu__close');
 
-                productImage.src = currentProduct.selectedVariant.image ? currentProduct.selectedVariant.image.src : currentProduct.image.src;
-                productImage.alt = currentProduct.title;
+                if (productImage) {
+                    productImage.src = currentProduct.selectedVariant.image ? currentProduct.selectedVariant.image.src : currentProduct.image.src;
+                    productImage.alt = currentProduct.title;
+                }
                 
                 // Titel mit Varianteninformation anzeigen, wenn vorhanden
                 let titleWithVariant = currentProduct.title;
                 if (currentProduct.selectedVariant.option1 && currentProduct.selectedVariant.option1 !== 'Default Title') {
                     titleWithVariant += ` - ${currentProduct.selectedVariant.option1}`;
                 }
-                productTitle.textContent = titleWithVariant;
-                
-                productPrice.textContent = formatPrice(currentProduct.selectedVariant.price);
+                if (productTitle) productTitle.textContent = titleWithVariant;
+                if (productPrice) productPrice.textContent = formatPrice(currentProduct.selectedVariant.price);
 
+                // Show the notification and overlay
+                const overlay = document.querySelector('.cart-notification-menu-overlay');
                 notificationMenu.classList.add('visible');
-
-                // Close notification on X button click
-                closeButton.addEventListener('click', () => {
-                    notificationMenu.classList.remove('visible');
-                });
+                if (overlay) overlay.classList.add('visible');
 
                 // Show feedback with black color scheme
                 const originalText = newAddToCartButton.textContent;
@@ -633,6 +638,11 @@ function displayProduct(product) {
     // Update product details with black color scheme
     // Add cart notification menu if it doesn't exist
     if (!document.querySelector('.cart-notification-menu')) {
+        // Create overlay
+        const menuOverlay = document.createElement('div');
+        menuOverlay.className = 'cart-notification-menu-overlay';
+        document.body.appendChild(menuOverlay);
+        
         const notificationMenu = document.createElement('div');
         notificationMenu.className = 'cart-notification-menu';
         notificationMenu.innerHTML = `
@@ -648,28 +658,81 @@ function displayProduct(product) {
                 </div>
             </div>
             <div class="cart-notification-menu__buttons">
-                <button class="cart-notification-menu__button cart-notification-menu__button--secondary" style="background-color: transparent !important; color: #5A3518 !important; border: 2px solid #5A3518 !important; padding: 14px !important; display: block !important; visibility: visible !important;">Weiter einkaufen</button>
-                <button class="cart-notification-menu__button cart-notification-menu__button--primary" style="background-color: #5A3518 !important; color: #ffffff !important; border: 2px solid #5A3518 !important; padding: 14px !important; display: block !important; visibility: visible !important;">Zur Kasse</button>
+                <button class="cart-notification-menu__button cart-notification-menu__button--secondary" style="pointer-events: auto !important; touch-action: manipulation !important;">Weiter einkaufen</button>
+                <button class="cart-notification-menu__button cart-notification-menu__button--primary" style="pointer-events: auto !important; touch-action: manipulation !important;">Zur Kasse</button>
             </div>
         `;
         document.body.appendChild(notificationMenu);
 
-        // Add event listeners for the notification menu
+        // Add event listeners for the notification menu with mobile support
         const closeBtn = notificationMenu.querySelector('.cart-notification-menu__close');
         const continueBtn = notificationMenu.querySelector('.cart-notification-menu__button--secondary');
         const checkoutBtn = notificationMenu.querySelector('.cart-notification-menu__button--primary');
 
-        closeBtn.addEventListener('click', () => {
-            notificationMenu.classList.remove('visible');
-        });
+        // Style buttons for better touch interaction
+        if (continueBtn) {
+            continueBtn.style.pointerEvents = 'auto';
+            continueBtn.style.cursor = 'pointer';
+            continueBtn.style.touchAction = 'manipulation';
+        }
+        
+        if (checkoutBtn) {
+            checkoutBtn.style.pointerEvents = 'auto';
+            checkoutBtn.style.cursor = 'pointer';
+            checkoutBtn.style.touchAction = 'manipulation';
+        }
 
-        continueBtn.addEventListener('click', () => {
-            notificationMenu.classList.remove('visible');
-        });
+        // Get overlay
+        const overlay = document.querySelector('.cart-notification-menu-overlay');
+        
+        // Close button
+        if (closeBtn) {
+            const closeNotification = (e) => {
+                if (e) e.preventDefault();
+                notificationMenu.classList.remove('visible');
+                if (overlay) overlay.classList.remove('visible');
+            };
+            closeBtn.addEventListener('click', closeNotification, { passive: false });
+            closeBtn.addEventListener('touchstart', closeNotification, { passive: false });
+        }
+        
+        // Close on overlay click
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                notificationMenu.classList.remove('visible');
+                overlay.classList.remove('visible');
+            });
+        }
 
-        checkoutBtn.addEventListener('click', () => {
-            window.location.href = '/pages/checkout.html';
-        });
+        // Continue shopping button - goes to products page
+        if (continueBtn) {
+            const goToProducts = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                notificationMenu.classList.remove('visible');
+                if (overlay) overlay.classList.remove('visible');
+                setTimeout(() => {
+                    window.location.href = '/pages/products.html';
+                }, 100);
+            };
+            continueBtn.addEventListener('click', goToProducts, { passive: false });
+            continueBtn.addEventListener('touchstart', goToProducts, { passive: false });
+        }
+
+        // Checkout button - goes to checkout
+        if (checkoutBtn) {
+            const goToCheckout = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                notificationMenu.classList.remove('visible');
+                if (overlay) overlay.classList.remove('visible');
+                setTimeout(() => {
+                    window.location.href = '/pages/checkout.html';
+                }, 100);
+            };
+            checkoutBtn.addEventListener('click', goToCheckout, { passive: false });
+            checkoutBtn.addEventListener('touchstart', goToCheckout, { passive: false });
+        }
     }
 
     const addToCartBtn = document.getElementById('add-to-cart');

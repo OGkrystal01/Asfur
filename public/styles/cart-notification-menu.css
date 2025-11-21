@@ -1,0 +1,217 @@
+/* Cart Notification Menu Styles */
+.cart-notification-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: white;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    border-radius: 12px;
+    z-index: 10000;
+    max-width: 90%;
+    width: 400px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-notification-menu.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: auto;
+}
+
+.cart-notification-menu__content {
+    padding: 0;
+}
+
+.cart-notification-menu__header {
+    background: #5A3518;
+    color: white;
+    padding: 20px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.cart-notification-menu__header i {
+    font-size: 24px;
+    color: white;
+}
+
+.cart-notification-menu__header span,
+.cart-notification-menu__title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.cart-notification-menu__close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 32px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    pointer-events: auto;
+    touch-action: manipulation;
+}
+
+.cart-notification-menu__product {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    border-bottom: 1px solid #e1e3e5;
+}
+
+.cart-notification-menu__product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #f8f8f8;
+    flex-shrink: 0;
+}
+
+.cart-notification-menu__product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cart-notification-menu__product-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #202223;
+}
+
+.cart-notification-menu__product-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #5A3518;
+    margin: 0;
+}
+
+.cart-notification-menu__buttons {
+    display: flex;
+    gap: 12px;
+    padding: 20px;
+    z-index: 10001;
+    position: relative;
+}
+
+.cart-notification-menu__button {
+    flex: 1;
+    padding: 14px 20px;
+    border: 2px solid #5A3518;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+    z-index: 10002;
+}
+
+.cart-notification-menu__button--secondary {
+    background: transparent;
+    color: #5A3518;
+}
+
+.cart-notification-menu__button--secondary:hover,
+.cart-notification-menu__button--secondary:active {
+    background: #5A3518;
+    color: white;
+}
+
+.cart-notification-menu__button--primary {
+    background: #5A3518;
+    color: white;
+}
+
+.cart-notification-menu__button--primary:hover,
+.cart-notification-menu__button--primary:active {
+    background: #3d2410;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .cart-notification-menu {
+        max-width: 95%;
+        width: auto;
+    }
+    
+    .cart-notification-menu__buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .cart-notification-menu__button {
+        width: 100%;
+        min-height: 48px;
+        font-size: 15px;
+    }
+    
+    .cart-notification-menu__product-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cart-notification-menu__product-title {
+        font-size: 14px;
+    }
+    
+    .cart-notification-menu__product-price {
+        font-size: 16px;
+    }
+    
+    .cart-notification-menu__header {
+        padding: 16px;
+    }
+    
+    .cart-notification-menu__header span,
+    .cart-notification-menu__title {
+        font-size: 16px;
+    }
+}
+
+/* Overlay - Create separate element to avoid z-index issues */
+.cart-notification-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-notification-menu-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
