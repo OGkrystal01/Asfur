@@ -2,7 +2,88 @@
 let stripe;
 let elements;
 let paymentElement;
+let expressCheckoutElement;
 let clientSecret;
+let currentStep = 1;
+
+// Section Navigation Functions
+window.toggleSection = function(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.classList.toggle('collapsed');
+    }
+};
+
+window.continueToShipping = function() {
+    // Validate contact info
+    const email = document.getElementById('email').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+    const postalCode = document.getElementById('postalCode').value;
+    const country = document.getElementById('country').value;
+    
+    if (!email || !firstName || !lastName || !address || !city || !postalCode || !country) {
+        alert('Bitte füllen Sie alle erforderlichen Felder aus.');
+        return;
+    }
+    
+    // Mark step 1 as completed
+    updateProgressStep(1, 'completed');
+    updateProgressStep(2, 'active');
+    
+    // Collapse contact section and show shipping method
+    const contactSection = document.getElementById('section-contact');
+    const shippingSection = document.getElementById('section-shipping');
+    const shippingMethodSection = document.getElementById('section-shipping-method');
+    
+    contactSection.classList.add('collapsed', 'completed');
+    contactSection.querySelector('.edit-btn').style.display = 'inline';
+    
+    shippingSection.classList.add('collapsed', 'completed');
+    shippingSection.querySelector('.edit-btn').style.display = 'inline';
+    
+    shippingMethodSection.style.display = 'block';
+    
+    // Scroll to shipping method
+    shippingMethodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    currentStep = 2;
+};
+
+window.continueToPayment = function() {
+    // Mark step 2 as completed
+    updateProgressStep(2, 'completed');
+    updateProgressStep(3, 'active');
+    
+    // Collapse shipping sections and show payment
+    const shippingMethodSection = document.getElementById('section-shipping-method');
+    const paymentSection = document.getElementById('section-payment');
+    
+    shippingMethodSection.style.display = 'none';
+    paymentSection.style.display = 'block';
+    
+    // Scroll to payment section
+    paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    
+    // On mobile, make order summary sticky
+    if (window.innerWidth <= 768) {
+        document.getElementById('order-summary').parentElement.classList.add('sticky-mobile');
+    }
+    
+    currentStep = 3;
+};
+
+function updateProgressStep(stepNumber, status) {
+    const step = document.querySelector(`.progress-step[data-step="${stepNumber}"]`);
+    if (step) {
+        step.classList.remove('active', 'completed');
+        if (status) {
+            step.classList.add(status);
+        }
+    }
+}
 
 document.addEventListener('DOMContentLoaded', async function() {
     const checkoutItems = document.getElementById('checkout-items');
@@ -340,17 +421,39 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             elements = stripe.elements({ appearance, clientSecret });
 
-            // Create and mount the Payment Element with all methods visible as a vertical list
+            // Create Express Checkout Element first (for Apple Pay, Google Pay, etc.)
+            console.log('🔄 Creating express checkout element...');
+            try {
+                expressCheckoutElement = elements.create('expressCheckout', {
+                    wallets: {
+                        applePay: 'auto',
+                        googlePay: 'auto'
+                    }
+                });
+                expressCheckoutElement.mount('#express-checkout-element');
+                console.log('✅ Express checkout element mounted');
+                
+                // Listen for express checkout events
+                expressCheckoutElement.on('confirm', async (event) => {
+                    console.log('🎯 Express checkout confirmed');
+                    // Express checkout handles payment automatically
+                });
+            } catch (error) {
+                console.log('ℹ️ Express checkout not available:', error.message);
+                // Hide express checkout section if not available
+                const expressSection = document.querySelector('.express-checkout-section');
+                if (expressSection) {
+                    expressSection.style.display = 'none';
+                }
+            }
+
+            // Create and mount the Payment Element with accordion layout for better mobile support
             paymentElement = elements.create('payment', {
                 layout: {
-                    type: 'tabs',
+                    type: 'accordion',
                     defaultCollapsed: false,
-                    radios: false,
-                    spacedAccordionItems: false
-                },
-                wallets: {
-                    applePay: 'auto',
-                    googlePay: 'auto'
+                    radios: true,
+                    spacedAccordionItems: true
                 }
             });
             paymentElement.mount('#payment-element');

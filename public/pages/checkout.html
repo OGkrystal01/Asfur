@@ -29,16 +29,57 @@
             <div class="checkout-content">
                 <!-- Left side: Form -->
                 <div class="checkout-form-section">
+                    <!-- Progress Indicator -->
+                    <div class="checkout-progress">
+                        <div class="progress-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Kontakt</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Lieferung</div>
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Zahlung</div>
+                        </div>
+                    </div>
+
                     <form id="checkout-form" class="checkout-form">
-                        <div class="form-section">
-                            <h2>Kontaktinformationen</h2>
-                            <div class="form-group">
-                                <input type="email" id="email" name="email" required placeholder="E-Mail">
+                        <!-- Step 1: Contact Information -->
+                        <div class="form-section collapsible-section" id="section-contact" data-step="1">
+                            <div class="section-header" onclick="toggleSection('section-contact')">
+                                <div class="section-title-group">
+                                    <h2>Kontaktinformationen</h2>
+                                    <span class="step-indicator">Schritt 1/3</span>
+                                </div>
+                                <div class="section-status">
+                                    <span class="edit-btn" style="display:none;">Bearbeiten</span>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="form-group">
+                                    <input type="email" id="email" name="email" required placeholder="E-Mail">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-section">
-                            <h2>Lieferadresse</h2>
+                        <!-- Step 2: Shipping Address -->
+                        <div class="form-section collapsible-section" id="section-shipping" data-step="2">
+                            <div class="section-header" onclick="toggleSection('section-shipping')">
+                                <div class="section-title-group">
+                                    <h2>Lieferadresse</h2>
+                                    <span class="step-indicator">Schritt 2/3</span>
+                                </div>
+                                <div class="section-status">
+                                    <span class="edit-btn" style="display:none;">Bearbeiten</span>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                            </div>
+                            <div class="section-content">
                             <div class="form-group">
                                 <input type="text" id="firstName" name="firstName" required placeholder="Vorname">
                                 <input type="text" id="lastName" name="lastName" required placeholder="Nachname">
@@ -71,10 +112,16 @@
                                     <!-- Add more countries as needed -->
                                 </select>
                             </div>
+                            <button type="button" class="continue-btn" onclick="continueToShipping()">Weiter zur Versandart</button>
+                            </div>
                         </div>
 
-                        <div class="form-section shipping-method-section">
-                            <h2>Versandart</h2>
+                        <!-- Shipping Method (part of step 2) -->
+                        <div class="form-section shipping-method-section collapsible-section" id="section-shipping-method" data-step="2" style="display:none;">
+                            <div class="section-header">
+                                <h2>Versandart</h2>
+                            </div>
+                            <div class="section-content">
                             <div class="shipping-option">
                                 <div class="shipping-option-content">
                                     <div class="shipping-option-details">
@@ -84,25 +131,69 @@
                                     <div class="shipping-option-price">KOSTENLOS</div>
                                 </div>
                             </div>
+                            <button type="button" class="continue-btn" onclick="continueToPayment()">Weiter zur Zahlung</button>
+                            </div>
                         </div>
 
-                        <div class="form-section payment-section">
-                            <h2>Zahlungsmethode</h2>
-                            <!-- Stripe Payment Element will be mounted here -->
-                            <div id="payment-element" class="payment-element-container">
+                        <!-- Step 3: Payment -->
+                        <div class="form-section payment-section collapsible-section" id="section-payment" data-step="3" style="display:none;">
+                            <div class="section-header" onclick="toggleSection('section-payment')">
+                                <div class="section-title-group">
+                                    <h2>Zahlungsmethode</h2>
+                                    <span class="step-indicator">Schritt 3/3</span>
+                                </div>
+                                <div class="section-status">
+                                    <span class="edit-btn" style="display:none;">Bearbeiten</span>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <!-- Express Checkout -->
+                                <div class="express-checkout-section">
+                                    <h3 class="express-title">Express Checkout</h3>
+                                    <div id="express-checkout-element" class="express-checkout-element">
+                                        <!-- Express checkout buttons will be mounted here -->
+                                    </div>
+                                    <div class="or-divider">
+                                        <span>ODER</span>
+                                    </div>
+                                </div>
+
+                                <!-- Standard Payment Methods -->
+                                <div id="payment-element" class="payment-element-container">
                                 <!-- Stripe.js injects the Payment Element here -->
                             </div>
                             <div id="payment-message" class="payment-message"></div>
+                            
+                            <!-- Security Badges -->
+                            <div class="security-badges">
+                                <div class="security-badge">
+                                    <i class="fas fa-lock"></i>
+                                    <span>256-Bit SSL verschlüsselt</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>3D Secure von Stripe</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Sichere Zahlung</span>
+                                </div>
+                            </div>
+
                             <!-- Payment button inside form -->
-                            <button type="button" id="continue-to-payment" class="checkout-button">Zahlung abschließen</button>
+                            <button type="button" id="continue-to-payment" class="checkout-button">
+                                <i class="fas fa-lock"></i> Jetzt sicher bezahlen
+                            </button>
                             <a href="/pages/cart.html" class="return-to-cart">Zurück zum Warenkorb</a>
+                            </div>
                         </div>
                     </form>
                 </div>
 
                 <!-- Right side: Order summary -->
                 <div class="checkout-summary-section">
-                    <div class="order-summary">
+                    <div class="order-summary" id="order-summary">
                         <h2>Bestellübersicht</h2>
                         <div id="checkout-items" class="checkout-items">
                             <!-- Items will be populated by JavaScript -->

@@ -13,7 +13,7 @@ const products = [
             {
                 "option1": "creme",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -25,7 +25,7 @@ const products = [
             {
                 "option1": "rot",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 0,
                 "requires_shipping": true,
                 "taxable": true,
@@ -37,7 +37,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -49,7 +49,7 @@ const products = [
             {
                 "option1": "weiss",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -90,7 +90,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -102,7 +102,7 @@ const products = [
             {
                 "option1": "rosa",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -114,7 +114,7 @@ const products = [
             {
                 "option1": "beige-1",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -126,7 +126,7 @@ const products = [
             {
                 "option1": "weiss",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -167,7 +167,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 59.99,
-                "compare_at_price": 85.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -179,7 +179,7 @@ const products = [
             {
                 "option1": "weiss",
                 "price": 59.99,
-                "compare_at_price": 85.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -191,7 +191,7 @@ const products = [
             {
                 "option1": "rosa",
                 "price": 59.99,
-                "compare_at_price": 85.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -231,7 +231,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 48,
                 "requires_shipping": true,
                 "taxable": true,
@@ -243,7 +243,7 @@ const products = [
             {
                 "option1": "rosa",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -281,7 +281,7 @@ const products = [
         "variants": [
             {
                 "price": 45.99,
-                "compare_at_price": 55.95,
+                "compare_at_price": 55.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -310,7 +310,7 @@ const products = [
         "variants": [
             {
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -339,7 +339,7 @@ const products = [
         "variants": [
             {
                 "price": 67.99,
-                "compare_at_price": 84.99,
+                "compare_at_price": 81.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -369,7 +369,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 34.99,
-                "compare_at_price": 43.74,
+                "compare_at_price": 41.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -381,7 +381,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 34.99,
-                "compare_at_price": 43.74,
+                "compare_at_price": 41.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -393,7 +393,7 @@ const products = [
             {
                 "option1": "creme",
                 "price": 34.99,
-                "compare_at_price": 43.74,
+                "compare_at_price": 41.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -433,7 +433,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 43,
                 "requires_shipping": true,
                 "taxable": true,
@@ -445,7 +445,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -457,7 +457,7 @@ const products = [
             {
                 "option1": "weiss",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -469,7 +469,7 @@ const products = [
             {
                 "option1": "rot",
                 "price": 39.99,
-                "compare_at_price": 49.99,
+                "compare_at_price": 47.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -510,7 +510,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 45.95,
-                "compare_at_price": 79.99,
+                "compare_at_price": 55.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -522,7 +522,7 @@ const products = [
             {
                 "option1": "beige-1",
                 "price": 45.95,
-                "compare_at_price": 79.99,
+                "compare_at_price": 55.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -534,7 +534,7 @@ const products = [
             {
                 "option1": "rosa",
                 "price": 45.95,
-                "compare_at_price": 79.99,
+                "compare_at_price": 55.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -574,7 +574,7 @@ const products = [
             {
                 "option1": "braunes-muster",
                 "price": 59.99,
-                "compare_at_price": 74.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -586,7 +586,7 @@ const products = [
             {
                 "option1": "schwarzes-muster",
                 "price": 59.99,
-                "compare_at_price": 74.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -598,7 +598,7 @@ const products = [
             {
                 "option1": "beiges-muster",
                 "price": 59.99,
-                "compare_at_price": 74.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -610,7 +610,7 @@ const products = [
             {
                 "option1": "grau-weiss-kariert",
                 "price": 59.99,
-                "compare_at_price": 74.99,
+                "compare_at_price": 71.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -651,7 +651,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 54.99,
-                "compare_at_price": 68.74,
+                "compare_at_price": 65.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -663,7 +663,7 @@ const products = [
             {
                 "option1": "rosa",
                 "price": 54.99,
-                "compare_at_price": 68.74,
+                "compare_at_price": 65.99,
                 "inventory_quantity": 49,
                 "requires_shipping": true,
                 "taxable": true,
@@ -702,7 +702,7 @@ const products = [
             {
                 "option1": "basic-braunes-logo",
                 "price": 54.99,
-                "compare_at_price": 68.74,
+                "compare_at_price": 65.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -714,7 +714,7 @@ const products = [
             {
                 "option1": "beige",
                 "price": 54.99,
-                "compare_at_price": 68.74,
+                "compare_at_price": 65.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -726,7 +726,7 @@ const products = [
             {
                 "option1": "denim-blaues-muster",
                 "price": 54.99,
-                "compare_at_price": 68.74,
+                "compare_at_price": 65.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -766,7 +766,7 @@ const products = [
             {
                 "option1": "braun",
                 "price": 44.95,
-                "compare_at_price": 56.19,
+                "compare_at_price": 53.99,
                 "inventory_quantity": 0,
                 "requires_shipping": true,
                 "taxable": true,
@@ -778,7 +778,7 @@ const products = [
             {
                 "option1": "blau",
                 "price": 44.95,
-                "compare_at_price": 56.19,
+                "compare_at_price": 53.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -790,7 +790,7 @@ const products = [
             {
                 "option1": "schwarz",
                 "price": 44.95,
-                "compare_at_price": 56.19,
+                "compare_at_price": 53.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -802,7 +802,7 @@ const products = [
             {
                 "option1": "weiss",
                 "price": 44.95,
-                "compare_at_price": 56.19,
+                "compare_at_price": 53.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -842,7 +842,7 @@ const products = [
         "variants": [
             {
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 0,
                 "requires_shipping": true,
                 "taxable": true,
@@ -872,7 +872,7 @@ const products = [
             {
                 "option1": "beige",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -884,7 +884,7 @@ const products = [
             {
                 "option1": "braun",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,
@@ -896,7 +896,7 @@ const products = [
             {
                 "option1": "grau",
                 "price": 49.99,
-                "compare_at_price": 62.49,
+                "compare_at_price": 59.99,
                 "inventory_quantity": 50,
                 "requires_shipping": true,
                 "taxable": true,

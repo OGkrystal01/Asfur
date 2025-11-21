@@ -36,6 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             <img src="/images/payment/google-pay.svg" alt="Google Pay" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
                             <img src="/images/payment/klarna.svg" alt="Klarna" style="height: 24px; max-width: 50px;" onerror="console.error('Failed to load:', this.src)">
                         </div>
+                        <div style="margin-top: 20px;">
+                            <p style="font-size: 0.85em; color: #888; margin-bottom: 10px;">🔒 Sichere Zahlung</p>
+                            <p style="font-size: 0.75em; color: #666;">256-Bit SSL Verschlüsselung · 3D Secure by Stripe</p>
+                        </div>
                     </div>
                 </div>
                 <div class="footer-bottom">
