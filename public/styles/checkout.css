@@ -1,4 +1,4 @@
-/* Checkout Page Styles - Shopify-inspired Design */
+/* Checkout Page Styles - Clean Single Page Design */
 .checkout-page {
     background-color: #fafafa;
     min-height: 100vh;
@@ -15,8 +15,8 @@
 }
 
 .checkout-main {
-    padding: 3rem 1rem;
-    max-width: 1200px;
+    padding: 2rem 1rem;
+    max-width: 1280px;
     margin: 0 auto;
 }
 
@@ -26,8 +26,14 @@
 
 .checkout-content {
     display: grid;
-    grid-template-columns: 1fr 480px;
-    gap: 4rem;
+    grid-template-columns: 1fr 420px;
+    gap: 3rem;
+}
+
+.checkout-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
 }
 
 /* Form Styles */
@@ -35,66 +41,75 @@
     background-color: #fff;
     padding: 2.5rem;
     border-radius: 8px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #e1e3e5;
 }
 
 .form-section {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.form-section h2 {
-    font-size: 1.125rem;
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-header-simple h2 {
+    font-size: 1.1rem;
     font-weight: 600;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
     color: #202223;
-    letter-spacing: -0.01em;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #5A3518;
 }
 
 .form-group {
     margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-row {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .checkout-form input,
 .checkout-form select {
     width: 100%;
-    padding: 0.875rem 0.875rem;
+    padding: 0.875rem;
     border: 1px solid #c9cccf;
-    border-radius: 5px;
-    font-size: 0.9375rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
     background-color: #fff;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .checkout-form input:focus,
 .checkout-form select:focus {
     outline: none;
     border-color: #5A3518;
-    box-shadow: 0 0 0 3px rgba(8, 0, 70, 0.1);
+    box-shadow: 0 0 0 3px rgba(90, 53, 24, 0.1);
 }
 
 .checkout-form input::placeholder {
-    color: #8c9196;
+    color: #adb5bd;
 }
 
-/* Shipping Method Section Styles */
-.shipping-method-section {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e1e3e5;
-}
-
-.shipping-option {
+/* Shipping Option Card */
+.shipping-option-card {
+    background: #f8f9fa;
     border: 2px solid #5A3518;
     border-radius: 8px;
-    padding: 0;
-    background: #f8f9fa;
-    cursor: default;
-}
-
-.shipping-option-content {
+    padding: 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -367,7 +382,7 @@
 @media (max-width: 1024px) {
     .checkout-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
     .checkout-summary-section {
@@ -574,13 +589,25 @@
     margin-bottom: 1.5rem;
 }
 
-/* Express Checkout Section - At Top */
-.express-checkout-section {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 1px 2px 0 rgba(0,0,0,.1);
-    margin-bottom: 2rem;
+/* Express Checkout in Sidebar */
+.express-checkout-sidebar {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e3e5;
+}
+
+.express-checkout-sidebar h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #202223;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.mobile-summary-reminder {
+    display: none;
 }
 
 .express-title {
@@ -656,7 +683,37 @@
 
 @media (max-width: 768px) {
     .checkout-main {
-        padding: 1.5rem 1rem;
+        padding: 1rem;
+    }
+
+    .checkout-content {
+        gap: 1rem;
+    }
+
+    .checkout-form-section,
+    .checkout-summary-section .order-summary {
+        padding: 1.5rem;
+        border: 1px solid #e1e3e5;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .mobile-summary-reminder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        border-radius: 6px;
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: #856404;
+        text-align: center;
     }
 
     .checkout-form-section {

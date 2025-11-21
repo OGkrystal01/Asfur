@@ -25,6 +25,8 @@ textarea,
     color: white;
     overflow: hidden;
     position: relative;
+    z-index: 100;
+    position: relative;
     height: 40px;
     border-bottom: 1px solid #f0f0f0;
     width: 100%;
@@ -105,18 +107,20 @@ textarea,
 .header {
     background-color: white;
     width: 100%;
-    z-index: 100;
+    z-index: 90;
+    position: relative;
+    margin: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Sticky header states - only when scrolling up */
+.header-sticky {
     position: fixed;
     top: 0;
     left: 0;
-    margin: 0;
-    box-sizing: border-box;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Sticky header states */
-.header-visible {
+    z-index: 90;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     transform: translateY(0);
 }
 
@@ -124,13 +128,8 @@ textarea,
     transform: translateY(-100%);
 }
 
-.header-sticky {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Add body padding to prevent content jump */
-body {
-    padding-top: 80px;
+.header-visible {
+    transform: translateY(0);
 }
 
 .header-container {

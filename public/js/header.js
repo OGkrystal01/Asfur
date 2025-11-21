@@ -7,16 +7,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         headerContainer.innerHTML = html;
     }
 
-    // Sticky header on scroll up - E-commerce style
+    // Sticky header on scroll up - only header, not announcement bar
     let lastScrollTop = 0;
     const header = document.querySelector('.header');
-    const scrollThreshold = 80;
+    const announcementBar = document.querySelector('.announcement-bar');
+    const scrollThreshold = 100;
     let ticking = false;
 
     if (header) {
-        // Initial state
-        header.classList.add('header-visible');
-        
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
@@ -32,15 +30,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
         
         if (currentScroll <= scrollThreshold) {
-            // At top of page - normal position
-            header.classList.remove('header-sticky', 'header-hidden');
-            header.classList.add('header-visible');
+            // Near top - normal position, not sticky
+            header.classList.remove('header-sticky', 'header-hidden', 'header-visible');
         } else if (currentScroll > lastScrollTop) {
-            // Scrolling down - hide header
-            header.classList.remove('header-visible', 'header-sticky');
+            // Scrolling down - header disappears naturally (not sticky)
+            header.classList.remove('header-sticky', 'header-visible');
             header.classList.add('header-hidden');
         } else {
-            // Scrolling up - show sticky header
+            // Scrolling up - make header sticky at top
             header.classList.remove('header-hidden');
             header.classList.add('header-sticky', 'header-visible');
         }

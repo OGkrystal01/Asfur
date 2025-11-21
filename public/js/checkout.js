@@ -1,118 +1,9 @@
-// Stripe Payment Element Integration
+// Global variables for checkout flow
 let stripe;
 let elements;
 let paymentElement;
-let expressCheckoutElement;
 let clientSecret;
-let currentStep = 1;
-
-// Section Navigation Functions
-window.toggleSection = function(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-        section.classList.toggle('collapsed');
-    }
-};
-
-// Validation functions
-window.validateAndContinueContact = function() {
-    const email = document.getElementById('email').value;
-    
-    if (!email || !email.includes('@')) {
-        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
-        updateSectionValidation('section-contact', false);
-        return;
-    }
-    
-    // Mark section as completed
-    const contactSection = document.getElementById('section-contact');
-    contactSection.classList.add('collapsed', 'completed');
-    contactSection.querySelector('.edit-btn').style.display = 'inline';
-    updateSectionValidation('section-contact', true);
-    
-    // Show shipping section
-    const shippingSection = document.getElementById('section-shipping');
-    shippingSection.style.display = 'block';
-    shippingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
-    updateProgressStep(1, 'completed');
-    updateProgressStep(2, 'active');
-    currentStep = 2;
-};
-
-window.validateAndContinueShipping = function() {
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const address = document.getElementById('address').value;
-    const city = document.getElementById('city').value;
-    const postalCode = document.getElementById('postalCode').value;
-    const country = document.getElementById('country').value;
-    
-    if (!firstName || !lastName || !address || !city || !postalCode || !country) {
-        alert('Bitte füllen Sie alle erforderlichen Felder aus.');
-        updateSectionValidation('section-shipping', false);
-        return;
-    }
-    
-    // Mark shipping section as completed
-    const shippingSection = document.getElementById('section-shipping');
-    shippingSection.classList.add('collapsed', 'completed');
-    shippingSection.querySelector('.edit-btn').style.display = 'inline';
-    updateSectionValidation('section-shipping', true);
-    
-    // Show shipping method section
-    const shippingMethodSection = document.getElementById('section-shipping-method');
-    shippingMethodSection.style.display = 'block';
-    updateSectionValidation('section-shipping-method', true);
-    shippingMethodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
-
-window.continueToPayment = function() {
-    // Mark step 2 as completed
-    updateProgressStep(2, 'completed');
-    updateProgressStep(3, 'active');
-    
-    // Collapse shipping sections and show payment
-    const shippingMethodSection = document.getElementById('section-shipping-method');
-    const paymentSection = document.getElementById('section-payment');
-    
-    shippingMethodSection.style.display = 'none';
-    paymentSection.style.display = 'block';
-    
-    // Scroll to payment section
-    paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    
-    // On mobile, make order summary sticky
-    if (window.innerWidth <= 768) {
-        document.getElementById('order-summary').parentElement.classList.add('sticky-mobile');
-    }
-    
-    currentStep = 3;
-};
-
-function updateProgressStep(stepNumber, status) {
-    const step = document.querySelector(`.progress-step[data-step="${stepNumber}"]`);
-    if (step) {
-        step.classList.remove('active', 'completed');
-        if (status) {
-            step.classList.add(status);
-        }
-    }
-}
-
-function updateSectionValidation(sectionId, isValid) {
-    const section = document.getElementById(sectionId);
-    if (!section) return;
-    
-    const indicator = section.querySelector('.validation-indicator');
-    if (!indicator) return;
-    
-    if (isValid) {
-        indicator.innerHTML = '<i class="fas fa-check-circle" style="color: #4CAF50;"></i>';
-    } else {
-        indicator.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #f44336;"></i>';
-    }
-}
+let expressCheckoutElement;
 
 document.addEventListener('DOMContentLoaded', async function() {
     const checkoutItems = document.getElementById('checkout-items');
@@ -489,6 +380,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             console.log('✅ Stripe Payment Element mounted successfully');
             console.log('✅ Payment methods loaded - user can now select payment method');
+
+            // Track AddPaymentInfo when payment element is ready
+            paymentElement.on('ready', function() {
+                console.log('💳 Payment Element ready - tracking AddPaymentInfo');
+                const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+                if (window.metaPixel && typeof window.metaPixel.trackAddPaymentInfo === 'function') {
+                    window.metaPixel.trackAddPaymentInfo(cartData);
+                }
+            });
             
             // Hide the initializing message
             paymentMessage.style.display = 'none';
