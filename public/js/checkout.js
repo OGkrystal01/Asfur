@@ -159,10 +159,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             discountLine.style.display = 'none';
         }
         
-        // Update shipping to FREE
+        // Update shipping to KOSTENLOS
         const shippingElement = document.getElementById('shipping');
         if (shippingElement) {
-            shippingElement.textContent = 'FREE';
+            shippingElement.textContent = 'KOSTENLOS';
             shippingElement.style.color = '#080046';
             shippingElement.style.fontWeight = '600';
         }

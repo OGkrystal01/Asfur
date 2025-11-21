@@ -1,15 +1,15 @@
 .cart-notification-menu {
-    position: fixed;
+    position: fixed !important;
     top: -100%;
     right: 20px;
     width: 320px;
-    background-color: #ffffff;
-    border: 2px solid #5A3518;
+    background-color: #ffffff !important;
+    border: 2px solid #5A3518 !important;
     border-radius: 8px;
     padding: 24px;
-    box-shadow: 0 8px 24px rgba(90, 53, 24, 0.12);
+    box-shadow: 0 8px 24px rgba(90, 53, 24, 0.12) !important;
     transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    z-index: 1000 !important;
 }
 
 .cart-notification-menu.visible {
@@ -95,8 +95,8 @@
 
 .cart-notification-menu__button {
     flex: 1;
-    padding: 14px;
-    border: 2px solid #5A3518;
+    padding: 14px !important;
+    border: 2px solid #5A3518 !important;
     border-radius: 4px;
     font-size: 14px;
     font-weight: 500;
@@ -104,11 +104,13 @@
     transition: all 0.3s ease;
     text-align: center;
     text-decoration: none;
+    display: block !important;
+    visibility: visible !important;
 }
 
 .cart-notification-menu__button--primary {
-    background-color: #5A3518;
-    color: #ffffff;
+    background-color: #5A3518 !important;
+    color: #ffffff !important;
 }
 
 .cart-notification-menu__button--primary:hover {
@@ -117,8 +119,8 @@
 }
 
 .cart-notification-menu__button--secondary {
-    background-color: transparent;
-    color: #000000;
+    background-color: transparent !important;
+    color: #000000 !important;
 }
 
 .cart-notification-menu__button--secondary:hover {

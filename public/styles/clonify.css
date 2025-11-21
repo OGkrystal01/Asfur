@@ -162,10 +162,11 @@
 }
 
 .product-card-scroll {
-    min-width: 320px; /* desktop: several cards visible */
+    min-width: 280px; /* desktop: several cards visible */
     flex-shrink: 0;
     background: white;
     border-radius: 12px;
+    max-width: 100%;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     transition: transform 0.3s, box-shadow 0.3s;
@@ -881,8 +882,9 @@ hr {
 }
 
 .testimonials-track .testimonial-card {
-    min-width: 300px;
-    flex: 0 0 300px;
+    min-width: 280px;
+    flex: 0 0 280px;
+    max-width: 100%;
 }
 
 .testimonial-card {
@@ -1077,6 +1079,15 @@ hr {
     .section-subheading {
         word-wrap: break-word;
         overflow-wrap: break-word;
+    }
+    
+    .product-card-scroll {
+        min-width: calc(100vw - 60px);
+        max-width: calc(100vw - 60px);
+    }
+    
+    .products-scroll {
+        padding: 20px 15px;
     }
 }
 
