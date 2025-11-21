@@ -1119,12 +1119,12 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: none;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     z-index: 10000;
-    padding: 20px;
+    padding-top: 100px;
 }
 
 .cart-notification-menu.visible {
@@ -1135,10 +1135,11 @@ body {
     background: white;
     border-radius: 12px;
     padding: 24px;
-    max-width: 400px;
-    width: 100%;
+    max-width: 420px;
+    width: 90%;
     position: relative;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    margin: 0 auto;
 }
 
 .cart-notification-menu__header {
@@ -1246,12 +1247,15 @@ body {
 
 @media (max-width: 768px) {
     .cart-notification-menu {
-        padding: 16px;
+        padding-top: 80px;
+        padding-left: 16px;
+        padding-right: 16px;
     }
     
     .cart-notification-menu__content {
         padding: 20px;
         max-width: 100%;
+        width: 100%;
     }
     
     .cart-notification-menu__buttons {
