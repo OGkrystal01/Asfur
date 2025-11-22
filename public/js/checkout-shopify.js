@@ -459,20 +459,14 @@ async function initializeStripePayment() {
     }
 }
 
-async function handleSubmit(e) {
-    e.preventDefault();
+async function handleSubmit(event) {
+    event.preventDefault();
     
-    const submitButton = document.getElementById('submit-btn');
-    submitButton.disabled = true;
-    submitButton.textContent = 'Wird bearbeitet...';
-    
-    // Get form data
-    const formData = new FormData(e.target);
-    const customerData = Object.fromEntries(formData.entries());
-    
-    // Save customer data for confirmation page
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const orderNumber = 'DP' + Date.now().toString().slice(-6);
+    // Disable submit button
+    const submitBtn = document.getElementById('submit-btn');
+    const originalText = submitBtn.innerHTML || submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Verarbeitung...';
     
     localStorage.setItem('orderNumber', orderNumber);
     localStorage.setItem('customerData', JSON.stringify(customerData));
@@ -512,17 +506,35 @@ async function handleSubmit(e) {
         
         if (error) {
             console.error('Payment error:', error);
-            showMessage(error.message, true);
-            submitButton.disabled = false;
-            submitButton.textContent = 'Bestellung überprüfen';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            
+            // Reinitialize payment element to make it selectable again
+            console.log('🔄 Reinitializing payment element after error...');
+            await initializeStripePayment();
+            
+            if (error.type === "card_error" || error.type === "validation_error") {
+                showMessage(error.message, true);
+            } else {
+                showMessage("Ein unerwarteter Fehler ist aufgetreten.", true);
+            }
         }
         // If no error, Stripe redirects automatically
         
     } catch (error) {
-        console.error('Error:', error);
-        showMessage('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.', true);
-        submitButton.disabled = false;
-        submitButton.textContent = 'Bestellung überprüfen';
+        console.error('Submit error:', error);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        
+        // Reinitialize payment element to make it selectable again
+        console.log('🔄 Reinitializing payment element after error...');
+        await initializeStripePayment();
+        
+        if (error.type === "card_error" || error.type === "validation_error") {
+            showMessage(error.message, true);
+        } else {
+            showMessage("Ein unerwarteter Fehler ist aufgetreten.", true);
+        }
     }
 }
 

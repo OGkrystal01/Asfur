@@ -515,6 +515,14 @@ body.shopify-checkout {
     margin-bottom: 24px;
 }
 
+.express-checkout-title {
+    font-size: 14px;
+    color: #6d7175;
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: 400;
+}
+
 .custom-express-buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -526,12 +534,12 @@ body.shopify-checkout {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px 20px;
+    gap: 6px;
+    padding: 12px 16px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 400;
     cursor: pointer;
     transition: all 0.2s;
     height: 48px;
@@ -540,22 +548,25 @@ body.shopify-checkout {
 .apple-pay-btn {
     background: #000;
     color: #fff;
+    font-weight: 400;
 }
 
 .apple-pay-btn:hover {
-    background: #333;
-    transform: translateY(-1px);
+    background: #1a1a1a;
 }
 
-.google-pay-btn {
-    background: #fff;
-    color: #5f6368;
-    border: 1px solid #dadce0;
+.apple-pay-btn .apple-logo {
+    display: flex;
+    align-items: center;
 }
 
-.google-pay-btn:hover {
-    background: #f8f9fa;
-    transform: translateY(-1px);
+.klarna-btn {
+    background: #FFB3C7;
+    color: #000;
+}
+
+.klarna-btn:hover {
+    background: #FFA0B8;
 }
 
 /* Express Checkout Message */
