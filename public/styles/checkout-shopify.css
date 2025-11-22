@@ -443,7 +443,7 @@ body.shopify-checkout {
 /* Payment Element Wrapper */
 .payment-element-wrapper {
     min-height: 300px;
-    margin-top: 24px;
+    margin-top: 8px;
     margin-bottom: 16px;
     border: none !important;
 }
