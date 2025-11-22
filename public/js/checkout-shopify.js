@@ -568,7 +568,29 @@ async function handleSubmit(event) {
             console.error('❌ Payment error:', error);
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
-            showMessage(error.message, true);
+            
+            // Better error messages based on error type
+            let errorMessage = error.message;
+            if (error.type === 'validation_error' && error.code === 'incomplete_payment_details') {
+                errorMessage = 'Zahlung abgebrochen';
+            } else if (error.message && error.message.includes('canceled')) {
+                errorMessage = 'Zahlung abgebrochen';
+            } else if (error.message && error.message.includes('cancelled')) {
+                errorMessage = 'Zahlung abgebrochen';
+            }
+            
+            showMessage(errorMessage, true);
+            
+            // Reinitialize payment element so it's clickable again
+            console.log('🔄 Reinitializing payment element after error...');
+            setTimeout(async () => {
+                try {
+                    await initializeStripePayment();
+                    console.log('✅ Payment element reinitialized');
+                } catch (reinitError) {
+                    console.error('❌ Failed to reinitialize:', reinitError);
+                }
+            }, 500);
         } else {
             console.log('✅ Payment confirmed, redirecting...');
         }
@@ -579,6 +601,15 @@ async function handleSubmit(event) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
         showMessage("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", true);
+        
+        // Reinitialize payment element
+        setTimeout(async () => {
+            try {
+                await initializeStripePayment();
+            } catch (reinitError) {
+                console.error('❌ Failed to reinitialize:', reinitError);
+            }
+        }, 500);
     }
 }
 

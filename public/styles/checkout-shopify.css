@@ -53,8 +53,8 @@ body.shopify-checkout {
 
 .summary-toggle {
     width: 100%;
-    padding: 16px 20px;
-    background: none;
+    padding: 24px 20px;
+    background: #e8e8e8;
     border: none;
     display: flex;
     justify-content: space-between;
@@ -275,6 +275,7 @@ body.shopify-checkout {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    margin-top: 24px;
 }
 
 .checkout-section {
@@ -282,6 +283,10 @@ body.shopify-checkout {
     flex-direction: column;
     gap: 12px;
     transition: all 0.3s ease;
+}
+
+.checkout-section:first-child {
+    margin-top: 0;
 }
 
 .section-header {
