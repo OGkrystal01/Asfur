@@ -107,12 +107,6 @@ window.addEventListener('cartUpdated', function() {
 // Update cart count periodically as fallback
 setInterval(updateCartCount, 500);
 
-// Initial update on page load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Header.js loaded, updating cart count...');
-    updateCartCount();
-});
-
 // Initialize mobile menu functionality
 function initializeMobileMenu() {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');

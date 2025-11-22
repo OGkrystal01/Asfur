@@ -241,14 +241,19 @@ async function initializeStripePayment() {
         
         const data = await response.json();
         console.log('📦 PaymentIntent data received:', data);
+        console.log('📦 Full response:', JSON.stringify(data, null, 2));
+        
         clientSecret = data.clientSecret;
         
         if (!clientSecret) {
             console.error('❌ No clientSecret in response');
+            console.error('❌ Response data:', data);
+            showMessage('Fehler: Server hat keinen clientSecret zurückgegeben', true);
             throw new Error('No clientSecret received from server');
         }
         
-        console.log('🔑 ClientSecret:', clientSecret.substring(0, 20) + '...');
+        console.log('🔑 ClientSecret received:', clientSecret.substring(0, 20) + '...');
+        console.log('🔑 ClientSecret length:', clientSecret.length);
         
         // Initialize Stripe Elements with Shopify-like appearance
         const appearance = {
@@ -282,22 +287,31 @@ async function initializeStripePayment() {
         };
         
         console.log('🎨 Creating Stripe Elements with appearance...');
+        console.log('🔑 ClientSecret value:', clientSecret);
+        console.log('🔑 ClientSecret type:', typeof clientSecret);
         
-        if (!clientSecret || clientSecret === 'undefined') {
+        if (!clientSecret || clientSecret === 'undefined' || clientSecret === 'null') {
             console.error('❌ Invalid clientSecret:', clientSecret);
+            showMessage('Fehler: Ungültiger clientSecret vom Server erhalten', true);
             throw new Error('Invalid clientSecret received from API');
         }
         
-        elements = stripe.elements({
-            clientSecret,
-            appearance
-        });
-        console.log('✅ Elements instance created:', elements);
-        
-        // Verify elements object
-        if (!elements || typeof elements.create !== 'function') {
-            console.error('❌ Elements object is invalid!', elements);
-            throw new Error('Stripe Elements failed to initialize');
+        try {
+            elements = stripe.elements({
+                clientSecret,
+                appearance
+            });
+            console.log('✅ Elements instance created:', elements);
+            
+            // Verify elements object
+            if (!elements || typeof elements.create !== 'function') {
+                console.error('❌ Elements object is invalid!', elements);
+                throw new Error('Stripe Elements failed to initialize');
+            }
+        } catch (elementsError) {
+            console.error('❌ Error creating Stripe Elements:', elementsError);
+            showMessage('Fehler beim Erstellen der Stripe Elements: ' + elementsError.message, true);
+            throw elementsError;
         }
         
         // Create Express Checkout Element (Apple Pay, Google Pay)
