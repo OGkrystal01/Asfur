@@ -350,7 +350,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             console.log('🔧 Elements created with appearance and loader');
 
-            // Create Express Checkout Element (Apple Pay, Google Pay & Klarna)
+            // Create Express Checkout Element (ONLY Apple Pay & Google Pay)
+            // DO NOT add Klarna here - it prevents it from showing in payment methods below
             console.log('🔄 Creating express checkout element...');
             try {
                 expressCheckoutElement = elements.create('expressCheckout', {
@@ -366,7 +367,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     paymentMethods: {
                         link: 'never',
                         amazonPay: 'never',
-                        klarna: 'auto'  // Enable Klarna in express checkout
+                        klarna: 'never'  // DISABLE in express so it shows in payment methods below
                     },
                     fields: {
                         billingDetails: 'auto'
@@ -456,8 +457,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Don't hide, keep trying
             }
 
-            // Create and mount the Payment Element with accordion layout for better mobile support
-            // DO NOT hide wallets - force them to appear even if in express checkout
+            // Create and mount the Payment Element with ALL methods
+            // Since wallets are in express checkout above, Stripe may hide them here
+            // But we FORCE them to show by setting wallets to 'auto'
             paymentElement = elements.create('payment', {
                 layout: {
                     type: 'accordion',
@@ -465,8 +467,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     radios: true,
                     spacedAccordionItems: false
                 },
-                // Remove wallet restrictions entirely - show everything
-                paymentMethodOrder: ['card', 'klarna', 'sepa_debit'],
+                wallets: {
+                    applePay: 'auto',  // Show even though in express
+                    googlePay: 'auto'  // Show even though in express
+                },
+                paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit'],
                 fields: {
                     billingDetails: {
                         email: 'never'  // Already have from form
