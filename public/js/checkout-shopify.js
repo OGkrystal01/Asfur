@@ -1,7 +1,7 @@
 // Shopify-style Checkout - Full Functionality
 const STRIPE_PUBLISHABLE_KEY = 'pk_live_51QP1AvP5oV0KyDJtaMLHSRTmLiIQN6VDM5Z3DFtKzgkXTlqZNP9O7OXAVHoRhRPSlxHc5bwMxAIMWdK8Xj4qcG6I00fHUyfcxE';
 
-let stripe, elements, paymentElement;
+let stripe, elements, paymentElement, expressCheckoutElement;
 let clientSecret;
 
 // Discount codes
@@ -37,10 +37,19 @@ function setupEventListeners() {
     // Mobile summary toggle
     const summaryToggle = document.getElementById('summary-toggle-btn');
     const summaryContent = document.getElementById('summary-content');
+    const cartSummaryToggle = document.getElementById('cart-summary-toggle');
     
+    // Both buttons toggle the summary
     summaryToggle.addEventListener('click', function() {
         const isExpanded = this.getAttribute('aria-expanded') === 'true';
         this.setAttribute('aria-expanded', !isExpanded);
+        summaryContent.style.display = isExpanded ? 'none' : 'block';
+    });
+    
+    // Cart icon in header also toggles summary
+    cartSummaryToggle.addEventListener('click', function() {
+        const isExpanded = summaryToggle.getAttribute('aria-expanded') === 'true';
+        summaryToggle.setAttribute('aria-expanded', !isExpanded);
         summaryContent.style.display = isExpanded ? 'none' : 'block';
     });
     
@@ -228,24 +237,81 @@ async function initializeStripePayment() {
             appearance
         });
         
-        // Create Payment Element
+        // Create Express Checkout Element (Apple Pay, Google Pay)
+        console.log('🚀 Creating Express Checkout Element...');
+        expressCheckoutElement = elements.create('expressCheckout', {
+            buttonType: {
+                applePay: 'buy',
+                googlePay: 'buy'
+            },
+            buttonHeight: 48,
+            layout: {
+                maxColumns: 2,
+                maxRows: 1
+            }
+        });
+        
+        expressCheckoutElement.mount('#express-checkout-element');
+        console.log('✅ Express Checkout Element mounted');
+        
+        // Handle express checkout confirm
+        expressCheckoutElement.on('confirm', async (event) => {
+            const formData = new FormData(document.getElementById('checkout-form'));
+            const customerData = Object.fromEntries(formData.entries());
+            
+            const { error } = await stripe.confirmPayment({
+                elements,
+                confirmParams: {
+                    return_url: `${window.location.origin}/pages/order-confirmation.html`,
+                    receipt_email: customerData.email || event.billingDetails?.email
+                },
+                redirect: 'if_required'
+            });
+            
+            if (error) {
+                showMessage(error.message, true);
+                event.complete('fail');
+            } else {
+                event.complete('success');
+            }
+        });
+        
+        // Create Payment Element  
+        console.log('🚀 Creating Payment Element...');
         paymentElement = elements.create('payment', {
             layout: {
                 type: 'accordion',
                 defaultCollapsed: false,
                 radios: true,
                 spacedAccordionItems: false
+            },
+            wallets: {
+                applePay: 'never',  // Already in express checkout
+                googlePay: 'never'  // Already in express checkout
             }
         });
         
+        const paymentContainer = document.getElementById('payment-element');
+        if (!paymentContainer) {
+            console.error('❌ Payment element container not found!');
+            return;
+        }
+        
         paymentElement.mount('#payment-element');
+        console.log('✅ Payment Element mounted to:', paymentContainer);
         
         // Track AddPaymentInfo when ready
         paymentElement.on('ready', function() {
+            console.log('✅ Payment methods loaded and ready');
             const cartData = JSON.parse(localStorage.getItem('cart')) || [];
             if (window.metaPixel && typeof window.metaPixel.trackAddPaymentInfo === 'function') {
                 window.metaPixel.trackAddPaymentInfo(cartData);
             }
+        });
+        
+        // Log when express checkout is ready
+        expressCheckoutElement.on('ready', function() {
+            console.log('✅ Express checkout buttons loaded');
         });
         
     } catch (error) {

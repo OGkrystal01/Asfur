@@ -486,6 +486,58 @@ body.shopify-checkout {
     text-decoration: underline;
 }
 
+/* ========== EXPRESS CHECKOUT ========== */
+.express-checkout-section {
+    margin-bottom: 24px;
+}
+
+.express-title {
+    font-size: 14px;
+    color: #6d7175;
+    text-align: center;
+    margin-bottom: 12px;
+    font-weight: 400;
+}
+
+.express-checkout-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 400px) {
+    .express-checkout-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+.or-divider {
+    position: relative;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.or-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: #e1e3e5;
+}
+
+.or-divider span {
+    position: relative;
+    display: inline-block;
+    padding: 0 16px;
+    background: #fff;
+    font-size: 14px;
+    color: #6d7175;
+    font-weight: 400;
+}
+
 /* ========== DESKTOP ONLY ========== */
 .desktop-only {
     display: none;
@@ -537,6 +589,10 @@ body.shopify-checkout {
     margin: 16px 0;
 }
 
+#express-checkout-element {
+    min-height: 48px;
+}
+
 /* Make Stripe elements match Shopify style */
 .StripeElement {
     padding: 14px 16px;
@@ -552,4 +608,16 @@ body.shopify-checkout {
 
 .StripeElement--invalid {
     border-color: #d72c0d;
+}
+
+/* Stripe Express Checkout button styling */
+#express-checkout-element iframe {
+    border-radius: 8px !important;
+}
+
+/* Payment Element styling to match Shopify radio buttons */
+.payment-element-wrapper {
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
 }
