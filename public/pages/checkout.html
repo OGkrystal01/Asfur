@@ -38,26 +38,6 @@
 
     <main class="checkout-main">
         <div class="checkout-container">
-            <!-- Express Checkout at Top -->
-            <div class="express-checkout-top">
-                <h2>Schnellkasse</h2>
-                <div id="express-checkout-element">
-                    <!-- Loading animation -->
-                    <div class="payment-loading">
-                        <div class="loading-spinner"></div>
-                        <p class="loading-text">Payment Methods Loading Please Wait...</p>
-                    </div>
-                </div>
-                
-                <div class="or-divider-main">
-                    <span>ODER</span>
-                </div>
-                
-                <div class="scroll-hint">
-                    <i class="fas fa-arrow-down"></i>
-                    Unten fortfahren für mehr Zahlungsmethoden
-                </div>
-            </div>
 
             <div class="checkout-content">
                 <!-- Left side: Form -->
@@ -68,10 +48,10 @@
                     </div>
 
                     <form id="checkout-form" class="checkout-form">
-                        <!-- Step 1: Contact Information -->
-                        <div class="form-section" id="section-contact">
+                        <!-- Customer Information Form -->
+                        <div class="form-section" id="section-customer">
                             <div class="section-header-simple">
-                                <h2>Schritt 1/3: Kontaktinformationen</h2>
+                                <h2>Schritt 1: Kontaktinformationen</h2>
                             </div>
                             <div class="form-group">
                                 <label for="email">E-Mail</label>
@@ -82,7 +62,7 @@
                         <!-- Step 2: Shipping Address -->
                         <div class="form-section" id="section-shipping">
                             <div class="section-header-simple">
-                                <h2>Schritt 2/3: Lieferadresse</h2>
+                                <h2>Schritt 2: Lieferadresse</h2>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
@@ -152,7 +132,7 @@
                         <!-- Step 3: Payment Section with Inline Summary -->
                         <div class="form-section" id="section-payment">
                             <div class="section-header-simple">
-                                <h2>Schritt 3/3: Zahlungsmethode</h2>
+                                <h2>Schritt 3: Zahlungsmethode</h2>
                                 <!-- Payment method badges - always visible -->
                                 <div class="payment-methods-badges">
                                     <img src="/images/payment/visa.svg" alt="Visa" class="payment-badge">
