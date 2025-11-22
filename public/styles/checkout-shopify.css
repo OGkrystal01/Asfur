@@ -555,7 +555,12 @@ body.shopify-checkout {
     background: #1a1a1a;
 }
 
-.apple-pay-btn .apple-logo {
+.apple-pay-btn svg {
+    display: block;
+    margin: 0;
+}
+
+.apple-pay-btn span {
     display: flex;
     align-items: center;
 }
@@ -638,6 +643,88 @@ body.shopify-checkout {
     font-size: 14px;
     color: #6d7175;
     font-weight: 400;
+}
+
+/* ========== MINI ORDER SUMMARY ========== */
+.mini-order-summary {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.mini-summary-items {
+    margin-bottom: 16px;
+}
+
+.mini-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.mini-item-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    position: relative;
+}
+
+.mini-item-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #6d7175;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.mini-item-details {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mini-item-name {
+    font-size: 14px;
+    color: #202223;
+}
+
+.mini-item-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #202223;
+}
+
+.mini-summary-total {
+    border-top: 1px solid #d1d5db;
+    padding-top: 12px;
+}
+
+.mini-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #202223;
+}
+
+.mini-total-row {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #d1d5db;
+    font-size: 16px;
 }
 
 /* ========== DESKTOP ONLY ========== */

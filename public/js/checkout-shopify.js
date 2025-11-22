@@ -141,8 +141,29 @@ function loadCartItems() {
     const desktopItems = document.getElementById('desktop-summary-items');
     desktopItems.innerHTML = cart.map(item => createCartItemHTML(item)).join('');
     
+    // Populate mini summary (above checkout button)
+    const miniItems = document.getElementById('mini-summary-items');
+    if (miniItems) {
+        miniItems.innerHTML = cart.map(item => createMiniCartItemHTML(item)).join('');
+    }
+    
     // Calculate and display totals
     updateTotals();
+}
+
+function createMiniCartItemHTML(item) {
+    return `
+        <div class="mini-summary-item">
+            <div style="position: relative;">
+                <img src="${item.image}" alt="${item.title}" class="mini-item-image">
+                <span class="mini-item-badge">${item.quantity}</span>
+            </div>
+            <div class="mini-item-details">
+                <span class="mini-item-name">${item.title}</span>
+                <span class="mini-item-price">€${(parseFloat(item.price) * item.quantity).toFixed(2)}</span>
+            </div>
+        </div>
+    `;
 }
 
 function createCartItemHTML(item) {
@@ -183,6 +204,12 @@ function updateTotals() {
     // Update desktop
     document.getElementById('desktop-subtotal').textContent = `€${subtotal.toFixed(2)}`;
     document.getElementById('desktop-total').textContent = `€${total.toFixed(2)}`;
+    
+    // Update mini summary
+    const miniSubtotal = document.getElementById('mini-subtotal');
+    const miniTotal = document.getElementById('mini-total');
+    if (miniSubtotal) miniSubtotal.textContent = `€${subtotal.toFixed(2)}`;
+    if (miniTotal) miniTotal.textContent = `€${total.toFixed(2)}`;
 }
 
 function applyDiscount(source) {

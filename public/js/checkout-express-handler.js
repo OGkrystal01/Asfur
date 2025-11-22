@@ -7,7 +7,7 @@ function setupCustomExpressButtons() {
     
     if (applePayBtn) {
         applePayBtn.addEventListener('click', () => {
-            console.log('🍎 Apple Pay button clicked - triggering express checkout');
+            console.log('🍎 Apple Pay button clicked - scrolling to payment section');
             // Scroll to payment section
             const paymentSection = document.getElementById('payment-element');
             if (paymentSection) {
@@ -16,17 +16,19 @@ function setupCustomExpressButtons() {
                     block: 'center' 
                 });
                 
-                // Simulate express payment method selection
+                // Highlight the payment section briefly
+                paymentSection.style.transition = 'box-shadow 0.3s';
+                paymentSection.style.boxShadow = '0 0 0 3px rgba(0, 0, 0, 0.3)';
                 setTimeout(() => {
-                    handlePaymentMethodChange({ value: { type: 'apple_pay' } });
-                }, 500);
+                    paymentSection.style.boxShadow = '';
+                }, 2000);
             }
         });
     }
     
     if (klarnaBtn) {
         klarnaBtn.addEventListener('click', () => {
-            console.log('💳 Klarna button clicked - triggering express checkout');
+            console.log('💳 Klarna button clicked - scrolling to payment section');
             // Scroll to payment section
             const paymentSection = document.getElementById('payment-element');
             if (paymentSection) {
@@ -35,10 +37,12 @@ function setupCustomExpressButtons() {
                     block: 'center' 
                 });
                 
-                // Simulate express payment method selection
+                // Highlight the payment section briefly
+                paymentSection.style.transition = 'box-shadow 0.3s';
+                paymentSection.style.boxShadow = '0 0 0 3px rgba(255, 179, 199, 0.5)';
                 setTimeout(() => {
-                    handlePaymentMethodChange({ value: { type: 'klarna' } });
-                }, 500);
+                    paymentSection.style.boxShadow = '';
+                }, 2000);
             }
         });
     }
@@ -64,8 +68,8 @@ function handlePaymentMethodChange(event) {
     console.log('Is express method:', isExpressMethod, 'Type:', paymentType);
     
     if (isExpressMethod) {
-        // Smooth fade out form sections
-        [emailSection, deliverySection, shippingSection].forEach(section => {
+        // Smooth fade out form sections (but NOT shipping section)
+        [emailSection, deliverySection].forEach(section => {
             if (section) {
                 section.style.opacity = '0';
                 section.style.maxHeight = section.scrollHeight + 'px';
@@ -91,10 +95,12 @@ function handlePaymentMethodChange(event) {
         if (submitBtn) {
             if (paymentType === 'apple_pay') {
                 submitBtn.innerHTML = `
-                    <svg width="20" height="24" viewBox="0 0 24 28" fill="white" style="margin-right: 8px;">
-                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    Pay with Apple Pay
+                    <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg width="20" height="24" viewBox="0 0 24 28" fill="white">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span>Pay with Apple Pay</span>
+                    </span>
                 `;
                 submitBtn.style.background = '#000';
                 submitBtn.style.color = '#fff';
@@ -112,16 +118,11 @@ function handlePaymentMethodChange(event) {
                 submitBtn.style.fontSize = '17px';
                 submitBtn.style.fontWeight = '500';
             } else if (paymentType === 'klarna') {
-                submitBtn.innerHTML = `
-                    <svg width="60" height="24" viewBox="0 0 60 24" fill="currentColor" style="margin-right: 8px;">
-                        <path d="M0 0h4.8v24H0V0zm23.6 12c0-3.7-2.1-7-5.4-8.9L13.5 0H8.3l5.8 11.2L8.3 24h5.2l4.7-9.1c2.9-1.7 5.4-4.8 5.4-8.9zM35.7 0h-4.8v24h4.8V0zm13.5 0c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12zm0 19.2c-4 0-7.2-3.2-7.2-7.2s3.2-7.2 7.2-7.2 7.2 3.2 7.2 7.2-3.2 7.2-7.2 7.2z"/>
-                    </svg>
-                    Jetzt mit Klarna bezahlen
-                `;
+                submitBtn.textContent = 'Mit Klarna Bezahlen';
                 submitBtn.style.background = '#FFB3C7';
                 submitBtn.style.color = '#000';
-                submitBtn.style.fontSize = '16px';
-                submitBtn.style.fontWeight = '600';
+                submitBtn.style.fontSize = '18px';
+                submitBtn.style.fontWeight = '700';
             } else if (paymentType === 'paypal') {
                 submitBtn.textContent = 'Mit PayPal bezahlen';
                 submitBtn.style.background = '#0070BA';
@@ -139,8 +140,8 @@ function handlePaymentMethodChange(event) {
         
         console.log('✅ Express checkout mode activated');
     } else {
-        // Smooth fade in form sections
-        [emailSection, deliverySection, shippingSection].forEach(section => {
+        // Smooth fade in form sections (shipping section stays visible always)
+        [emailSection, deliverySection].forEach(section => {
             if (section && section.style.display === 'none') {
                 section.style.display = 'flex';
                 section.style.overflow = 'visible';
