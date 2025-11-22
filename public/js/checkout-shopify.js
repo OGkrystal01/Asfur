@@ -489,20 +489,7 @@ async function initializeStripePayment() {
 async function handleSubmit(event) {
     event.preventDefault();
     
-    // Collect form data
-    const customerData = {
-        email: document.getElementById('email').value,
-        firstName: document.getElementById('first-name').value,
-        lastName: document.getElementById('last-name').value,
-        address: document.getElementById('address').value,
-        apartment: document.getElementById('apartment')?.value || '',
-        city: document.getElementById('city').value,
-        postalCode: document.getElementById('postal-code').value,
-        country: document.getElementById('country').value
-    };
-    
-    // Generate order number
-    const orderNumber = 'ORD-' + Date.now();
+    console.log('🚀 Form submitted');
     
     // Disable submit button
     const submitBtn = document.getElementById('submit-btn');
@@ -510,45 +497,88 @@ async function handleSubmit(event) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Verarbeitung...';
     
+    // Check if form sections are visible (not express checkout)
+    const emailSection = document.getElementById('email-section');
+    const isExpressCheckout = emailSection && emailSection.style.display === 'none';
+    
+    // Collect form data (skip if express checkout)
+    let customerData = {
+        email: '',
+        firstName: '',
+        lastName: '',
+        address: '',
+        apartment: '',
+        city: '',
+        postalCode: '',
+        country: 'DE'
+    };
+    
+    if (!isExpressCheckout) {
+        // Regular checkout - collect form data
+        customerData = {
+            email: document.getElementById('email')?.value || '',
+            firstName: document.getElementById('first-name')?.value || '',
+            lastName: document.getElementById('last-name')?.value || '',
+            address: document.getElementById('address')?.value || '',
+            apartment: document.getElementById('apartment')?.value || '',
+            city: document.getElementById('city')?.value || '',
+            postalCode: document.getElementById('postal-code')?.value || '',
+            country: document.getElementById('country')?.value || 'DE'
+        };
+        console.log('📝 Collected customer data:', customerData);
+    } else {
+        console.log('⚡ Express checkout - customer data handled by payment provider');
+    }
+    
+    // Generate order number
+    const orderNumber = 'ORD-' + Date.now();
+    
     // Save to localStorage
     localStorage.setItem('orderNumber', orderNumber);
     localStorage.setItem('customerData', JSON.stringify(customerData));
     
     try {
         // Confirm payment with Stripe
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: `${window.location.origin}/pages/order-confirmation.html`,
-                receipt_email: customerData.email,
-                shipping: {
-                    name: `${customerData.firstName || ''} ${customerData.lastName}`.trim(),
+        const confirmParams = {
+            return_url: `${window.location.origin}/pages/order-confirmation.html`
+        };
+        
+        // Only add shipping/billing for non-express checkout
+        if (!isExpressCheckout && customerData.email) {
+            confirmParams.receipt_email = customerData.email;
+            confirmParams.shipping = {
+                name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
+                address: {
+                    line1: customerData.address || 'N/A',
+                    line2: customerData.apartment || undefined,
+                    city: customerData.city || 'N/A',
+                    postal_code: customerData.postalCode || '00000',
+                    country: customerData.country || 'DE'
+                }
+            };
+            confirmParams.payment_method_data = {
+                billing_details: {
+                    name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
+                    email: customerData.email,
                     address: {
-                        line1: customerData.address,
+                        line1: customerData.address || 'N/A',
                         line2: customerData.apartment || undefined,
-                        city: customerData.city,
-                        postal_code: customerData.postalCode,
-                        country: customerData.country
-                    }
-                },
-                payment_method_data: {
-                    billing_details: {
-                        name: `${customerData.firstName || ''} ${customerData.lastName}`.trim(),
-                        email: customerData.email,
-                        address: {
-                            line1: customerData.address,
-                            line2: customerData.apartment || undefined,
-                            city: customerData.city,
-                            postal_code: customerData.postalCode,
-                            country: customerData.country
-                        }
+                        city: customerData.city || 'N/A',
+                        postal_code: customerData.postalCode || '00000',
+                        country: customerData.country || 'DE'
                     }
                 }
-            }
+            };
+        }
+        
+        console.log('💳 Confirming payment with Stripe...');
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams
         });
         
         if (error) {
-            console.error('Payment error:', error);
+            console.error('❌ Payment error:', error);
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
             showMessage(error.message, true);
@@ -556,7 +586,7 @@ async function handleSubmit(event) {
         // If no error, Stripe redirects automatically
         
     } catch (error) {
-        console.error('Submit error:', error);
+        console.error('❌ Submit error:', error);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
         showMessage("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", true);

@@ -7,7 +7,8 @@ function setupCustomExpressButtons() {
     
     if (applePayBtn) {
         applePayBtn.addEventListener('click', () => {
-            console.log('🍎 Apple Pay button clicked - scrolling to payment section');
+            console.log('🍎 Apple Pay button clicked - auto-selecting Apple Pay');
+            
             // Scroll to payment section
             const paymentSection = document.getElementById('payment-element');
             if (paymentSection) {
@@ -16,19 +17,18 @@ function setupCustomExpressButtons() {
                     block: 'center' 
                 });
                 
-                // Highlight the payment section briefly
-                paymentSection.style.transition = 'box-shadow 0.3s';
-                paymentSection.style.boxShadow = '0 0 0 3px rgba(0, 0, 0, 0.3)';
+                // Try to auto-select Apple Pay in the payment element
                 setTimeout(() => {
-                    paymentSection.style.boxShadow = '';
-                }, 2000);
+                    selectPaymentMethod('apple_pay');
+                }, 800);
             }
         });
     }
     
     if (klarnaBtn) {
         klarnaBtn.addEventListener('click', () => {
-            console.log('💳 Klarna button clicked - scrolling to payment section');
+            console.log('💳 Klarna button clicked - auto-selecting Klarna');
+            
             // Scroll to payment section
             const paymentSection = document.getElementById('payment-element');
             if (paymentSection) {
@@ -37,14 +37,122 @@ function setupCustomExpressButtons() {
                     block: 'center' 
                 });
                 
-                // Highlight the payment section briefly
-                paymentSection.style.transition = 'box-shadow 0.3s';
-                paymentSection.style.boxShadow = '0 0 0 3px rgba(255, 179, 199, 0.5)';
+                // Try to auto-select Klarna in the payment element
                 setTimeout(() => {
-                    paymentSection.style.boxShadow = '';
-                }, 2000);
+                    selectPaymentMethod('klarna');
+                }, 800);
             }
         });
+    }
+}
+
+// Function to programmatically select a payment method
+function selectPaymentMethod(methodType) {
+    console.log(`🎯 Attempting to select payment method: ${methodType}`);
+    
+    // Find the payment element container
+    const paymentContainer = document.getElementById('payment-element');
+    if (!paymentContainer) {
+        console.error('❌ Payment container not found');
+        return;
+    }
+    
+    // Try to find and click the payment method option
+    const attemptClick = () => {
+        // First, try to find elements in the main DOM
+        let paymentOptions = Array.from(paymentContainer.querySelectorAll('*'));
+        
+        // Also check in iframe if exists
+        const iframe = paymentContainer.querySelector('iframe');
+        if (iframe && iframe.contentDocument) {
+            try {
+                const iframeElements = Array.from(iframe.contentDocument.querySelectorAll('*'));
+                paymentOptions = paymentOptions.concat(iframeElements);
+                console.log('📦 Added iframe elements to search');
+            } catch (e) {
+                console.log('⚠️ Cannot access iframe content (cross-origin)');
+            }
+        }
+        
+        console.log(`🔍 Searching through ${paymentOptions.length} elements`);
+        
+        for (let option of paymentOptions) {
+            const text = option.textContent?.toLowerCase() || '';
+            const ariaLabel = option.getAttribute?.('aria-label')?.toLowerCase() || '';
+            const className = option.className?.toLowerCase() || '';
+            const id = option.id?.toLowerCase() || '';
+            
+            // Check if this is the Apple Pay option
+            if (methodType === 'apple_pay') {
+                if (text.includes('apple') || ariaLabel.includes('apple') || 
+                    className.includes('apple') || id.includes('apple')) {
+                    console.log('✅ Found Apple Pay option:', option.tagName, className);
+                    
+                    // Try to click
+                    if (typeof option.click === 'function') {
+                        option.click();
+                        console.log('👆 Clicked Apple Pay element');
+                    }
+                    
+                    // Trigger express mode after selection
+                    setTimeout(() => {
+                        handlePaymentMethodChange({ value: { type: 'apple_pay' } });
+                    }, 300);
+                    return true;
+                }
+            }
+            
+            // Check if this is the Klarna option
+            if (methodType === 'klarna') {
+                if (text.includes('klarna') || ariaLabel.includes('klarna') || 
+                    className.includes('klarna') || id.includes('klarna')) {
+                    console.log('✅ Found Klarna option:', option.tagName, className);
+                    
+                    // Try to click
+                    if (typeof option.click === 'function') {
+                        option.click();
+                        console.log('👆 Clicked Klarna element');
+                    }
+                    
+                    // Trigger express mode after selection
+                    setTimeout(() => {
+                        handlePaymentMethodChange({ value: { type: 'klarna' } });
+                    }, 300);
+                    return true;
+                }
+            }
+        }
+        
+        console.log('⚠️ Could not find payment method in DOM, showing hint message');
+        // Show a message to the user to select the payment method
+        const expressMessage = document.getElementById('express-message');
+        if (expressMessage && methodType === 'apple_pay') {
+            expressMessage.innerHTML = '<div class="express-message-content"><p class="express-message-text">Bitte wählen Sie Apple Pay aus den Zahlungsmethoden unten ⬇️</p></div>';
+            expressMessage.style.display = 'block';
+            setTimeout(() => {
+                expressMessage.style.display = 'none';
+            }, 5000);
+        } else if (expressMessage && methodType === 'klarna') {
+            expressMessage.innerHTML = '<div class="express-message-content"><p class="express-message-text">Bitte wählen Sie Klarna aus den Zahlungsmethoden unten ⬇️</p></div>';
+            expressMessage.style.display = 'block';
+            setTimeout(() => {
+                expressMessage.style.display = 'none';
+            }, 5000);
+        }
+        
+        return false;
+    };
+    
+    // Try immediately
+    if (!attemptClick()) {
+        // If not found, try again after a delay (payment element might still be loading)
+        console.log('⏳ Retrying in 500ms...');
+        setTimeout(() => {
+            if (!attemptClick()) {
+                console.log('⏳ Final retry in 1000ms...');
+                setTimeout(attemptClick, 1000);
+            }
+        }, 500);
     }
 }
 
