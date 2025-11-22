@@ -346,6 +346,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 appearance,
                 loader: 'auto'
             });
+            
+            console.log('🔧 Elements created with appearance and loader');
 
             // Create Express Checkout Element (Apple Pay, Google Pay & Klarna)
             console.log('🔄 Creating express checkout element...');
@@ -382,12 +384,34 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (expressSection) {
                         expressSection.style.display = 'block';
                     }
-                    // Delay hiding the loader to ensure buttons are visible
+                    // Delay hiding the loader to ensure buttons are visible - LONGER DELAY
                     setTimeout(() => {
                         if (expressElement) {
                             expressElement.classList.add('loaded');
                         }
-                    }, 500);
+                    }, 2000); // Increased to 2 seconds
+                });
+                
+                // Handle shipping address changes for Klarna/Apple Pay/Google Pay
+                expressCheckoutElement.on('shippingaddresschange', async (event) => {
+                    console.log('📦 Shipping address changed:', event.address);
+                    // Resolve with success to allow the payment to continue
+                    event.resolve({
+                        shippingRates: [{
+                            id: 'standard-shipping',
+                            displayName: 'Standard Shipping',
+                            amount: 0, // Free shipping
+                            detail: 'Delivery within 3-5 business days'
+                        }]
+                    });
+                });
+                
+                // Handle shipping option selection
+                expressCheckoutElement.on('shippingoptionchange', async (event) => {
+                    console.log('📦 Shipping option selected:', event.shippingOption);
+                    event.resolve({
+                        status: 'success'
+                    });
                 });
                 
                 // Listen for express checkout events
@@ -395,6 +419,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 expressCheckoutElement.on('confirm', async (event) => {
                     console.log('🎯 Express checkout confirmed, processing payment...');
                     console.log('💡 Payment method will collect customer info automatically');
+                    console.log('📋 Event data:', event);
                     
                     // Store order data for confirmation page
                     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -418,6 +443,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     
                     if (error) {
                         console.error('❌ Express payment error:', error);
+                        console.error('Error details:', error);
                         showMessage(error.message, true);
                     }
                     // If no error, Stripe redirects automatically to confirmation page
@@ -432,7 +458,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Create and mount the Payment Element with accordion layout for better mobile support
-            // Include ALL payment methods including Apple Pay and Klarna - FORCE on mobile
+            // Include ALL payment methods including Apple Pay and Klarna
             paymentElement = elements.create('payment', {
                 layout: {
                     type: 'accordion',
@@ -441,12 +467,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                     spacedAccordionItems: false
                 },
                 wallets: {
-                    applePay: 'auto',  // Show Apple Pay in both express and bottom
-                    googlePay: 'auto'  // Show Google Pay in both express and bottom
+                    applePay: 'auto',
+                    googlePay: 'auto'
                 },
                 paymentMethodOrder: ['card', 'klarna', 'apple_pay', 'google_pay', 'sepa_debit'],
-                // Force display on mobile
-                readOnly: false
+                fields: {
+                    billingDetails: {
+                        email: 'never'  // Already have from form
+                    }
+                }
             });
             paymentElement.mount('#payment-element');
 
@@ -472,7 +501,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         paymentContainer.classList.add('payment-element-ready');
                         console.log('✅ Payment methods should now be visible');
                     }
-                }, 500);
+                }, 2000); // Increased to 2 seconds
             });
             
             // Hide the initializing message

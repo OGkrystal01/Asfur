@@ -269,13 +269,7 @@ app.post('/api/payment-intents', async (req, res) => {
                 discountAmount: discountAmount || '0'
             },
             receipt_email: customerEmail || undefined,
-            description: `Order from Dupelify - ${cartItems.length} item(s)`,
-            shipping: customerName ? {
-                name: customerName,
-                address: {
-                    country: 'DE'
-                }
-            } : undefined
+            description: `Order from Dupelify - ${cartItems.length} item(s)`
         });
 
         console.log('PaymentIntent created:', paymentIntent.id);
