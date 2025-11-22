@@ -213,14 +213,22 @@ app.post('/api/payment-intents', async (req, res) => {
         }
 
         // Calculate total amount
-        let amount = finalTotal || cartItems.reduce((sum, item) => {
-            const itemTotal = parseFloat(item.price) * (item.quantity || 1);
-            return sum + itemTotal;
-        }, 0);
-
-        // Apply discount if provided
-        if (discountAmount && discountAmount > 0) {
-            amount -= discountAmount;
+        // If finalTotal is provided, it's already calculated with discount applied
+        let amount;
+        if (finalTotal !== undefined && finalTotal !== null) {
+            amount = finalTotal;
+            console.log('💰 Using provided finalTotal:', amount, 'EUR (already includes discount)');
+        } else {
+            // Calculate from cart items
+            amount = cartItems.reduce((sum, item) => {
+                const itemTotal = parseFloat(item.price) * (item.quantity || 1);
+                return sum + itemTotal;
+            }, 0);
+            
+            // Apply discount if provided
+            if (discountAmount && discountAmount > 0) {
+                amount -= discountAmount;
+            }
         }
 
         amount = Math.max(0, amount);
