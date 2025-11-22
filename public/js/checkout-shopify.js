@@ -398,6 +398,17 @@ async function initializeStripePayment() {
             },
             terms: {
                 card: 'never'
+            },
+            variables: {
+                colorPrimary: '#5A3518',
+                colorBackground: '#ffffff',
+                colorText: '#202223',
+                colorDanger: '#d72c0d',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                spacingUnit: '4px',
+                borderRadius: '8px',
+                focusBoxShadow: '0 0 0 3px rgba(90, 53, 24, 0.1)',
+                focusOutline: 'none'
             }
         });
         

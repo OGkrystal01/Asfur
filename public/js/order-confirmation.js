@@ -15,23 +15,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('Redirect status:', redirectStatus);
     console.log('Payment intent:', paymentIntentParam);
     
-    // Check if we have a successful payment from Stripe redirect
-    if (redirectStatus === 'succeeded' || paymentIntentParam) {
+    // ONLY show order confirmation if payment was successful
+    if (redirectStatus === 'succeeded') {
         console.log('✅ Payment successful, displaying order confirmation');
         displayOrderConfirmation();
     } else {
-        // Check if we have cart data (direct access without payment)
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        if (cart.length > 0) {
-            // Has cart, might be testing or direct access
-            console.log('⚠️ Displaying order confirmation from cart data');
-            displayOrderConfirmation();
-        } else {
-            // No payment and no cart, redirect to shop
-            console.log('❌ No order data found, redirecting to products');
-            window.location.href = '/pages/products.html';
-            return;
-        }
+        // Payment was not successful or user canceled
+        console.log('❌ Payment not successful or canceled');
+        console.log('Redirect status was:', redirectStatus);
+        
+        // Redirect back to checkout
+        alert('Zahlung wurde nicht abgeschlossen. Sie werden zurück zum Checkout weitergeleitet.');
+        window.location.href = '/pages/checkout.html';
+        return;
     }
 
     function displayOrderConfirmation() {
