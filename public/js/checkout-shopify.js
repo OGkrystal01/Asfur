@@ -33,14 +33,15 @@ let appliedDiscount = null;
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 Checkout page loaded');
     
-    // Check if returning from payment redirect (Klarna, etc)
+    // Check if returning from payment redirect (Klarna, Apple Pay, etc)
     const urlParams = new URLSearchParams(window.location.search);
     const hasPaymentIntent = urlParams.has('payment_intent');
     const redirectStatus = urlParams.get('redirect_status');
     
-    // If returning from failed/canceled payment, refresh once to reset state
-    if (hasPaymentIntent && redirectStatus !== 'succeeded') {
-        console.log('🔄 Detected return from canceled payment, checking if already refreshed...');
+    // If returning from payment (with payment_intent in URL) but NOT succeeded, refresh once to reset state
+    // This handles: canceled, failed, or when user clicks back without completing
+    if (hasPaymentIntent && (!redirectStatus || redirectStatus !== 'succeeded')) {
+        console.log('🔄 Detected return from payment (status:', redirectStatus || 'none', '), checking if already refreshed...');
         const hasRefreshed = sessionStorage.getItem('payment_refreshed');
         
         if (!hasRefreshed) {
@@ -535,11 +536,17 @@ async function initializeStripePayment() {
 
 async function handleSubmit(event) {
     event.preventDefault();
-    
     console.log('🚀 Form submitted');
     
     // Disable submit button
     const submitBtn = document.getElementById('submit-btn');
+    
+    // Check if already processing
+    if (submitBtn.disabled) {
+        console.warn('⚠️ Already processing, ignoring duplicate submit');
+        return;
+    }
+    
     const originalText = submitBtn.innerHTML || submitBtn.textContent;
     submitBtn.disabled = true;
     submitBtn.textContent = 'Verarbeitung...';
@@ -571,76 +578,64 @@ async function handleSubmit(event) {
             return_url: `${window.location.origin}/pages/order-confirmation.html`
         };
         
-        // Always add shipping/billing details for all payment methods
+        // Add receipt email if available
         if (customerData.email) {
             confirmParams.receipt_email = customerData.email;
         }
         
-        // Add shipping information (required for Klarna and visible for Apple Pay)
-        if (customerData.firstName || customerData.lastName || customerData.address) {
-            confirmParams.shipping = {
-                name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
-                address: {
-                    line1: customerData.address || 'N/A',
-                    line2: customerData.apartment || undefined,
-                    city: customerData.city || 'N/A',
-                    postal_code: customerData.postalCode || '00000',
-                    country: customerData.country || 'DE'
-                }
-            };
-        }
+        console.log('💳 Confirming payment with Stripe...');
+        console.log('📦 Confirm params:', JSON.stringify(confirmParams, null, 2));
         
-        // Add billing details
-        if (customerData.email || customerData.firstName) {
-            confirmParams.payment_method_data = {
-                billing_details: {
-                    name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
-                    email: customerData.email || undefined,
-                    address: {
-                        line1: customerData.address || 'N/A',
-                        line2: customerData.apartment || undefined,
-                        city: customerData.city || 'N/A',
-                        postal_code: customerData.postalCode || '00000',
-                        country: customerData.country || 'DE'
-                    }
-                }
-            };
-        }
-        
-        console.log('💳 Confirming payment with Stripe...', confirmParams);
-        
-        const { error } = await stripe.confirmPayment({
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
             confirmParams
         });
         
         if (error) {
             console.error('❌ Payment error:', error);
+            console.error('❌ Error type:', error.type);
+            console.error('❌ Error code:', error.code);
+            console.error('❌ Full error object:', JSON.stringify(error, null, 2));
+            
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
             
             // Better error messages based on error type
             let errorMessage = error.message;
+            let shouldReinit = false;
+            
             if (error.type === 'validation_error' && error.code === 'incomplete_payment_details') {
                 errorMessage = 'Zahlung abgebrochen';
-            } else if (error.message && error.message.includes('canceled')) {
+                shouldReinit = false; // Form is still valid, don't reinit
+            } else if (error.message && (error.message.includes('canceled') || error.message.includes('cancelled'))) {
                 errorMessage = 'Zahlung abgebrochen';
-            } else if (error.message && error.message.includes('cancelled')) {
-                errorMessage = 'Zahlung abgebrochen';
+                shouldReinit = false; // User canceled, don't reinit
+            } else if (error.type === 'card_error') {
+                errorMessage = error.message;
+                shouldReinit = false; // Card error, user can retry
+            } else {
+                // Unknown error, might need to reinit
+                errorMessage = error.message || 'Ein Fehler ist aufgetreten';
+                shouldReinit = true;
             }
             
             showMessage(errorMessage, true);
             
-            // Reinitialize payment element so it's clickable again
-            console.log('🔄 Reinitializing payment element after error...');
-            setTimeout(async () => {
-                try {
-                    await initializeStripePayment();
-                    console.log('✅ Payment element reinitialized');
-                } catch (reinitError) {
-                    console.error('❌ Failed to reinitialize:', reinitError);
-                }
-            }, 500);
+            // Only reinitialize if needed
+            if (shouldReinit) {
+                console.log('🔄 Reinitializing payment element after critical error...');
+                setTimeout(async () => {
+                    try {
+                        await initializeStripePayment();
+                        console.log('✅ Payment element reinitialized');
+                    } catch (reinitError) {
+                        console.error('❌ Failed to reinitialize:', reinitError);
+                        showMessage('Bitte laden Sie die Seite neu', true);
+                    }
+                }, 500);
+            } else {
+                console.log('ℹ️ No reinitialization needed, user can retry');
+            }
         } else {
             console.log('✅ Payment confirmed, redirecting...');
         }
@@ -652,12 +647,15 @@ async function handleSubmit(event) {
         submitBtn.innerHTML = originalText;
         showMessage("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", true);
         
-        // Reinitialize payment element
+        // For catch block errors, always try to reinitialize
+        console.log('🔄 Reinitializing after exception...');
         setTimeout(async () => {
             try {
                 await initializeStripePayment();
+                console.log('✅ Payment element reinitialized after exception');
             } catch (reinitError) {
                 console.error('❌ Failed to reinitialize:', reinitError);
+                showMessage('Bitte laden Sie die Seite neu', true);
             }
         }, 500);
     }
