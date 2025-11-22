@@ -377,9 +377,6 @@ async function initializeStripePayment() {
             throw elementsError;
         }
         
-        // Setup custom express buttons
-        setupCustomExpressButtons();
-        
         // Create Payment Element  
         console.log('🚀 Creating Payment Element...');
         paymentElement = elements.create('payment', {
