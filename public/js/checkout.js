@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 loader: 'auto'
             });
 
-            // Create Express Checkout Element (Apple Pay & Google Pay)
+            // Create Express Checkout Element (Apple Pay, Google Pay & Klarna)
             console.log('🔄 Creating express checkout element...');
             try {
                 expressCheckoutElement = elements.create('expressCheckout', {
@@ -362,7 +362,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     buttonHeight: 48,
                     paymentMethods: {
                         link: 'never',
-                        amazonPay: 'never'
+                        amazonPay: 'never',
+                        klarna: 'auto'  // Enable Klarna in express checkout
                     },
                     fields: {
                         billingDetails: 'auto'
@@ -373,18 +374,46 @@ document.addEventListener('DOMContentLoaded', async function() {
                 expressCheckoutElement.mount('#express-checkout-element');
                 console.log('✅ Express checkout element mounted');
                 
-                // Prevent hiding on ready
+                // Prevent hiding on ready and remove loading animation
                 expressCheckoutElement.on('ready', () => {
                     console.log('✅ Express checkout ready and visible');
                     const expressSection = document.querySelector('.express-checkout-top');
+                    const expressElement = document.getElementById('express-checkout-element');
                     if (expressSection) {
                         expressSection.style.display = 'block';
+                    }
+                    if (expressElement) {
+                        expressElement.classList.add('loaded');
                     }
                 });
                 
                 // Listen for express checkout events
                 expressCheckoutElement.on('confirm', async (event) => {
                     console.log('🎯 Express checkout confirmed, processing payment...');
+                    
+                    // Store order data for confirmation page
+                    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                    const orderNumber = localStorage.getItem('orderNumber') || 'DP' + Date.now().toString().slice(-6);
+                    localStorage.setItem('orderNumber', orderNumber);
+                    
+                    // Get basic customer data from form if available, otherwise use placeholder
+                    const formData = new FormData(checkoutForm);
+                    const customerData = {
+                        email: formData.get('email') || 'customer@example.com',
+                        firstName: formData.get('firstName') || 'Customer',
+                        lastName: formData.get('lastName') || '',
+                        address: formData.get('address') || '',
+                        city: formData.get('city') || '',
+                        postalCode: formData.get('postalCode') || '',
+                        country: formData.get('country') || 'DE'
+                    };
+                    localStorage.setItem('customerData', JSON.stringify(customerData));
+                    
+                    // Track InitiateCheckout for express
+                    if (window.metaPixel && typeof window.metaPixel.trackInitiateCheckout === 'function') {
+                        console.log('🎯 Tracking InitiateCheckout for Express Payment');
+                        window.metaPixel.trackInitiateCheckout(cart);
+                    }
                     
                     // Submit the payment to Stripe - this is required!
                     const { error: submitError } = await elements.submit();
@@ -407,7 +436,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         console.error('❌ Payment error:', error);
                         showMessage(error.message, true);
                     }
-                    // If no error, Stripe redirects automatically
+                    // If no error, Stripe redirects automatically to confirmation page
                 });
                 
                 expressCheckoutElement.on('cancel', () => {
@@ -419,7 +448,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Create and mount the Payment Element with accordion layout for better mobile support
-            // Include Klarna and all payment methods
+            // Include ALL payment methods including Apple Pay and Klarna
             paymentElement = elements.create('payment', {
                 layout: {
                     type: 'accordion',
@@ -428,22 +457,28 @@ document.addEventListener('DOMContentLoaded', async function() {
                     spacedAccordionItems: false
                 },
                 wallets: {
-                    applePay: 'never',  // Already in express checkout
-                    googlePay: 'never'  // Already in express checkout
+                    applePay: 'auto',  // Show Apple Pay in both express and bottom
+                    googlePay: 'auto'  // Show Google Pay in both express and bottom
                 },
-                paymentMethodOrder: ['card', 'klarna', 'sepa_debit']
+                paymentMethodOrder: ['apple_pay', 'google_pay', 'card', 'klarna', 'sepa_debit']
             });
             paymentElement.mount('#payment-element');
 
             console.log('✅ Stripe Payment Element mounted successfully');
             console.log('✅ Payment methods loaded - user can now select payment method');
 
-            // Track AddPaymentInfo when payment element is ready
+            // Track AddPaymentInfo when payment element is ready and remove loading animation
             paymentElement.on('ready', function() {
                 console.log('💳 Payment Element ready - tracking AddPaymentInfo');
                 const cartData = JSON.parse(localStorage.getItem('cart')) || [];
                 if (window.metaPixel && typeof window.metaPixel.trackAddPaymentInfo === 'function') {
                     window.metaPixel.trackAddPaymentInfo(cartData);
+                }
+                
+                // Remove loading animation
+                const paymentContainer = document.getElementById('payment-element');
+                if (paymentContainer) {
+                    paymentContainer.classList.add('payment-element-ready');
                 }
             });
             
@@ -519,12 +554,37 @@ document.addEventListener('DOMContentLoaded', async function() {
         try {
             console.log('🔄 Confirming payment with Stripe...');
             
-            // Confirm payment with Stripe - Payment Element handles billing details automatically
+            // Confirm payment with Stripe - Include required shipping for Klarna
             const { error } = await stripe.confirmPayment({
                 elements,
                 confirmParams: {
                     return_url: `${window.location.origin}/pages/order-confirmation.html`,
-                    receipt_email: customerData.email
+                    receipt_email: customerData.email,
+                    shipping: {
+                        name: `${customerData.firstName} ${customerData.lastName}`.trim(),
+                        address: {
+                            line1: customerData.address,
+                            line2: customerData.apartment || undefined,
+                            city: customerData.city,
+                            postal_code: customerData.postalCode,
+                            state: customerData.state || undefined,
+                            country: customerData.country
+                        }
+                    },
+                    payment_method_data: {
+                        billing_details: {
+                            name: `${customerData.firstName} ${customerData.lastName}`.trim(),
+                            email: customerData.email,
+                            address: {
+                                line1: customerData.address,
+                                line2: customerData.apartment || undefined,
+                                city: customerData.city,
+                                postal_code: customerData.postalCode,
+                                state: customerData.state || undefined,
+                                country: customerData.country
+                            }
+                        }
+                    }
                 }
             });
 

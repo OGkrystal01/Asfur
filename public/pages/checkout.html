@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kasse - Dupelify</title>
+    <meta name="description" content="Sicher zur Kasse bei Dupelify">
+    
+    <!-- Preload Stripe for faster payment loading -->
+    <link rel="preconnect" href="https://js.stripe.com" crossorigin>
+    <link rel="dns-prefetch" href="https://js.stripe.com">
+    <link rel="preconnect" href="https://api.stripe.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.stripe.com">
     <link rel="icon" href="../images/logo/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/styles/header.css">
@@ -29,7 +36,13 @@
             <!-- Express Checkout at Top -->
             <div class="express-checkout-top">
                 <h2>Schnellkasse</h2>
-                <div id="express-checkout-element"></div>
+                <div id="express-checkout-element">
+                    <!-- Loading animation -->
+                    <div class="payment-loading">
+                        <div class="loading-spinner"></div>
+                        <p class="loading-text">Payment Methods Loading Please Wait...</p>
+                    </div>
+                </div>
                 
                 <div class="or-divider-main">
                     <span>ODER</span>
@@ -138,7 +151,11 @@
                             </div>
 
                             <div id="payment-element" class="payment-element-container">
-                                <!-- Stripe.js injects the Payment Element here -->
+                                <!-- Loading animation -->
+                                <div class="payment-loading">
+                                    <div class="loading-spinner"></div>
+                                    <p class="loading-text">Payment Methods Loading Please Wait...</p>
+                                </div>
                             </div>
                             <div id="payment-message" class="payment-message"></div>
                             
