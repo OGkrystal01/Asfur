@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checkout - Dupelify</title>
+    <meta name="description" content="Sicher zur Kasse bei Dupelify">
+    
+    <!-- Preload Stripe domains for faster loading -->
+    <link rel="preconnect" href="https://js.stripe.com" crossorigin>
+    <link rel="dns-prefetch" href="https://js.stripe.com">
+    <link rel="preconnect" href="https://api.stripe.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.stripe.com">
+    <link rel="dns-prefetch" href="https://m.stripe.com">
+    <link rel="dns-prefetch" href="https://m.stripe.network">
+    
+    <!-- Preload Stripe.js library for instant availability -->
+    <link rel="preload" href="https://js.stripe.com/v3/" as="script">
+    <link rel="icon" href="../images/logo/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/checkout-shopify.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Preload Stripe.js for faster loading -->
+    <link rel="preconnect" href="https://js.stripe.com">
+    <link rel="dns-prefetch" href="https://js.stripe.com">
+</head>
+<body class="shopify-checkout">
+    <!-- Mobile Header -->
+    <header class="shopify-header">
+        <div class="shopify-header-content">
+            <a href="/" class="shopify-logo">
+                <img src="/images/logo/Logo.png" alt="Dupelify">
+            </a>
+            <button class="cart-icon" id="mobile-summary-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="shopify-main">
+        <!-- Mobile Order Summary (Collapsible) -->
+        <div class="mobile-order-summary" id="mobile-order-summary">
+            <button class="summary-toggle" id="summary-toggle-btn">
+                <span class="summary-toggle-text">Order summary</span>
+                <svg class="chevron" width="12" height="12" viewBox="0 0 12 12">
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+                <span class="summary-total" id="mobile-total">€0.00</span>
+            </button>
+            <div class="summary-content" id="summary-content">
+                <div class="summary-items" id="mobile-summary-items"></div>
+                <div class="summary-discount">
+                    <input type="text" placeholder="Discount code" id="mobile-discount-code">
+                    <button class="apply-btn" id="mobile-apply-discount">Apply</button>
+                </div>
+                <div class="summary-totals">
+                    <div class="summary-line">
+                        <span>Subtotal</span>
+                        <span id="mobile-subtotal">€0.00</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Shipping</span>
+                        <span id="mobile-shipping">FREE</span>
+                    </div>
+                    <div class="summary-line total-line">
+                        <span>Total</span>
+                        <span><small>EUR</small> <strong id="mobile-total-amount">€0.00</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shopify-container">
+
+            <div class="checkout-content">
+                <!-- Left side: Form -->
+                <div class="checkout-form-section">
+                    <div class="checkout-header">
+                        <h1>Checkout</h1>
+                        <p class="checkout-subtitle">Füllen Sie Ihre Informationen aus</p>
+                    </div>
+
+                    <form id="checkout-form" class="checkout-form">
+                        <!-- Customer Information Form -->
+                        <div class="form-section" id="section-customer">
+                            <div class="section-header-simple">
+                                <h2>Schritt 1: Kontaktinformationen</h2>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-Mail</label>
+                                <input type="email" id="email" name="email" required placeholder="ihre@email.de">
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Shipping Address -->
+                        <div class="form-section" id="section-shipping">
+                            <div class="section-header-simple">
+                                <h2>Schritt 2: Lieferadresse</h2>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">Vorname</label>
+                                    <input type="text" id="firstName" name="firstName" required placeholder="Max">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Nachname</label>
+                                    <input type="text" id="lastName" name="lastName" required placeholder="Mustermann">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Straße und Hausnummer</label>
+                                <input type="text" id="address" name="address" required placeholder="Musterstraße 123">
+                            </div>
+                            <div class="form-group">
+                                <label for="apartment">Zusatz (optional)</label>
+                                <input type="text" id="apartment" name="apartment" placeholder="Wohnung, Etage, usw.">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="postalCode">Postleitzahl</label>
+                                    <input type="text" id="postalCode" name="postalCode" required placeholder="12345">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">Stadt</label>
+                                    <input type="text" id="city" name="city" required placeholder="Berlin">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Land</label>
+                                <select id="country" name="country" required>
+                                    <option value="">Land auswählen</option>
+                                    <option value="DE" selected>Deutschland</option>
+                                    <option value="AT">Österreich</option>
+                                    <option value="CH">Schweiz</option>
+                                    <option value="NL">Niederlande</option>
+                                    <option value="BE">Belgien</option>
+                                    <option value="FR">Frankreich</option>
+                                    <option value="IT">Italien</option>
+                                    <option value="ES">Spanien</option>
+                                    <option value="PL">Polen</option>
+                                    <option value="SE">Schweden</option>
+                                    <option value="DK">Dänemark</option>
+                                    <option value="NO">Norwegen</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Method -->
+                        <div class="form-section" id="section-shipping-method">
+                            <div class="section-header-simple">
+                                <h2>Versandart</h2>
+                            </div>
+                            <div class="shipping-option-card">
+                                <div class="shipping-option-details">
+                                    <i class="fas fa-truck"></i>
+                                    <div>
+                                        <div class="shipping-option-name">2-3 Tage Versand</div>
+                                        <div class="shipping-option-description">Mit Sendungsverfolgung</div>
+                                    </div>
+                                </div>
+                                <div class="shipping-option-price">KOSTENLOS</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Payment Section with Inline Summary -->
+                        <div class="form-section" id="section-payment">
+                            <div class="section-header-simple">
+                                <h2>Schritt 3: Zahlungsmethode</h2>
+                                <!-- Payment method badges - always visible -->
+                                <div class="payment-methods-badges">
+                                    <img src="/images/payment/visa.svg" alt="Visa" class="payment-badge">
+                                    <img src="/images/payment/mastercard.svg" alt="Mastercard" class="payment-badge">
+                                    <img src="/images/payment/klarna-simple.svg" alt="Klarna" class="payment-badge">
+                                    <img src="/images/payment/apple-pay.svg" alt="Apple Pay" class="payment-badge">
+                                    <img src="/images/payment/google-pay.svg" alt="Google Pay" class="payment-badge">
+                                    <img src="/images/payment/sepa.svg" alt="SEPA" class="payment-badge">
+                                </div>
+                            </div>
+
+                            <div id="payment-element" class="payment-element-container">
+                                <!-- Loading animation -->
+                                <div class="payment-loading">
+                                    <div class="loading-spinner"></div>
+                                    <p class="loading-text">Payment Methods Loading Please Wait...</p>
+                                </div>
+                            </div>
+                            <div id="payment-message" class="payment-message"></div>
+                            
+                            <!-- Order Summary below payment -->
+                            <h3 class="summary-heading">Übersicht:</h3>
+                            <div class="order-summary-inline" id="order-summary">
+                                <div id="checkout-items" class="checkout-items">
+                                    <!-- Items will be populated by JavaScript -->
+                                </div>
+                                <div class="summary-totals">
+                                    <div class="discount-code-section">
+                                        <div class="discount-input-group">
+                                            <input type="text" id="discount-code" placeholder="Rabattcode eingeben" class="discount-input">
+                                            <button type="button" id="apply-discount" class="apply-discount-btn">Anwenden</button>
+                                        </div>
+                                        <div id="discount-message" class="discount-message"></div>
+                                    </div>
+                                    
+                                    <div class="summary-line">
+                                        <span>Zwischensumme</span>
+                                        <span id="subtotal">€0.00</span>
+                                    </div>
+                                    <div class="summary-line discount-line" id="discount-line" style="display: none;">
+                                        <span>Rabatt (<span id="discount-code-label"></span>)</span>
+                                        <span id="discount-amount" class="discount-amount">-€0.00</span>
+                                    </div>
+                                    <div class="summary-line">
+                                        <span>Versand</span>
+                                        <span id="shipping">KOSTENLOS</span>
+                                    </div>
+                                    <div class="summary-line total">
+                                        <span>Gesamt</span>
+                                        <span id="total">€0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment button inside form -->
+                            <button type="button" id="continue-to-payment" class="checkout-button">
+                                <i class="fas fa-lock"></i> Jetzt sicher bezahlen
+                            </button>
+                            <a href="/pages/cart.html" class="return-to-cart">Zurück zum Warenkorb</a>
+                            
+                            <!-- Security Badges at Bottom -->
+                            <div class="security-badges">
+                                <div class="security-badge">
+                                    <i class="fas fa-lock"></i>
+                                    <span>SSL verschlüsselt</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>3D Secure von Stripe</span>
+                                </div>
+                                <div class="security-badge">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Sichere Zahlung</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Meta Pixel -->
+    <script src="/js/meta-pixel.js"></script>
+    
+    <!-- Load Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="/js/data/products.js"></script>
+    <script src="/js/checkout.js"></script>
+</body>
+</html>
