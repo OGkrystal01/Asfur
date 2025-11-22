@@ -1,5 +1,20 @@
 // Shopify-style Checkout - Full Functionality
-const STRIPE_PUBLISHABLE_KEY = 'pk_live_51QP1AvP5oV0KyDJtaMLHSRTmLiIQN6VDM5Z3DFtKzgkXTlqZNP9O7OXAVHoRhRPSlxHc5bwMxAIMWdK8Xj4qcG6I00fHUyfcxE';
+// Stripe Configuration - Use environment variable from server
+// DO NOT hardcode keys here - they expire and change
+let STRIPE_PUBLISHABLE_KEY = null;
+
+// Fetch the publishable key from server
+async function getStripePublishableKey() {
+    try {
+        const response = await fetch('/api/stripe-config');
+        const data = await response.json();
+        return data.publishableKey;
+    } catch (error) {
+        console.error('❌ Failed to fetch Stripe config:', error);
+        // Fallback to hardcoded key (replace with your current valid key)
+        return 'pk_live_51QP1AvP5oV0KyDJtaMLHSRTmLiIQN6VDM5Z3DFtKzgkXTlqZNP9O7OXAVHoRhRPSlxHc5bwMxAIMWdK8Xj4qcG6I00fHUyfcxE';
+    }
+}
 
 let stripe, elements, paymentElement, expressCheckoutElement;
 let clientSecret;
@@ -13,27 +28,37 @@ const DISCOUNT_CODES = {
 
 let appliedDiscount = null;
 
-document.addEventListener('DOMContentLoaded', async function() {
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', async () => {
     console.log('🚀 Checkout page loaded');
     
-    // Check if cart has items
+    // Load cart from localStorage
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     console.log('🛒 Cart items:', cart.length);
     
     if (cart.length === 0) {
-        console.warn('⚠️ Cart is empty, redirecting...');
-        // Don't redirect immediately, just warn
-    }
-    
-    // Initialize Stripe
-    console.log('🔑 Initializing Stripe with key:', STRIPE_PUBLISHABLE_KEY.substring(0, 20) + '...');
-    try {
-        stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-        console.log('✅ Stripe initialized');
-    } catch (error) {
-        console.error('❌ Failed to initialize Stripe:', error);
+        showMessage('Ihr Warenkorb ist leer', true);
+        setTimeout(() => {
+            window.location.href = '/pages/products.html';
+        }, 2000);
         return;
     }
+    
+    // Get Stripe publishable key from server
+    console.log('🔑 Fetching Stripe publishable key from server...');
+    STRIPE_PUBLISHABLE_KEY = await getStripePublishableKey();
+    
+    if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.length < 20) {
+        console.error('❌ Invalid Stripe publishable key received');
+        showMessage('Fehler: Stripe-Konfiguration fehlt. Bitte Support kontaktieren.', true);
+        return;
+    }
+    
+    console.log('🔑 Using Stripe key:', STRIPE_PUBLISHABLE_KEY.substring(0, 20) + '...');
+    
+    // Initialize Stripe
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    console.log('✅ Stripe initialized');
     
     // Load cart and populate
     loadCartItems();
@@ -249,7 +274,16 @@ async function initializeStripePayment() {
         if (!clientSecret) {
             console.error('❌ No clientSecret in response');
             console.error('❌ Response data:', data);
-            showMessage('Fehler: Server hat keinen clientSecret zurückgegeben', true);
+            const errorContainer = document.getElementById('payment-element');
+            if (errorContainer) {
+                errorContainer.innerHTML = `
+                    <div style="padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; color: #856404;">
+                        <p style="margin: 0; font-weight: 600;">⚠️ Server-Fehler</p>
+                        <p style="margin: 8px 0 0 0; font-size: 13px;">Kein clientSecret vom Server erhalten.</p>
+                        <p style="margin: 4px 0 0 0; font-size: 12px;">Bitte Support kontaktieren.</p>
+                    </div>
+                `;
+            }
             throw new Error('No clientSecret received from server');
         }
         
@@ -400,8 +434,15 @@ async function initializeStripePayment() {
         }
         
         console.log('🔧 Mounting payment element...');
-        paymentElement.mount('#payment-element');
-        console.log('✅ Payment Element mounted to:', paymentContainer);
+        try {
+            await paymentElement.mount('#payment-element');
+            console.log('✅ Payment Element mounted to:', paymentContainer);
+        } catch (mountError) {
+            console.error('❌ MOUNT ERROR:', mountError);
+            console.error('❌ Mount error message:', mountError.message);
+            console.error('❌ Mount error type:', mountError.type);
+            throw mountError;
+        }
         
         // Track when payment element is ready
         paymentElement.on('ready', function() {
@@ -422,13 +463,22 @@ async function initializeStripePayment() {
         
         paymentElement.on('loaderror', function(event) {
             console.error('❌ Payment Element load error:', event);
-            console.error('❌ Error details:', JSON.stringify(event));
+            console.error('❌ Error type:', event.error?.type);
+            console.error('❌ Error code:', event.error?.code);
+            console.error('❌ Error message:', event.error?.message);
+            console.error('❌ Full event:', JSON.stringify(event, null, 2));
+            
+            const errorMsg = event.error?.message || 'Unbekannter Fehler';
+            const errorType = event.error?.type || 'unknown';
+            
             const errorContainer = document.getElementById('payment-element');
             if (errorContainer) {
                 errorContainer.innerHTML = `
                     <div style="padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; color: #856404;">
                         <p style="margin: 0; font-weight: 600;">⚠️ Fehler beim Laden der Zahlungsmethoden</p>
-                        <p style="margin: 8px 0 0 0; font-size: 14px;">Bitte aktualisieren Sie die Seite.</p>
+                        <p style="margin: 8px 0 0 0; font-size: 13px;"><strong>Fehlertyp:</strong> ${errorType}</p>
+                        <p style="margin: 4px 0 0 0; font-size: 13px;"><strong>Details:</strong> ${errorMsg}</p>
+                        <p style="margin: 8px 0 0 0; font-size: 12px;">Bitte Screenshot an Support senden.</p>
                     </div>
                 `;
             }

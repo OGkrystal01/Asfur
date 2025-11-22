@@ -187,7 +187,7 @@ app.get('/api/stripe-config', (req, res) => {
         });
     }
     
-    console.log('✅ Stripe config requested - key available');
+    console.log('✅ Stripe config requested - sending publishable key');
     res.json({ 
         publishableKey: STRIPE_PUBLISHABLE_KEY
     });
@@ -212,67 +212,62 @@ app.post('/api/payment-intents', async (req, res) => {
             return res.status(400).json({ error: 'Invalid cart items' });
         }
 
-        // Use finalTotal if provided (with discount), otherwise calculate from cart
-        let total;
-        if (finalTotal !== undefined && finalTotal !== null) {
-            total = parseFloat(finalTotal);
-            console.log('Using discounted total:', total);
-            if (discountCode) {
-                console.log('Discount code applied:', discountCode, 'Amount:', discountAmount);
-            }
-        } else {
-            // Calculate total amount server-side (never trust client input)
-            total = cartItems.reduce((sum, item) => {
-                return sum + (parseFloat(item.price) * parseInt(item.quantity));
-            }, 0);
-            console.log('Calculated total from cart:', total);
+        // Calculate total amount
+        let amount = finalTotal || cartItems.reduce((sum, item) => {
+            const itemTotal = parseFloat(item.price) * (item.quantity || 1);
+            return sum + itemTotal;
+        }, 0);
+
+        // Apply discount if provided
+        if (discountAmount && discountAmount > 0) {
+            amount -= discountAmount;
         }
 
-        if (isNaN(total) || total < 0) {
-            console.error('Invalid total amount:', total);
-            return res.status(400).json({ error: 'Invalid total amount' });
+        amount = Math.max(0, amount);
+        const amountInCents = Math.round(amount * 100);
+
+        console.log('💰 Creating PaymentIntent for:', amountInCents, 'cents (', amount, 'EUR)');
+
+        // Validate amount
+        if (amountInCents < 50) {
+            console.error('❌ Amount too small:', amountInCents, 'cents (minimum 50 cents)');
+            return res.status(400).json({ 
+                error: 'Amount too small',
+                message: 'Minimum amount is €0.50'
+            });
         }
 
-        // Ensure minimum charge (50 cents for EUR)
-        const minimumAmount = 0.50;
-        if (total < minimumAmount) {
-            total = minimumAmount;
-            console.log('Adjusted to minimum amount:', total);
+        if (amountInCents > 99999999) {
+            console.error('❌ Amount too large:', amountInCents, 'cents');
+            return res.status(400).json({ 
+                error: 'Amount too large',
+                message: 'Maximum amount exceeded'
+            });
         }
-
-        // Convert to cents for Stripe
-        const amountInCents = Math.round(total * 100);
-        console.log('Amount to charge in cents:', amountInCents);
 
         // Generate order number
         const orderNumber = 'DP' + Date.now().toString().slice(-6);
 
-        // Create a PaymentIntent with Stripe
+        // Create PaymentIntent
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amountInCents,
             currency: 'eur',
             automatic_payment_methods: {
                 enabled: true,
-                allow_redirects: 'always'
             },
-            // Store order metadata for webhook processing
+            payment_method_types: ['card', 'klarna', 'sepa_debit'],
+            description: `Order ${orderNumber} - ${cartItems.length} item(s)`,
             metadata: {
-                orderNumber,
-                customerName: customerName || 'Customer',
-                customerEmail: customerEmail || '',
-                cartItems: JSON.stringify(cartItems.map(item => ({
-                    title: item.title,
-                    price: item.price,
-                    quantity: item.quantity
-                }))),
-                discountCode: discountCode || '',
-                discountAmount: discountAmount || '0'
-            },
-            receipt_email: customerEmail || undefined,
-            description: `Order from Dupelify - ${cartItems.length} item(s)`
+                order_number: orderNumber,
+                customer_name: customerName || 'Guest',
+                customer_email: customerEmail || '',
+                discount_code: discountCode || '',
+                items_count: cartItems.length.toString()
+            }
         });
 
-        console.log('PaymentIntent created:', paymentIntent.id);
+        console.log('✅ PaymentIntent created:', paymentIntent.id);
+        console.log('✅ ClientSecret:', paymentIntent.client_secret?.substring(0, 20) + '...');
 
         // Return client secret to frontend
         res.json({
