@@ -195,6 +195,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         window.metaPixel.trackInitiateCheckout(cartData);
     }
     
+    // Initialize Stripe payment IMMEDIATELY - start loading as soon as page loads
+    console.log('🚀 Starting Stripe initialization immediately...');
+    initializeStripePayment().catch(error => {
+        console.error('Failed to initialize Stripe:', error);
+    });
+    
     // Handle discount code application
     const discountInput = document.getElementById('discount-code');
     const applyDiscountBtn = document.getElementById('apply-discount');
@@ -247,10 +253,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
     
     // Show loading state immediately
-    console.log('🔄 Loading payment methods...');
-    showMessage('Loading payment methods...', false);
-    
-    await initializeStripePayment();
 
     // Initialize Stripe Payment Element
     async function initializeStripePayment() {
@@ -376,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 expressCheckoutElement.mount('#express-checkout-element');
                 console.log('✅ Express checkout element mounted');
                 
-                // Prevent hiding on ready and remove loading animation with delay
+                // Prevent hiding on ready and remove loading animation IMMEDIATELY
                 expressCheckoutElement.on('ready', () => {
                     console.log('✅ Express checkout ready and visible');
                     const expressSection = document.querySelector('.express-checkout-top');
@@ -384,12 +386,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (expressSection) {
                         expressSection.style.display = 'block';
                     }
-                    // Delay hiding the loader to ensure buttons are visible - LONGER DELAY
-                    setTimeout(() => {
-                        if (expressElement) {
-                            expressElement.classList.add('loaded');
-                        }
-                    }, 2000); // Increased to 2 seconds
+                    // Hide loader IMMEDIATELY when buttons are ready
+                    if (expressElement) {
+                        expressElement.classList.add('loaded');
+                    }
                 });
                 
                 // Handle shipping address changes for Klarna/Apple Pay/Google Pay
@@ -494,14 +494,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                     window.metaPixel.trackAddPaymentInfo(cartData);
                 }
                 
-                // Remove loading animation with delay to ensure payment methods are visible
-                setTimeout(() => {
-                    const paymentContainer = document.getElementById('payment-element');
-                    if (paymentContainer) {
-                        paymentContainer.classList.add('payment-element-ready');
-                        console.log('✅ Payment methods should now be visible');
-                    }
-                }, 2000); // Increased to 2 seconds
+                // Remove loading animation IMMEDIATELY when ready
+                const paymentContainer = document.getElementById('payment-element');
+                if (paymentContainer) {
+                    paymentContainer.classList.add('payment-element-ready');
+                    console.log('✅ Payment methods should now be visible');
+                }
             });
             
             // Hide the initializing message
