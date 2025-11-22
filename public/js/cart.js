@@ -238,8 +238,59 @@ function updateQuantity(handle, quantity, variantOptions = null) {
 
 // Show cart notification
 function showCartNotification(product) {
-    const notification = document.querySelector('.cart-notification');
+    // Try new cart-notification-menu first (product page)
+    let notification = document.querySelector('.cart-notification-menu');
+    const isNewStyle = !!notification;
+    
+    // Fallback to old cart-notification
+    if (!notification) {
+        notification = document.querySelector('.cart-notification');
+    }
+    
     if (!notification) return;
+    
+    // Handle new-style notification
+    if (isNewStyle) {
+        const img = notification.querySelector('.cart-notification-menu__product-image');
+        const title = notification.querySelector('.cart-notification-menu__product-title');
+        const price = notification.querySelector('.cart-notification-menu__product-price');
+        
+        if (img) img.src = product.image;
+        if (title) title.textContent = product.title;
+        if (price) price.textContent = formatPrice(product.price);
+        
+        notification.classList.add('visible');
+        
+        // Setup buttons
+        const continueBtn = notification.querySelector('.cart-notification-menu__button--secondary');
+        const checkoutBtn = notification.querySelector('.cart-notification-menu__button--primary');
+        const closeBtn = notification.querySelector('.cart-notification-menu__close');
+        
+        if (continueBtn) {
+            continueBtn.onclick = () => {
+                notification.classList.remove('visible');
+            };
+        }
+        
+        if (checkoutBtn) {
+            checkoutBtn.onclick = () => {
+                window.location.href = '/pages/checkout.html';
+            };
+        }
+        
+        if (closeBtn) {
+            closeBtn.onclick = () => {
+                notification.classList.remove('visible');
+            };
+        }
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            notification.classList.remove('visible');
+        }, 5000);
+        
+        return;
+    }
 
     // Display variant information if available
     let variantDisplay = '';
