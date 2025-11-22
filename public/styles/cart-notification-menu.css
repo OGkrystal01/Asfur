@@ -160,9 +160,9 @@
 /* Mobile Styles */
 @media (max-width: 768px) {
     .cart-notification-menu {
-        max-width: 90%;
-        min-width: 340px;
-        width: 90%;
+        max-width: 450px;
+        min-width: 360px;
+        width: auto;
     }
     
     .cart-notification-menu__buttons {

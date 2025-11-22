@@ -210,13 +210,20 @@ async function initializeStripePayment() {
         
         // Create PaymentIntent
         console.log('📡 Creating PaymentIntent...');
+        console.log('📦 Request data:', {
+            finalTotal: total,
+            cartItems: cart,
+            discountCode: appliedDiscount ? Object.keys(DISCOUNT_CODES).find(key => DISCOUNT_CODES[key] === appliedDiscount) : null,
+            discountAmount: discountAmount
+        });
+        
         const response = await fetch('/api/payment-intents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                amount: amountInCents,
+                finalTotal: total,
                 cartItems: cart,
                 discountCode: appliedDiscount ? Object.keys(DISCOUNT_CODES).find(key => DISCOUNT_CODES[key] === appliedDiscount) : null,
                 discountAmount: discountAmount
