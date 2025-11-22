@@ -497,38 +497,19 @@ async function handleSubmit(event) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Verarbeitung...';
     
-    // Check if form sections are visible (not express checkout)
-    const emailSection = document.getElementById('email-section');
-    const isExpressCheckout = emailSection && emailSection.style.display === 'none';
-    
-    // Collect form data (skip if express checkout)
-    let customerData = {
-        email: '',
-        firstName: '',
-        lastName: '',
-        address: '',
-        apartment: '',
-        city: '',
-        postalCode: '',
-        country: 'DE'
+    // Always collect form data
+    const customerData = {
+        email: document.getElementById('email')?.value || '',
+        firstName: document.getElementById('first-name')?.value || '',
+        lastName: document.getElementById('last-name')?.value || '',
+        address: document.getElementById('address')?.value || '',
+        apartment: document.getElementById('apartment')?.value || '',
+        city: document.getElementById('city')?.value || '',
+        postalCode: document.getElementById('postal-code')?.value || '',
+        country: document.getElementById('country')?.value || 'DE'
     };
     
-    if (!isExpressCheckout) {
-        // Regular checkout - collect form data
-        customerData = {
-            email: document.getElementById('email')?.value || '',
-            firstName: document.getElementById('first-name')?.value || '',
-            lastName: document.getElementById('last-name')?.value || '',
-            address: document.getElementById('address')?.value || '',
-            apartment: document.getElementById('apartment')?.value || '',
-            city: document.getElementById('city')?.value || '',
-            postalCode: document.getElementById('postal-code')?.value || '',
-            country: document.getElementById('country')?.value || 'DE'
-        };
-        console.log('📝 Collected customer data:', customerData);
-    } else {
-        console.log('⚡ Express checkout - customer data handled by payment provider');
-    }
+    console.log('📝 Collected customer data:', customerData);
     
     // Generate order number
     const orderNumber = 'ORD-' + Date.now();
@@ -538,14 +519,18 @@ async function handleSubmit(event) {
     localStorage.setItem('customerData', JSON.stringify(customerData));
     
     try {
-        // Confirm payment with Stripe
+        // Build confirm params with all required information
         const confirmParams = {
             return_url: `${window.location.origin}/pages/order-confirmation.html`
         };
         
-        // Only add shipping/billing for non-express checkout
-        if (!isExpressCheckout && customerData.email) {
+        // Always add shipping/billing details for all payment methods
+        if (customerData.email) {
             confirmParams.receipt_email = customerData.email;
+        }
+        
+        // Add shipping information (required for Klarna and visible for Apple Pay)
+        if (customerData.firstName || customerData.lastName || customerData.address) {
             confirmParams.shipping = {
                 name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
                 address: {
@@ -556,10 +541,14 @@ async function handleSubmit(event) {
                     country: customerData.country || 'DE'
                 }
             };
+        }
+        
+        // Add billing details
+        if (customerData.email || customerData.firstName) {
             confirmParams.payment_method_data = {
                 billing_details: {
                     name: `${customerData.firstName || ''} ${customerData.lastName}`.trim() || 'Customer',
-                    email: customerData.email,
+                    email: customerData.email || undefined,
                     address: {
                         line1: customerData.address || 'N/A',
                         line2: customerData.apartment || undefined,
@@ -571,7 +560,8 @@ async function handleSubmit(event) {
             };
         }
         
-        console.log('💳 Confirming payment with Stripe...');
+        console.log('💳 Confirming payment with Stripe...', confirmParams);
+        
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams
@@ -582,6 +572,8 @@ async function handleSubmit(event) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalText;
             showMessage(error.message, true);
+        } else {
+            console.log('✅ Payment confirmed, redirecting...');
         }
         // If no error, Stripe redirects automatically
         
