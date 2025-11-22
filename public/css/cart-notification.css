@@ -131,9 +131,15 @@
 
 @media (max-width: 768px) {
     .cart-notification-menu {
-        width: calc(100% - 32px);
-        right: 16px;
-        padding: 20px;
+        width: calc(100% - 40px);
+        max-width: 500px;
+        right: 20px;
+        top: 80px !important;
+        padding: 0;
+    }
+    
+    .cart-notification-menu.visible {
+        top: 80px !important;
     }
 
     .cart-notification-menu__title {

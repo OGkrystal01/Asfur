@@ -294,8 +294,25 @@ async function initializeStripePayment() {
             }
         });
         
-        expressCheckoutElement.mount('#express-checkout-element');
-        console.log('✅ Express Checkout Element mounted');
+        try {
+            await expressCheckoutElement.mount('#express-checkout-element');
+            console.log('✅ Express Checkout Element mounted');
+            
+            // Force visibility check
+            setTimeout(() => {
+                const expressContainer = document.getElementById('express-checkout-element');
+                const expressIframe = expressContainer?.querySelector('iframe');
+                if (expressIframe) {
+                    console.log('✅ Express iframe found:', expressIframe);
+                    console.log('   Iframe height:', expressIframe.offsetHeight);
+                } else {
+                    console.warn('⚠️ Express iframe NOT found - may not be available for this browser');
+                }
+            }, 2000);
+        } catch (mountError) {
+            console.error('❌ Failed to mount express checkout:', mountError);
+            // Don't throw - express checkout may not be available
+        }
         
         // Handle express checkout confirm
         expressCheckoutElement.on('confirm', async (event) => {
@@ -340,8 +357,26 @@ async function initializeStripePayment() {
             return;
         }
         
-        paymentElement.mount('#payment-element');
-        console.log('✅ Payment Element mounted to:', paymentContainer);
+        try {
+            await paymentElement.mount('#payment-element');
+            console.log('✅ Payment Element mounted to:', paymentContainer);
+            
+            // Force visibility check
+            setTimeout(() => {
+                const paymentIframe = paymentContainer.querySelector('iframe');
+                if (paymentIframe) {
+                    console.log('✅ Payment iframe found:', paymentIframe);
+                    console.log('   Iframe visibility:', window.getComputedStyle(paymentIframe).visibility);
+                    console.log('   Iframe display:', window.getComputedStyle(paymentIframe).display);
+                    console.log('   Iframe height:', paymentIframe.offsetHeight);
+                } else {
+                    console.error('❌ Payment iframe NOT found in container!');
+                }
+            }, 2000);
+        } catch (mountError) {
+            console.error('❌ Failed to mount payment element:', mountError);
+            throw mountError;
+        }
         
         // Track AddPaymentInfo when ready
         paymentElement.on('ready', function() {

@@ -39,6 +39,7 @@ function addToCart(product) {
     }
     
     localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdated'));
     updateCartUI();
     if (!product.skipNotification) {
         showCartNotification(product);
@@ -207,6 +208,7 @@ function removeFromCart(handle, variantOptions = null) {
     }
     
     localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdated'));
     updateCartUI();
 }
 
@@ -228,6 +230,7 @@ function updateQuantity(handle, quantity, variantOptions = null) {
         } else {
             item.quantity = Math.min(99, Math.max(1, quantity));
             localStorage.setItem('cart', JSON.stringify(cart));
+            window.dispatchEvent(new Event('cartUpdated'));
             updateCartUI();
         }
     }

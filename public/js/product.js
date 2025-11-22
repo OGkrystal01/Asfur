@@ -278,6 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 localStorage.setItem('cart', JSON.stringify(cart));
+                
+                // Dispatch cart update event
+                window.dispatchEvent(new Event('cartUpdated'));
             }
 
             // Track AddToCart event with Meta Pixel before redirecting

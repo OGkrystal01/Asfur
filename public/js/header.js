@@ -67,12 +67,32 @@ function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
     
+    console.log('🔄 Updating cart count:', totalItems);
+    
     // Update all cart count elements
     const cartCounts = document.querySelectorAll('.cart-count');
     cartCounts.forEach(count => {
         count.textContent = totalItems;
+        count.style.display = totalItems > 0 ? 'flex' : 'none';
     });
 }
+
+// Listen for storage changes (when cart updates from other tabs/pages)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'cart') {
+        console.log('🔄 Cart changed in storage, updating count');
+        updateCartCount();
+    }
+});
+
+// Listen for custom cart update event
+window.addEventListener('cartUpdated', function() {
+    console.log('🔄 Cart updated event received');
+    updateCartCount();
+});
+
+// Update cart count periodically as fallback
+setInterval(updateCartCount, 1000);
 
 // Initialize mobile menu functionality
 function initializeMobileMenu() {
