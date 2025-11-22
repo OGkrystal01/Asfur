@@ -1283,25 +1283,11 @@ body {
 }
 
 .cart-count {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #ff0000;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: scale(0);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: none !important;
 }
 
 .cart-count.visible {
-    transform: scale(1);
+    display: none !important;
 }
 
 /* Checkout Modal */

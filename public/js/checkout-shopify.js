@@ -300,7 +300,8 @@ async function initializeStripePayment() {
         try {
             elements = stripe.elements({
                 clientSecret,
-                appearance
+                appearance,
+                loader: 'auto'
             });
             console.log('✅ Elements instance created:', elements);
             
@@ -380,46 +381,48 @@ async function initializeStripePayment() {
                 radios: true,
                 spacedAccordionItems: false
             },
-            wallets: {
-                applePay: 'never',  // Already in express checkout
-                googlePay: 'never'  // Already in express checkout
+            paymentMethodOrder: ['card', 'klarna', 'sepa_debit'],
+            fields: {
+                billingDetails: {
+                    email: 'never'
+                }
+            },
+            terms: {
+                card: 'never'
             }
         });
         
         const paymentContainer = document.getElementById('payment-element');
         if (!paymentContainer) {
-            console.error('❌ Payment element container not found!');
+            console.error('❌ Payment element container nicht gefunden!');
+            showMessage('Fehler: Zahlungscontainer nicht gefunden', true);
             return;
         }
         
-        try {
-            await paymentElement.mount('#payment-element');
-            console.log('✅ Payment Element mounted to:', paymentContainer);
+        console.log('🔧 Mounting payment element...');
+        paymentElement.mount('#payment-element');
+        console.log('✅ Payment Element mounted to:', paymentContainer);
+        
+        // Track when payment element is ready
+        paymentElement.on('ready', function() {
+            console.log('✅ Payment Element ready - payment methods loaded');
+            console.log('💳 User can now select payment method');
             
-            // Force visibility check
+            // Check if iframe loaded
             setTimeout(() => {
                 const paymentIframe = paymentContainer.querySelector('iframe');
                 if (paymentIframe) {
-                    console.log('✅ Payment iframe found:', paymentIframe);
-                    console.log('   Iframe visibility:', window.getComputedStyle(paymentIframe).visibility);
-                    console.log('   Iframe display:', window.getComputedStyle(paymentIframe).display);
-                    console.log('   Iframe height:', paymentIframe.offsetHeight);
+                    console.log('✅ Payment iframe found');
+                    console.log('   Height:', paymentIframe.offsetHeight);
                 } else {
-                    console.error('❌ Payment iframe NOT found in container!');
+                    console.error('❌ Payment iframe NOT found!');
                 }
-            }, 2000);
-        } catch (mountError) {
-            console.error('❌ Failed to mount payment element:', mountError);
-            throw mountError;
-        }
+            }, 1000);
+        });
         
-        // Track AddPaymentInfo when ready
-        paymentElement.on('ready', function() {
-            console.log('✅ Payment methods loaded and ready');
-            const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-            if (window.metaPixel && typeof window.metaPixel.trackAddPaymentInfo === 'function') {
-                window.metaPixel.trackAddPaymentInfo(cartData);
-            }
+        paymentElement.on('loaderror', function(event) {
+            console.error('❌ Payment Element load error:', event);
+            showMessage('Fehler beim Laden der Zahlungsmethoden', true);
         });
         
         // Log when express checkout is ready

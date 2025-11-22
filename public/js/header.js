@@ -8,9 +8,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Initialize mobile menu after header is loaded
         initializeMobileMenu();
-        
-        // Update cart count after header is loaded
-        updateCartCount();
     }
 
     // Sticky header on scroll up - only header, not announcement bar
@@ -62,50 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, { passive: false });
 });
 
-// Update cart count
-function updateCartCount() {
-    try {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const totalItems = cart.reduce((total, item) => total + (item.quantity || 0), 0);
-        
-        console.log('🔄 Cart update - Items:', totalItems, 'Cart:', cart);
-        
-        // Update all cart count elements
-        const cartCounts = document.querySelectorAll('.cart-count');
-        console.log('📍 Found cart count elements:', cartCounts.length);
-        
-        cartCounts.forEach((count, index) => {
-            console.log(`  Updating element ${index}:`, count);
-            count.textContent = totalItems;
-            if (totalItems > 0) {
-                count.style.display = 'flex';
-                count.style.visibility = 'visible';
-                count.style.opacity = '1';
-            } else {
-                count.style.display = 'none';
-            }
-        });
-    } catch (error) {
-        console.error('❌ Error updating cart count:', error);
-    }
-}
-
-// Listen for storage changes (when cart updates from other tabs/pages)
-window.addEventListener('storage', function(e) {
-    if (e.key === 'cart') {
-        console.log('🔄 Cart changed in storage, updating count');
-        updateCartCount();
-    }
-});
-
-// Listen for custom cart update event
-window.addEventListener('cartUpdated', function() {
-    console.log('🔄 Cart updated event received');
-    updateCartCount();
-});
-
-// Update cart count periodically as fallback
-setInterval(updateCartCount, 500);
+// Cart counter functionality disabled - no counter in UI
 
 // Initialize mobile menu functionality
 function initializeMobileMenu() {
