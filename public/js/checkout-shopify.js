@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // Handle BFCache (Back/Forward Cache) restoration
-// This fixes the bug where returning from Klarna leaves the button disabled
+// This fixes the bug where returning from Klarna leaves the button disabled and payment methods unclickable
 window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
         // Page was restored from BFCache (browser back button from Klarna)
@@ -108,6 +108,14 @@ window.addEventListener('pageshow', function(event) {
             // Reset button state
             submitBtn.disabled = false;
             submitBtn.textContent = 'Bestellung überprüfen';
+        }
+        
+        // Re-initialize Stripe payment element to make payment methods clickable again
+        if (stripe && typeof initializeStripePayment === 'function') {
+            console.log('🔄 BFCache detected - reinitializing Stripe payment element...');
+            initializeStripePayment().catch(error => {
+                console.error('❌ Failed to reinitialize payment element after BFCache:', error);
+            });
         }
     }
 });
