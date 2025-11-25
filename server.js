@@ -122,7 +122,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
                 
                 // Extract order metadata
                 const metadata = paymentIntent.metadata;
-                const orderNumber = metadata.orderNumber || 'DP' + Date.now().toString().slice(-6);
+                const orderNumber = metadata.order_number || 'DP' + uuidv4().split('-')[0].toUpperCase();
                 
                 // Parse cart items from metadata
                 let items = [];
@@ -253,8 +253,8 @@ app.post('/api/payment-intents', async (req, res) => {
             });
         }
 
-        // Generate order number
-        const orderNumber = 'DP' + Date.now().toString().slice(-6);
+        // Generate order number (UUID-based to prevent collisions)
+        const orderNumber = 'DP' + uuidv4().split('-')[0].toUpperCase();
 
         // Create PaymentIntent
         // NOTE: Cannot use both automatic_payment_methods AND payment_method_types
@@ -379,7 +379,7 @@ app.get('/api/test-email', async (req, res) => {
     try {
         // Sample order data
         const order = {
-            orderNumber: 'DP' + Date.now().toString().slice(-6),
+            orderNumber: 'DP' + uuidv4().split('-')[0].toUpperCase(),
             customerName: 'Test Customer',
             customerEmail: req.query.email || 'test@example.com',
             items: [

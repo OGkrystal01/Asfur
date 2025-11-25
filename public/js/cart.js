@@ -134,60 +134,69 @@ function updateCartDisplay() {
             variantDisplay = `<p class="cart-item__variant">${item.variant}</p>`;
         }
         
+        // Build variant data attribute
+        const variantAttr = item.variant && item.variant !== 'Default' ? 
+            `data-variant="${item.variant}"` : '';
+        
         cartItem.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" class="cart-item__image">
-            <div class="cart-item__info">
-                <h3 class="cart-item__title">${item.title}</h3>
-                ${variantDisplay}
-                <p class="cart-item__price">${formatPrice(item.price)}</p>
-                <div class="cart-item__quantity">
-                    <button class="quantity-btn decrease" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>-</button>
-                    <input type="number" value="${item.quantity}" min="1" max="99" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>
-                    <button class="quantity-btn increase" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>+</button>
+            <div class="cart-item__image-wrapper">
+                <img src="${item.image}" alt="${item.title}" class="cart-item__image">
+            </div>
+            <div class="cart-item__details">
+                <div class="cart-item__header">
+                    <div class="cart-item__info">
+                        <h3 class="cart-item__title">${item.title}</h3>
+                        ${variantDisplay}
+                    </div>
+                    <button class="cart-item__remove" data-handle="${item.handle}" ${variantAttr} aria-label="Remove item">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="cart-item__footer">
+                    <div class="cart-item__quantity">
+                        <button class="quantity-btn quantity-btn--decrease" data-handle="${item.handle}" ${variantAttr} aria-label="Decrease quantity">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="99" data-handle="${item.handle}" ${variantAttr} readonly>
+                        <button class="quantity-btn quantity-btn--increase" data-handle="${item.handle}" ${variantAttr} aria-label="Increase quantity">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="cart-item__price">${formatPrice(item.price * item.quantity)}</div>
                 </div>
             </div>
-            <button class="cart-item__remove" data-handle="${item.handle}" ${item.selectedVariant ? `data-variant='${JSON.stringify(item.selectedVariant.options)}'` : ''}>&times;</button>
         `;
         cartItems.appendChild(cartItem);
     });
 
-    // Add event listeners for quantity controls
-    const quantityInputs = cartItems.querySelectorAll('input[type="number"]');
-    quantityInputs.forEach(input => {
-        input.addEventListener('change', (e) => {
-            const handle = e.target.dataset.handle;
-            const variantData = e.target.dataset.variant;
-            const quantity = parseInt(e.target.value) || 1;
-            updateQuantity(handle, quantity, variantData ? JSON.parse(variantData) : null);
-        });
-    });
-
     // Add event listeners for decrease buttons
-    const decreaseButtons = cartItems.querySelectorAll('.quantity-btn.decrease');
+    const decreaseButtons = cartItems.querySelectorAll('.quantity-btn--decrease');
     decreaseButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const handle = e.target.dataset.handle;
-            const variantData = e.target.dataset.variant;
-            const input = e.target.parentNode.querySelector('input[type="number"]');
+            const btn = e.currentTarget;
+            const handle = btn.dataset.handle;
+            const variantData = btn.dataset.variant;
+            const input = btn.parentNode.querySelector('.quantity-input');
             const currentValue = parseInt(input.value) || 1;
             if (currentValue > 1) {
                 input.value = currentValue - 1;
-                updateQuantity(handle, currentValue - 1, variantData ? JSON.parse(variantData) : null);
+                updateQuantity(handle, currentValue - 1, variantData || null);
             }
         });
     });
 
     // Add event listeners for increase buttons
-    const increaseButtons = cartItems.querySelectorAll('.quantity-btn.increase');
+    const increaseButtons = cartItems.querySelectorAll('.quantity-btn--increase');
     increaseButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const handle = e.target.dataset.handle;
-            const variantData = e.target.dataset.variant;
-            const input = e.target.parentNode.querySelector('input[type="number"]');
+            const btn = e.currentTarget;
+            const handle = btn.dataset.handle;
+            const variantData = btn.dataset.variant;
+            const input = btn.parentNode.querySelector('.quantity-input');
             const currentValue = parseInt(input.value) || 1;
             if (currentValue < 99) {
                 input.value = currentValue + 1;
-                updateQuantity(handle, currentValue + 1, variantData ? JSON.parse(variantData) : null);
+                updateQuantity(handle, currentValue + 1, variantData || null);
             }
         });
     });
@@ -196,9 +205,10 @@ function updateCartDisplay() {
     const removeButtons = cartItems.querySelectorAll('.cart-item__remove');
     removeButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const handle = e.target.dataset.handle;
-            const variantData = e.target.dataset.variant;
-            removeFromCart(handle, variantData ? JSON.parse(variantData) : null);
+            const btn = e.currentTarget;
+            const handle = btn.dataset.handle;
+            const variantData = btn.dataset.variant;
+            removeFromCart(handle, variantData || null);
         });
     });
 
