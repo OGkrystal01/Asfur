@@ -28,9 +28,17 @@ const DISCOUNT_CODES = {
 };
 
 let appliedDiscount = null;
+let hasInitialized = false;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', async () => {
+    // Prevent re-initialization after BFCache restoration
+    if (hasInitialized) {
+        console.log('⚠️ Already initialized, skipping DOMContentLoaded');
+        return;
+    }
+    hasInitialized = true;
+    
     console.log('🚀 Checkout page loaded');
     
     // Check if returning from payment redirect (Klarna, Apple Pay, etc)
@@ -103,6 +111,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
         // Page was restored from BFCache (browser back button from Klarna)
+        
+        // First check if cart still exists
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            console.log('⚠️ Cart is empty after BFCache restore, redirecting...');
+            window.location.href = '/pages/products.html';
+            return;
+        }
+        
         const submitBtn = document.getElementById('submit-btn');
         if (submitBtn && submitBtn.disabled) {
             // Reset button state
