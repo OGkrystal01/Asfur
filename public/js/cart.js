@@ -389,17 +389,22 @@ function showMobileCartOverlay() {
         document.body.appendChild(overlay);
     }
     
-    // Build cart items HTML
+    // Build cart items HTML with quantity controls and remove button
     let itemsHTML = '';
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
         itemsHTML += `
-            <div class="cart-notification__item">
+            <div class="cart-notification__item" data-index="${index}">
                 <img src="${item.image}" alt="${item.title}" class="cart-notification__item-image">
                 <div class="cart-notification__item-info">
                     <div class="cart-notification__item-title">${item.title}</div>
                     <div class="cart-notification__item-details">
-                        <span class="cart-notification__item-quantity">Anzahl: ${item.quantity}</span>
+                        <div class="cart-notification__item-quantity-controls">
+                            <button class="cart-notification__quantity-btn quantity-decrease" data-index="${index}">−</button>
+                            <span class="cart-notification__quantity-value">${item.quantity}</span>
+                            <button class="cart-notification__quantity-btn quantity-increase" data-index="${index}">+</button>
+                        </div>
                         <span class="cart-notification__item-price">${formatPrice(item.price * item.quantity)}</span>
+                        <button class="cart-notification__item-remove" data-index="${index}">&times;</button>
                     </div>
                 </div>
             </div>
@@ -464,6 +469,59 @@ function showMobileCartOverlay() {
             window.location.href = '/pages/cart.html';
         });
     }
+    
+    // Add quantity control event listeners
+    const increaseButtons = overlay.querySelectorAll('.quantity-increase');
+    const decreaseButtons = overlay.querySelectorAll('.quantity-decrease');
+    const removeButtons = overlay.querySelectorAll('.cart-notification__item-remove');
+    
+    increaseButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const index = parseInt(btn.dataset.index);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart[index]) {
+                cart[index].quantity = Math.min(99, cart[index].quantity + 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                window.dispatchEvent(new Event('cartUpdated'));
+                showMobileCartOverlay(); // Refresh overlay
+            }
+        });
+    });
+    
+    decreaseButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const index = parseInt(btn.dataset.index);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart[index]) {
+                if (cart[index].quantity > 1) {
+                    cart[index].quantity = Math.max(1, cart[index].quantity - 1);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    window.dispatchEvent(new Event('cartUpdated'));
+                    showMobileCartOverlay(); // Refresh overlay
+                }
+            }
+        });
+    });
+    
+    removeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const index = parseInt(btn.dataset.index);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart[index]) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                window.dispatchEvent(new Event('cartUpdated'));
+                if (cart.length === 0) {
+                    closeOverlay();
+                } else {
+                    showMobileCartOverlay(); // Refresh overlay
+                }
+            }
+        });
+    });
 }
 
 // Format price
@@ -506,8 +564,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize cart notification
-    if (!document.querySelector('.cart-notification')) {
+    // Initialize cart notification (desktop only)
+    if (window.innerWidth >= 768 && !document.querySelector('.cart-notification')) {
         const notification = document.createElement('div');
         notification.className = 'cart-notification';
         document.body.appendChild(notification);
