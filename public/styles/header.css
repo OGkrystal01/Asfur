@@ -227,6 +227,51 @@ textarea,
     height: 26px;
 }
 
+/* Cart Badge - Count Indicator */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #5A3518;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.cart-badge.visible {
+    display: flex;
+}
+
+/* Mobile cart badge positioning */
+.mobile-cart-toggle {
+    position: relative;
+}
+
+.mobile-cart-toggle .cart-badge {
+    top: -6px;
+    right: -6px;
+}
+
+/* Desktop cart badge positioning */
+.cart-icon {
+    position: relative;
+}
+
+.cart-icon .cart-badge {
+    top: -10px;
+    right: -10px;
+}
+
 .cart-notification {
     position: fixed;
     top: 20px;

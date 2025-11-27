@@ -50,7 +50,7 @@
             </div>
             <a href="/pages/cart.html" class="mobile-cart-toggle" aria-label="Cart">
                 <img src="/images/cart/cart.png" alt="Cart" class="cart-icon-img">
-                <span class="mobile-cart-count">0</span>
+                <span class="cart-badge" id="mobile-cart-badge">0</span>
             </a>
             <nav class="nav-container">
                 <ul class="nav-list">
@@ -60,6 +60,7 @@
                     <li class="nav-item">
                         <a href="/pages/cart.html" class="cart-icon">
                             <img src="/images/cart/cart.png" alt="Cart" class="cart-icon-img">
+                            <span class="cart-badge" id="desktop-cart-badge">0</span>
                             Warenkorb (<span id="cart-count">0</span>)
                         </a>
                     </li>
@@ -539,6 +540,7 @@
 
     <script src="/js/data/products.js"></script>
     <script src="../js/cart.js"></script>
+    <script src="../js/cart-badge.js"></script>
     <script src="../js/product.js"></script>
     <!-- Meta Pixel -->
     <script src="../js/meta-pixel.js"></script>

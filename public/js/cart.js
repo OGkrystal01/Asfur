@@ -74,8 +74,21 @@ function updateCartCount() {
     const cartCountElements = document.querySelectorAll('#cart-count');
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    // Update text counts
     cartCountElements.forEach(element => {
         element.textContent = totalItems.toString();
+    });
+    
+    // Update cart badges
+    const cartBadges = document.querySelectorAll('.cart-badge');
+    cartBadges.forEach(badge => {
+        badge.textContent = totalItems.toString();
+        if (totalItems > 0) {
+            badge.classList.add('visible');
+        } else {
+            badge.classList.remove('visible');
+        }
     });
 }
 
