@@ -29,7 +29,7 @@
 .cart-content {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0;
 }
 
 .cart-items {
@@ -160,7 +160,7 @@
     width: 36px;
     height: 36px;
     border: none;
-    background: #fff;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -252,6 +252,7 @@
     background: #fafafa;
     border-radius: 12px;
     padding: 20px;
+    margin: 12px 0;
     position: sticky;
     top: 20px;
 }
@@ -429,6 +430,7 @@
     .cart-summary {
         width: 380px;
         flex-shrink: 0;
+        margin: 0;
     }
 
     #cart-container {
