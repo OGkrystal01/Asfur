@@ -216,19 +216,20 @@ function updateCartDisplay() {
 }
 
 // Remove item from cart
-function removeFromCart(handle, variantOptions = null) {
+function removeFromCart(handle, variantString = null) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
-    if (variantOptions) {
+    if (variantString) {
         // Remove specific variant
         cart = cart.filter(item => {
-            if (item.selectedVariant && item.handle === handle) {
-                return JSON.stringify(item.selectedVariant.options) !== JSON.stringify(variantOptions);
+            if (item.handle === handle) {
+                // Compare with variant string
+                return item.variant !== variantString;
             }
-            return item.handle !== handle;
+            return true;
         });
     } else {
-        // Remove all variants of this product
+        // Remove all items with this handle
         cart = cart.filter(item => item.handle !== handle);
     }
     
@@ -238,20 +239,19 @@ function removeFromCart(handle, variantOptions = null) {
 }
 
 // Update item quantity
-function updateQuantity(handle, quantity, variantOptions = null) {
+function updateQuantity(handle, quantity, variantString = null) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
     const item = cart.find(item => {
-        if (variantOptions && item.selectedVariant) {
-            return item.handle === handle && 
-                   JSON.stringify(item.selectedVariant.options) === JSON.stringify(variantOptions);
+        if (variantString) {
+            return item.handle === handle && item.variant === variantString;
         }
         return item.handle === handle;
     });
     
     if (item) {
         if (quantity <= 0) {
-            removeFromCart(handle, variantOptions);
+            removeFromCart(handle, variantString);
         } else {
             item.quantity = Math.min(99, Math.max(1, quantity));
             localStorage.setItem('cart', JSON.stringify(cart));

@@ -29,7 +29,7 @@
 .cart-content {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 16px;
 }
 
 .cart-items {
@@ -37,6 +37,7 @@
     background: #fff;
     border-radius: 12px;
     padding: 16px;
+    padding-bottom: 12px;
 }
 
 /* Modern Cart Item Styles */
