@@ -276,54 +276,17 @@ function updateQuantity(handle, quantity, variantString = null) {
 
 // Show cart notification
 function showCartNotification(product) {
-    // Try new cart-notification-menu first (product page)
-    let notification = document.querySelector('.cart-notification-menu');
-    const isNewStyle = !!notification;
+    // Check if mobile (< 768px)
+    const isMobile = window.innerWidth < 768;
     
-    // Fallback to old cart-notification
-    if (!notification) {
-        notification = document.querySelector('.cart-notification');
-    }
-    
-    if (!notification) return;
-    
-    // Handle new-style notification
-    if (isNewStyle) {
-        const img = notification.querySelector('.cart-notification-menu__product-image');
-        const title = notification.querySelector('.cart-notification-menu__product-title');
-        const price = notification.querySelector('.cart-notification-menu__product-price');
-        
-        if (img) img.src = product.image;
-        if (title) title.textContent = product.title;
-        if (price) price.textContent = formatPrice(product.price);
-        
-        notification.classList.add('visible');
-        
-        // Setup buttons
-        const continueBtn = notification.querySelector('.cart-notification-menu__button--secondary');
-        const checkoutBtn = notification.querySelector('.cart-notification-menu__button--primary');
-        const closeBtn = notification.querySelector('.cart-notification-menu__close');
-        
-        if (continueBtn) {
-            continueBtn.onclick = () => {
-                notification.classList.remove('visible');
-            };
-        }
-        
-        if (checkoutBtn) {
-            checkoutBtn.onclick = () => {
-                window.location.href = '/pages/checkout.html';
-            };
-        }
-        
-        if (closeBtn) {
-            closeBtn.onclick = () => {
-                notification.classList.remove('visible');
-            };
-        }
-        
+    if (isMobile) {
+        showMobileCartOverlay();
         return;
     }
+    
+    // Desktop: Use old notification style
+    let notification = document.querySelector('.cart-notification');
+    if (!notification) return;
 
     // Display variant information if available
     let variantDisplay = '';
@@ -347,14 +310,14 @@ function showCartNotification(product) {
                 </div>
             </div>
             <div class="cart-notification__buttons">
-                <button class="button button--outline cart-continue-btn">Weiter einkaufen</button>
-                <button class="button button--primary cart-checkout-btn">Zur Kasse</button>
+                <button class="cart-notification__button cart-notification__button--secondary cart-continue-btn">Weiter einkaufen</button>
+                <button class="cart-notification__button cart-notification__button--primary cart-checkout-btn">Warenkorb ansehen</button>
             </div>
         </div>
     `;
 
     // Show notification
-    notification.classList.add('visible');
+    notification.classList.add('show');
     
     // Add event listeners immediately after DOM update
     requestAnimationFrame(() => {
@@ -410,8 +373,97 @@ function showCartNotification(product) {
 
     // Close notification after 8 seconds
     setTimeout(() => {
-        notification.classList.remove('visible');
+        notification.classList.remove('show');
     }, 8000);
+}
+
+// Show mobile cart overlay with all items
+function showMobileCartOverlay() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // Create or get overlay
+    let overlay = document.querySelector('.cart-notification-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'cart-notification-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    // Build cart items HTML
+    let itemsHTML = '';
+    cart.forEach(item => {
+        itemsHTML += `
+            <div class="cart-notification__item">
+                <img src="${item.image}" alt="${item.title}" class="cart-notification__item-image">
+                <div class="cart-notification__item-info">
+                    <div class="cart-notification__item-title">${item.title}</div>
+                    <div class="cart-notification__item-details">
+                        <span class="cart-notification__item-quantity">Anzahl: ${item.quantity}</span>
+                        <span class="cart-notification__item-price">${formatPrice(item.price * item.quantity)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Build overlay HTML
+    overlay.innerHTML = `
+        <div class="cart-notification-backdrop"></div>
+        <div class="cart-notification">
+            <div class="cart-notification__content">
+                <div class="cart-notification__header">
+                    <h2 class="cart-notification__title">Warenkorb</h2>
+                    <button class="cart-notification__close">&times;</button>
+                </div>
+                <div class="cart-notification__items-list">
+                    ${itemsHTML}
+                </div>
+                <div class="cart-notification__shipping">
+                    <div class="cart-notification__shipping-row">
+                        <span class="cart-notification__shipping-label">Versand</span>
+                        <span class="cart-notification__shipping-value">Kostenlos</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-notification__buttons">
+                <button class="cart-notification__button cart-notification__button--primary">Warenkorb ansehen</button>
+                <button class="cart-notification__button cart-notification__button--secondary">Weiter einkaufen</button>
+            </div>
+        </div>
+    `;
+    
+    // Show overlay
+    requestAnimationFrame(() => {
+        overlay.classList.add('show');
+    });
+    
+    // Add event listeners
+    const closeBtn = overlay.querySelector('.cart-notification__close');
+    const continueBtn = overlay.querySelector('.cart-notification__button--secondary');
+    const viewCartBtn = overlay.querySelector('.cart-notification__button--primary');
+    const backdrop = overlay.querySelector('.cart-notification-backdrop');
+    
+    const closeOverlay = () => {
+        overlay.classList.remove('show');
+    };
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeOverlay);
+    }
+    
+    if (backdrop) {
+        backdrop.addEventListener('click', closeOverlay);
+    }
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', closeOverlay);
+    }
+    
+    if (viewCartBtn) {
+        viewCartBtn.addEventListener('click', () => {
+            window.location.href = '/pages/cart.html';
+        });
+    }
 }
 
 // Format price
