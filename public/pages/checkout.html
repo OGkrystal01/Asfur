@@ -71,8 +71,10 @@
         </div>
 
         <div class="shopify-container">
-            <!-- Main Checkout Form -->
-            <div class="checkout-main-content">
+            <!-- Desktop Two Column Layout -->
+            <div class="checkout-grid">
+                <!-- Main Checkout Form -->
+                <div class="checkout-main-content">
                 
                 <form id="checkout-form" class="shopify-form">
                     
@@ -210,35 +212,6 @@
                         <div id="payment-message" class="payment-message"></div>
                     </section>
 
-                    <!-- Order Summary (Desktop) -->
-                    <section class="checkout-section order-summary-section desktop-only">
-                        <h2 class="section-title">Bestellübersicht</h2>
-                        <div class="desktop-summary-items" id="desktop-summary-items"></div>
-                        
-                        <div class="desktop-discount">
-                            <input type="text" placeholder="Rabattcode" id="desktop-discount-input" class="discount-input">
-                            <button type="button" class="apply-btn" id="desktop-apply-btn">Anwenden</button>
-                        </div>
-
-                        <div class="desktop-totals">
-                            <div class="summary-row">
-                                <span>Zwischensumme</span>
-                                <span id="desktop-subtotal">€0.00</span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Versand</span>
-                                <span class="shipping-free">KOSTENLOS</span>
-                            </div>
-                            <div class="summary-row total-row">
-                                <span>Gesamt</span>
-                                <span class="total-price">
-                                    <span class="currency">EUR</span>
-                                    <strong id="desktop-total">€0.00</strong>
-                                </span>
-                            </div>
-                        </div>
-                    </section>
-
                     <!-- Mini Order Summary Before Submit -->
                     <div class="mini-order-summary">
                         <div class="mini-summary-items" id="mini-summary-items">
@@ -276,6 +249,38 @@
                     </div>
 
                 </form>
+            </div>
+
+            <!-- Order Summary Sidebar (Desktop Only) -->
+            <aside class="checkout-sidebar desktop-only">
+                <div class="sidebar-sticky">
+                    <h2 class="section-title">Bestellübersicht</h2>
+                    <div class="desktop-summary-items" id="desktop-summary-items"></div>
+                    
+                    <div class="desktop-discount">
+                        <input type="text" placeholder="Rabattcode" id="desktop-discount-input" class="discount-input">
+                        <button type="button" class="apply-btn" id="desktop-apply-btn">Anwenden</button>
+                    </div>
+
+                    <div class="desktop-totals">
+                        <div class="summary-row">
+                            <span>Zwischensumme</span>
+                            <span id="desktop-subtotal">€0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Versand</span>
+                            <span class="shipping-free">KOSTENLOS</span>
+                        </div>
+                        <div class="summary-row total-row">
+                            <span>Gesamt</span>
+                            <span class="total-price">
+                                <span class="currency">EUR</span>
+                                <strong id="desktop-total">€0.00</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
             </div>
         </div>
     </main>

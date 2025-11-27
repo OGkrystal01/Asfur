@@ -781,13 +781,56 @@ body.shopify-checkout {
 /* ========== RESPONSIVE - TABLET/DESKTOP ========== */
 @media (min-width: 1000px) {
     .shopify-container {
-        max-width: 1200px;
-        padding: 40px 20px;
+        max-width: 1400px;
+        padding: 40px 40px;
+    }
+
+    /* Two Column Grid Layout */
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 480px;
+        gap: 80px;
+        align-items: start;
     }
 
     .checkout-main-content {
-        max-width: 560px;
+        max-width: 100%;
         padding: 0;
+    }
+
+    /* Sidebar Styling */
+    .checkout-sidebar {
+        background: #fafafa;
+        border-radius: 12px;
+        border: 1px solid #e1e3e5;
+        padding: 32px;
+    }
+
+    .sidebar-sticky {
+        position: sticky;
+        top: 20px;
+    }
+
+    .checkout-sidebar .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #202223;
+    }
+
+    .desktop-summary-items {
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e1e3e5;
+    }
+
+    .desktop-discount {
+        margin-bottom: 24px;
+    }
+
+    .desktop-totals {
+        padding-top: 20px;
+        border-top: 1px solid #e1e3e5;
     }
 
     .mobile-order-summary {
@@ -798,23 +841,16 @@ body.shopify-checkout {
         display: block;
     }
 
-    .order-summary-section {
-        margin-top: 36px;
-        padding: 24px;
-        background: #fafafa;
-        border-radius: 8px;
-        border: 1px solid #e1e3e5;
-    }
-
-    .desktop-summary-items {
-        margin-bottom: 20px;
-    }
-
     .section-title {
         font-size: 20px;
     }
 
     .cart-summary-toggle {
+        display: none;
+    }
+
+    /* Hide mini summary on desktop */
+    .mini-order-summary {
         display: none;
     }
 }
