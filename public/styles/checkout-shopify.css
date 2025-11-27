@@ -45,6 +45,13 @@ body.shopify-checkout {
     position: relative;
 }
 
+.cart-summary-toggle .cart-icon-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: block;
+}
+
 /* ========== MOBILE ORDER SUMMARY ========== */
 .mobile-order-summary {
     border-bottom: 1px solid #e1e3e5;
