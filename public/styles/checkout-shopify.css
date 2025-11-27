@@ -24,14 +24,20 @@ body.shopify-checkout {
 
 .shopify-header-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
+}
+
+.shopify-logo {
+    display: flex;
+    justify-content: center;
 }
 
 .shopify-logo img {
-    height: 42px;
+    height: 32px;
     display: block;
 }
 
@@ -42,7 +48,10 @@ body.shopify-checkout {
     cursor: pointer;
     color: #202223;
     display: block;
-    position: relative;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .cart-summary-toggle .cart-icon-img {
