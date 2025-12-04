@@ -1,7 +1,7 @@
 {
   "name": "dupelify",
   "version": "1.0.0",
-  "description": "Dupelify - Premium Resale Marketplace",
+  "description": "Nevoris - Premium Resale Marketplace",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -12,7 +12,7 @@
     "start:simple": "SET STORE_VERSION=simple&& node server.js"
   },
   "keywords": ["ecommerce", "resale", "marketplace"],
-  "author": "Dupelify",
+  "author": "Nevoris",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",
