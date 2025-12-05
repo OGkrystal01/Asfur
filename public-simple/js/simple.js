@@ -4,7 +4,7 @@ function addToCart() {
     const product = {
         handle: 'nevoris-bag',
         title: 'Nevoris Bag - Premium Women\'s Handbag',
-        price: 149,
+        price: 20,
         image: '/images/logo/Logo.png',
         quantity: 1
     };
