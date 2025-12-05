@@ -2,9 +2,9 @@
 function addToCart() {
     // Save product to localStorage with structure matching server expectations
     const product = {
-        handle: 'ebook-cheap-products',
-        title: 'Digital E-Book: How to Find Products Cheap',
-        price: 20,
+        handle: 'nevoris-bag',
+        title: 'Nevoris Bag - Premium Women\'s Handbag',
+        price: 149,
         image: '/images/logo/Logo.png',
         quantity: 1
     };
