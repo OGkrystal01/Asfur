@@ -59,7 +59,7 @@ async function sendOrderConfirmationEmail(order) {
         const htmlContent = createOrderConfirmationEmail(order);
         
         const mailOptions = {
-            from: `"Nevoris" <${EMAIL_FROM}>`,
+            from: `"Aurelia-Bags" <${EMAIL_FROM}>`,
             to: order.customerEmail,
             subject: `Order Confirmation #${order.orderNumber}`,
             html: htmlContent,

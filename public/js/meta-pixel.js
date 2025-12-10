@@ -1,5 +1,5 @@
 // Meta (Facebook) Pixel Integration
-// Meta Pixel ID configured for Dupelify
+// Meta Pixel ID configured for Aurelia-Bags
 
 const META_PIXEL_ID = '3013171445524064';
 

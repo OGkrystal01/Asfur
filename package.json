@@ -1,7 +1,7 @@
 {
-  "name": "dupelify",
+  "name": "aurelia-bags",
   "version": "1.0.0",
-  "description": "Nevoris - Premium Resale Marketplace",
+  "description": "Aurelia-Bags - Elegant Luxury Designer Bags",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -12,7 +12,7 @@
     "start:simple": "SET STORE_VERSION=simple&& node server.js"
   },
   "keywords": ["ecommerce", "resale", "marketplace"],
-  "author": "Nevoris",
+  "author": "Aurelia-Bags",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",

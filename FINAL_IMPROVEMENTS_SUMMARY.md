@@ -270,4 +270,4 @@ If you need any adjustments or have questions about the implementation, everythi
 ---
 
 *Generated on completion of all requested improvements*
-*Project: Dupelify E-Commerce Platform*
+*Project: Aurelia-Bags E-Commerce Platform*

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <footer class="footer">
                 <div class="footer-container">
                     <div class="footer-section">
-                        <h3>Über Nevoris</h3>
+                        <h3>Über Aurelia-Bags</h3>
                         <p>Ihre vertrauenswürdige Quelle für Premium-Luxustaschen. Qualität garantiert.</p>
                     </div>
                     <div class="footer-section">
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="footer-section">
                         <h4>Kontakt</h4>
                         <p>Brauchen Sie Hilfe? Kontaktieren Sie unser Support-Team.</p>
-                        <p>E-Mail: support@nevoris.com</p>
+                        <p>E-Mail: support@aurelia-bags.com</p>
                     </div>
                     <div class="footer-section">
                         <h4>Zahlungsmethoden</h4>
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; ${new Date().getFullYear()} Nevoris. Alle Rechte vorbehalten.</p>
+                    <p>&copy; ${new Date().getFullYear()} Aurelia-Bags. Alle Rechte vorbehalten.</p>
                 </div>
             </footer>
         `;

@@ -28,7 +28,7 @@
 - Description: Updated to focus on designer bags
 
 #### Announcement Bar:
-- 👜 "Welcome to Dupelify Luxury Bags"
+- 👜 "Welcome to Aurelia-Bags Luxury Bags"
 - 🌟 "Rated #1 Premium Bag Supplier 2025"
 - ✓ "Authentic Packaging & Quality Guarantee"
 

@@ -8,7 +8,7 @@ module.exports = function createOrderConfirmationEmail(order) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Order Confirmation - Nevoris</title>
+      <title>Order Confirmation - Aurelia-Bags</title>
       <style>
         body {
           font-family: Arial, sans-serif;
@@ -91,7 +91,7 @@ module.exports = function createOrderConfirmationEmail(order) {
     <body>
       <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333;">
         <div style="background-color: #0A0F2C; padding: 30px; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Nevoris</h1>
+          <h1 style="color: #ffffff; margin: 0; font-size: 28px;">Aurelia-Bags</h1>
           <p style="color: #ffffff; margin: 10px 0 0 0;">Order Confirmation</p>
         </div>
         
@@ -130,16 +130,16 @@ module.exports = function createOrderConfirmationEmail(order) {
           <p>If you have any questions about your order or need assistance with the tutorials, please don't hesitate to reply to this email - we're here to help you succeed!</p>
           
           <div style="text-align: center;">
-            <a href="https://nevoris.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold;">Contact Support</a>
-            <a href="https://nevoris.com/pages/order-tracking.html?order=${orderNumber}" style="color: #ffffff; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold; background-color: #0A0F2C;">Track Your Order</a>
+            <a href="https://aurelia-bags.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold;">Contact Support</a>
+            <a href="https://aurelia-bags.com/pages/order-tracking.html?order=${orderNumber}" style="color: #ffffff; text-decoration: none; padding: 10px 20px; margin: 20px 10px; border-radius: 4px; font-weight: bold; background-color: #0A0F2C;">Track Your Order</a>
           </div>
         </div>
         
         <div style="background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666;">
-          <p style="margin: 0;">&copy; ${new Date().getFullYear()} Nevoris. All rights reserved.</p>
+          <p style="margin: 0;">&copy; ${new Date().getFullYear()} Aurelia-Bags. All rights reserved.</p>
           <p style="margin: 10px 0 0 0;">
-            <a href="https://nevoris.com" style="color: #0A0F2C; text-decoration: none;">Visit our website</a> | 
-            <a href="https://nevoris.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none;">Contact Support</a>
+            <a href="https://aurelia-bags.com" style="color: #0A0F2C; text-decoration: none;">Visit our website</a> | 
+            <a href="https://aurelia-bags.com/pages/contact.html" style="color: #0A0F2C; text-decoration: none;">Contact Support</a>
           </p>
         </div>
       </div>

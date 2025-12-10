@@ -10,7 +10,7 @@ Your Meta Pixel has been fully integrated to track the complete customer journey
 
 1. Go to [Meta Events Manager](https://business.facebook.com/events_manager2)
 2. Click **"Connect Data Sources"** → **"Web"** → **"Meta Pixel"**
-3. Name your pixel (e.g., "Dupelify Store")
+3. Name your pixel (e.g., "Aurelia-Bags Store")
 4. Copy your **Pixel ID** (looks like: `1234567890123456`)
 
 ---
