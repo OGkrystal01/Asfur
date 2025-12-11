@@ -2,8 +2,8 @@
 function addToCart() {
     // Save product to localStorage with structure matching server expectations
     const product = {
-        handle: 'aurelia-bags-premium-bag',
-        title: 'Aurelia-Bags Bag - Premium Women\'s Handbag',
+        handle: 'alovre-premium-bag',
+        title: 'Alovre Bag - Premium Women\'s Handbag',
         price: 20,
         image: '/images/logo/Logo.png',
         quantity: 1

@@ -31,7 +31,7 @@ lines.forEach(line => {
     if (!handle || handle === 'Handle') return;
     
     const title = cols[1]?.trim();
-    const vendor = cols[3]?.trim() || 'Aurelia-Bags';
+    const vendor = cols[3]?.trim() || 'Alovre';
     const category = cols[4]?.trim() || '';
     const publishedStr = cols[7]?.trim();
     const published = publishedStr === 'true' || publishedStr === '';

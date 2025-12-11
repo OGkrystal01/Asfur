@@ -28,7 +28,7 @@
 - Description: Updated to focus on designer bags
 
 #### Announcement Bar:
-- 👜 "Welcome to Aurelia-Bags Luxury Bags"
+- 👜 "Welcome to Alovre Luxury Bags"
 - 🌟 "Rated #1 Premium Bag Supplier 2025"
 - ✓ "Authentic Packaging & Quality Guarantee"
 

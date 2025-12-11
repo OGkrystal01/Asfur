@@ -270,4 +270,4 @@ If you need any adjustments or have questions about the implementation, everythi
 ---
 
 *Generated on completion of all requested improvements*
-*Project: Aurelia-Bags E-Commerce Platform*
+*Project: Alovre E-Commerce Platform*

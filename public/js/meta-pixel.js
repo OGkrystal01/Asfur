@@ -1,5 +1,5 @@
 // Meta (Facebook) Pixel Integration
-// Meta Pixel ID configured for Aurelia-Bags
+// Meta Pixel ID configured for Alovre
 
 const META_PIXEL_ID = '3013171445524064';
 
